@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 // Certifique-se que o namespace corresponde à estrutura das suas pastas
 namespace Aluguer_Salas.Areas.Identity.Pages.Account
 {
-    // Permite que mesmo utilizadores não autenticados (ou já deslogados) acedam a esta página
+    
     [AllowAnonymous]
     public class LogoutModel : PageModel
     {
