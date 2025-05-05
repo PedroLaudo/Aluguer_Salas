@@ -1,0 +1,20 @@
+﻿@page
+@model LogoutModel
+@{
+    // O título da página pode ser definido, mas a página raramente é vista.
+    ViewData["Title"] = "Terminar Sessão";
+}
+
+<header>
+    <h1>@ViewData["Title"]</h1>
+    @{
+        // Este bloco só seria visível se o OnPost falhasse em redirecionar
+        // ou se o OnGet mostrasse alguma confirmação.
+        // No cenário mais comum (POST direto e redirect), esta parte não é mostrada.
+    }
+    <p>Terminou a sessão da aplicação com sucesso.</p>
+
+    @* Você poderia adicionar uma mensagem ou um botão aqui,
+       mas geralmente o redirecionamento automático no OnPost é suficiente. *@
+
+</header>
