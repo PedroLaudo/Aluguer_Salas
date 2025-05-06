@@ -4,6 +4,7 @@ using Aluguer_Salas.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Aluguer_Salas.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250505193823_PersonalizarUtilizado")]
+    partial class PersonalizarUtilizado
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -165,11 +168,11 @@ namespace Aluguer_Salas.Migrations
 
             modelBuilder.Entity("Aluguer_Salas.Data.Utentes", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("IdUtilizador")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdUtilizador"));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -180,14 +183,13 @@ namespace Aluguer_Salas.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UtilizadorIdentityId")
+                    b.Property<string>("UtilizadorId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.HasKey("IdUtilizador");
 
-                    b.HasIndex("UtilizadorIdentityId")
-                        .IsUnique();
+                    b.HasIndex("UtilizadorId");
 
                     b.ToTable("Utentes");
                 });
@@ -458,8 +460,8 @@ namespace Aluguer_Salas.Migrations
             modelBuilder.Entity("Aluguer_Salas.Data.Utentes", b =>
                 {
                     b.HasOne("Aluguer_Salas.Data.Utilizadores", "Utilizador")
-                        .WithOne("Utente")
-                        .HasForeignKey("Aluguer_Salas.Data.Utentes", "UtilizadorIdentityId")
+                        .WithMany()
+                        .HasForeignKey("UtilizadorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -522,11 +524,6 @@ namespace Aluguer_Salas.Migrations
                     b.Navigation("Disponibilidades");
 
                     b.Navigation("Reservas");
-                });
-
-            modelBuilder.Entity("Aluguer_Salas.Data.Utilizadores", b =>
-                {
-                    b.Navigation("Utente");
                 });
 #pragma warning restore 612, 618
         }

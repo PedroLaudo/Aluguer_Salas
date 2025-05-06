@@ -28,8 +28,18 @@ builder.Services.AddIdentity<Utilizadores, IdentityRole>(options =>
     options.Lockout.AllowedForNewUsers = true;
     options.User.RequireUniqueEmail = true;
 })
+
+
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+
+//Obriga a autenticacao de e‑mail para registo de utilizadores
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.SignIn.RequireConfirmedEmail = true;
+});
+
+
 
 // --- Regista o serviço de envio de e‑mail necessário para IEmailSender ---
 builder.Services.AddTransient<IEmailSender, EmailSender>();

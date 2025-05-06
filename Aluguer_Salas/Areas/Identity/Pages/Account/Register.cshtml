@@ -41,6 +41,15 @@
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
 
+            <div class="form-floating mb-3">
+                <select asp-for="Input.Tipo" class="form-control" aria-required="true">
+                    <option value="Aluno">Aluno</option>
+                    <option value="Professor">Professor</option>
+                </select>
+                <label asp-for="Input.Tipo">Tipo de Utilizador</label>
+                <span asp-validation-for="Input.Tipo" class="text-danger"></span>
+            </div>
+
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </form>
     </div>
