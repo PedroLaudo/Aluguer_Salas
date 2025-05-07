@@ -14,7 +14,7 @@ namespace Aluguer_Salas.Data
         /// <summary>
         /// Identificador do utilizador que fez a reserva
         /// </summary>
-        public int IdUtilizador { get; set; }
+        public int IdIdUtente { get; set; }
 
         /// <summary>
         /// Identificador da sala reservada
@@ -37,7 +37,7 @@ namespace Aluguer_Salas.Data
         public string Status { get; set; } = string.Empty;  // inicializado
 
         // Relacionamento com a tabela Utilizadores
-        public Utilizadores? Utilizador { get; set; }      // pode ser null
+        public Utentes? Utente { get; set; }      // pode ser null
 
         // Relacionamento com a tabela Salas
         public Salas? Sala { get; set; }                    // pode ser null

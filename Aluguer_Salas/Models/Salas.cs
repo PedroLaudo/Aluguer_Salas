@@ -21,9 +21,14 @@ namespace Aluguer_Salas.Data
         public string Descricao { get; set; }
 
         // Relacionamento com a tabela Disponibilidade (se houver)
-        public ICollection<Disponibilidade> Disponibilidades { get; set; }
+      //  public ICollection<Disponibilidade> Disponibilidades { get; set; }
 
         // Relacionamento com a tabela Reserva (se houver)
         public ICollection<Reservas> Reservas { get; set; }
+
+        // lista limpezas
+
+
+
     }
 }
