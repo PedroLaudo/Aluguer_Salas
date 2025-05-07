@@ -18,6 +18,7 @@ namespace Aluguer_Salas.Data
 
         public virtual Utentes? Utente { get; set; }
 
+        //public string UtilizadorIdentityId { get; set; } = null!; 
 
     }
 }
