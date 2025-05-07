@@ -2,7 +2,7 @@ using Aluguer_Salas.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
-using Aluguer_Salas.Services; 
+using Aluguer_Salas.Services.Email;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,10 +39,11 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.SignIn.RequireConfirmedEmail = true;
 });
 
-
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
 // --- Regista o serviço de envio de e‑mail necessário para IEmailSender ---
 builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.AddTransient<ICustomEmailSender, EmailSender>();
 
 // --- PARA PERSONALIZAR OPÇÕES DO COOKIE DE AUTENTICAÇÃO DO IDENTITY ---
 // Faça isso DEPOIS de AddIdentity
