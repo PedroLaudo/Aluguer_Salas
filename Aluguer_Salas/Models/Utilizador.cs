@@ -5,7 +5,7 @@ using Aluguer_Salas.Models;
 namespace Aluguer_Salas.Data
 {
    
-    public class Utilizadores : IdentityUser
+    public class Utilizador : IdentityUser
     {
         
         [Required(ErrorMessage = "O {0} é de preenchimento obrigatório.")]
@@ -16,7 +16,7 @@ namespace Aluguer_Salas.Data
         [StringLength(255, ErrorMessage = "O {0} deve ter no máximo {1} caracteres.")]
         public string? Login { get; set; }
 
-        public virtual Utentes? Utente { get; set; }
+        public virtual Utente? Utente { get; set; }
 
         //public string UtilizadorIdentityId { get; set; } = null!; 
 

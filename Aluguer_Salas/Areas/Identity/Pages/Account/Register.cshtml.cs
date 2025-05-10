@@ -24,18 +24,18 @@ namespace Aluguer_Salas.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<Utilizadores> _signInManager;
-        private readonly UserManager<Utilizadores> _userManager;
-        private readonly IUserStore<Utilizadores> _userStore;
-        private readonly IUserEmailStore<Utilizadores> _emailStore;
+        private readonly SignInManager<Utilizador> _signInManager;
+        private readonly UserManager<Utilizador> _userManager;
+        private readonly IUserStore<Utilizador> _userStore;
+        private readonly IUserEmailStore<Utilizador> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly ApplicationDbContext _context;
 
         public RegisterModel(
-            UserManager<Utilizadores> userManager,
-            IUserStore<Utilizadores> userStore,
-            SignInManager<Utilizadores> signInManager,
+            UserManager<Utilizador> userManager,
+            IUserStore<Utilizador> userStore,
+            SignInManager<Utilizador> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             ApplicationDbContext context)
@@ -114,7 +114,7 @@ namespace Aluguer_Salas.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User (Identity) created a new account with password.");
 
-                    var utente = new Utentes
+                    var utente = new Utente
                     {
                         UtilizadorIdentityId = user.Id,
                         Email = user.Email,
@@ -190,27 +190,27 @@ namespace Aluguer_Salas.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private Utilizadores CreateUser()
+        private Utilizador CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<Utilizadores>();
+                return Activator.CreateInstance<Utilizador>();
             }
             catch
             {
-                throw new InvalidOperationException($"Não foi possível criar uma instância de '{nameof(Utilizadores)}'. " +
-                    $"Assegura-te que '{nameof(Utilizadores)}' não é abstrata e tem um construtor sem parâmetros, ou, alternativamente, " +
+                throw new InvalidOperationException($"Não foi possível criar uma instância de '{nameof(Utilizador)}'. " +
+                    $"Assegura-te que '{nameof(Utilizador)}' não é abstrata e tem um construtor sem parâmetros, ou, alternativamente, " +
                     "sobrescreve a página de registo em /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
 
-        private IUserEmailStore<Utilizadores> GetEmailStore()
+        private IUserEmailStore<Utilizador> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("O UI padrão requer um user store que suporte email.");
             }
-            return (IUserEmailStore<Utilizadores>)_userStore;
+            return (IUserEmailStore<Utilizador>)_userStore;
         }
     }
 }

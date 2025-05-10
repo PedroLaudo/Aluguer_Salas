@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using Aluguer_Salas.Models;
 
 namespace Aluguer_Salas.Data
 {
@@ -32,6 +33,6 @@ namespace Aluguer_Salas.Data
         public TimeSpan HoraFim { get; set; }
 
         // Relacionamento com a tabela Salas
-        public Salas Sala { get; set; }
+        public Sala Sala { get; set; }
     }
 }

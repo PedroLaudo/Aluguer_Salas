@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Aluguer_Salas.Models;
 
 namespace Aluguer_Salas.Data
 {
@@ -20,7 +21,7 @@ namespace Aluguer_Salas.Data
         public string DiaSemana { get; set; }
 
         // Relacionamento com a tabela Salas
-        public Salas Sala { get; set; }
+        public Sala Sala { get; set; }
 
         // Relacionamento com a tabela Funcionario
         public Funcionario Funcionario { get; set; }

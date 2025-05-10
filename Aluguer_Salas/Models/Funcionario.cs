@@ -14,7 +14,7 @@ namespace Aluguer_Salas.Data
 
         // --- Propriedade de Navegação ---
         [ForeignKey("UtilizadorId")] // Diz ao EF que UtilizadorId é a FK para esta navegação
-        public virtual Utilizadores Utilizador { get; set; } // 'virtual' para lazy loading
+        public virtual Utilizador Utilizador { get; set; } // 'virtual' para lazy loading
 
         // Outras propriedades do Funcionário (ex: Cargo, DataAdmissao, etc.)
         // public string Cargo { get; set; }

@@ -1,10 +1,17 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using Aluguer_Salas.Data 
+
+@inject SignInManager<Utilizador> SignInManager
+@inject UserManager<Utilizador> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Aluguer_Salas</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Aluguer_Salas.styles.css" asp-append-version="true" />
 </head>
@@ -25,8 +32,25 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="Identity" asp-controller="Alugar" asp-action="Salas">Salas</a>
+                        </li>
+
+
+
+
+                        
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrador"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Backoffice/Index">Salas Administrador</a>
+                            </li>
+                            
+                        }
+                        
+
                     </ul>
-                    <partial name="_LoginPartial" />
+                    <partial name="_LoginPartial" /> 
                 </div>
             </div>
         </nav>
@@ -39,7 +63,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - Aluguer_Salas - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            © 2025 - Aluguer_Salas - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

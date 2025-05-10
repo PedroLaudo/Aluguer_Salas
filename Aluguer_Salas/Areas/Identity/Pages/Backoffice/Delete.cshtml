@@ -1,0 +1,46 @@
+﻿@page "{id:int?}"
+@model Aluguer_Salas.Areas.Identity.Pages.Backoffice.DeleteModel
+@{
+    ViewData["Title"] = "Apagar Sala";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h3>Tem a certeza que quer apagar esta sala?</h3>
+<div>
+    <h4>Sala</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Sala.NomeSala)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Sala.NomeSala)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Sala.Capacidade)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Sala.Capacidade)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Sala.Descricao)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Sala.Descricao)
+        </dd>
+         
+         <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Sala.Disponivel)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Sala.Disponivel)
+        </dd> 
+    </dl>
+
+    <form method="post">
+        <input type="hidden" asp-for="Sala.Id" /> @* Envia o ID para o OnPostAsync *@
+        <input type="submit" value="Apagar" class="btn btn-danger" /> |
+        <a asp-page="./Index" class="btn btn-secondary">Voltar à Lista</a>
+    </form>
+</div>

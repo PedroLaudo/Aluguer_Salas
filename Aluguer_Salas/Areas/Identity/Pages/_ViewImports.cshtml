@@ -1,5 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using Aluguer_Salas.Areas.Identity
 @using Aluguer_Salas.Areas.Identity.Pages
+@using Aluguer_Salas.Models // Adicionado para conveniência se usar modelos
+@using Aluguer_Salas.Data   // Você já tem este, o que é bom se usar o DbContext nas views (raro, mas possível)
+
+@namespace Aluguer_Salas.Areas.Identity.Pages // <-- ADICIONE ESTA LINHA ESSENCIAL
+
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@using Aluguer_Salas.Data
