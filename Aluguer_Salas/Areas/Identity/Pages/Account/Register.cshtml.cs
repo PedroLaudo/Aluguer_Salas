@@ -10,7 +10,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Aluguer_Salas.Data; // Namespace para Utilizadores e Utentes e ApplicationDbContext
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +18,12 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc.Rendering; // Para SelectListItem
 using Microsoft.EntityFrameworkCore;
+
+
+using Aluguer_Salas.Data; // Namespace para Utilizadores e Utentes e ApplicationDbContext
+using Aluguer_Salas.Models;
+using Aluguer_Salas.Services.Email;
+
 
 namespace Aluguer_Salas.Areas.Identity.Pages.Account
 {
@@ -29,7 +34,7 @@ namespace Aluguer_Salas.Areas.Identity.Pages.Account
         private readonly IUserStore<Utilizador> _userStore;
         private readonly IUserEmailStore<Utilizador> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
+        private readonly ICustomEmailSender _emailSender;
         private readonly ApplicationDbContext _context;
 
         public RegisterModel(
@@ -37,7 +42,7 @@ namespace Aluguer_Salas.Areas.Identity.Pages.Account
             IUserStore<Utilizador> userStore,
             SignInManager<Utilizador> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender,
+            ICustomEmailSender emailSender,
             ApplicationDbContext context)
         {
             _userManager = userManager;
@@ -52,10 +57,19 @@ namespace Aluguer_Salas.Areas.Identity.Pages.Account
         [BindProperty]
         public InputModel Input { get; set; }
 
+
+        /// <summary>
+        /// se for instanciado, este atributo terá o link para onde a aplicação
+        /// será redirecionada, após Registo
+        /// </summary>
         public string ReturnUrl { get; set; }
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
-
+        /// <summary>
+        /// Se estiver especificado a Autenticação por outros fornecedores
+        /// de autenticação, este atributo terá essa lista de outros fornecedores
+        /// </summary>
+        /// 
         public List<SelectListItem> TiposDeUtilizador { get; } = new List<SelectListItem>
         {
             new SelectListItem { Value = "", Text = "-- Selecione o Tipo --" },
