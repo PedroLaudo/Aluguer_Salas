@@ -58,12 +58,7 @@ namespace Aluguer_Salas.Data
                       .HasForeignKey("SalaId") // Especifique o nome da FK em Reservas se não seguir a convenção (ex: IdSala)
                       .OnDelete(DeleteBehavior.Restrict); // Ou Cascade, SetNull, etc., dependendo da sua regra de negócio
 
-                // Relação Salas -> Disponibilidades (1 para Muitos)
-                // Assume que Disponibilidade.cs tem 'public int IdSala { get; set; }' e 'public virtual Salas Sala { get; set; }'
-                entity.HasMany(s => s.Disponibilidades)
-                      .WithOne(d => d.Sala)
-                      .HasForeignKey(d => d.IdSala) // Nome da FK em Disponibilidade
-                      .OnDelete(DeleteBehavior.Cascade); // Exemplo: Apagar disponibilidades se a sala for apagada
+                
             });
 
             // Relação Salas -> Limpeza (1 para Muitos)
