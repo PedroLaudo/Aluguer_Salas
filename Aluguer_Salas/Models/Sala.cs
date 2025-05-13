@@ -22,8 +22,10 @@ namespace Aluguer_Salas.Models
         public string? Descricao { get; set; }
 
         public bool Disponivel { get; set; } = true;
-      
 
+        // Relações com inicialização e virtual
+        // Assume que Disponibilidade está em Aluguer_Salas.Data
+        
         // Assume que Reservas está em Aluguer_Salas.Data
         public virtual ICollection<Reserva> Reservas { get; set; } = new List<Reserva>();
     }
