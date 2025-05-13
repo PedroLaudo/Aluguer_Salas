@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Aluguer_Salas.Data
+namespace Aluguer_Salas.Models
 {
     public class Utente
     {

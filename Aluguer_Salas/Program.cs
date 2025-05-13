@@ -1,8 +1,10 @@
 using Aluguer_Salas.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services; // Para IEmailSender
+using Aluguer_Salas.Models;
 using Microsoft.EntityFrameworkCore;
-using Aluguer_Salas.Services; // Para EmailSender
+using Aluguer_Salas.Services.Email;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,8 +52,8 @@ builder.Services.AddIdentity<Utilizador, IdentityRole>(options => // Use AddIden
 // não é estritamente necessário, mas não prejudica.
 
 // 3. Regista o serviço de envio de e-mail
+builder.Services.AddTransient<ICustomEmailSender, EmailSender>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
-
 // 4. Personaliza opções do Cookie de Autenticação do Identity (Opcional, mas bom para ter)
 builder.Services.ConfigureApplicationCookie(options =>
 {

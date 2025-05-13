@@ -1,72 +1,70 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Aluguer_Salas.Migrations
 {
     /// <inheritdoc />
-    public partial class atualizaçãoDB : Migration
+    public partial class aluguer : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Funcionario_AspNetUsers_UtilizadorId",
-                table: "Funcionario");
+                name: "FK_Reservas_AspNetUsers_UtilizadorIdentityId",
+                table: "Reservas");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_Reservas_Salas_SalaId",
                 table: "Reservas");
 
             migrationBuilder.DropTable(
-                name: "Disponibilidades");
+                name: "Limpeza");
 
             migrationBuilder.DropTable(
-                name: "Limpeza");
+                name: "Funcionario");
 
             migrationBuilder.DropIndex(
                 name: "IX_Reservas_SalaId",
                 table: "Reservas");
 
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_Funcionario",
-                table: "Funcionario");
-
             migrationBuilder.DropColumn(
                 name: "SalaId",
                 table: "Reservas");
 
-            migrationBuilder.RenameTable(
-                name: "Funcionario",
-                newName: "Funcionarios");
-
-            migrationBuilder.RenameIndex(
-                name: "IX_Funcionario_UtilizadorId",
-                table: "Funcionarios",
-                newName: "IX_Funcionarios_UtilizadorId");
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_Funcionarios",
-                table: "Funcionarios",
-                column: "FuncionarioId");
+            migrationBuilder.CreateTable(
+                name: "Funcionarios",
+                columns: table => new
+                {
+                    FuncionarioId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UtilizadorId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Funcionarios", x => x.FuncionarioId);
+                    table.ForeignKey(
+                        name: "FK_Funcionarios_AspNetUsers_UtilizadorId",
+                        column: x => x.UtilizadorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Limpezas",
                 columns: table => new
                 {
-                    LimpezaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     IdSala = table.Column<int>(type: "int", nullable: false),
-                    FuncionarioId = table.Column<int>(type: "int", nullable: false),
-                    DiaSemana = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    IdUtilizador = table.Column<int>(type: "int", nullable: false),
+                    DiaSemana = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Limpezas", x => x.LimpezaId);
+                    table.PrimaryKey("PK_Limpezas", x => new { x.IdSala, x.IdUtilizador });
                     table.ForeignKey(
-                        name: "FK_Limpezas_Funcionarios_FuncionarioId",
-                        column: x => x.FuncionarioId,
+                        name: "FK_Limpezas_Funcionarios_IdUtilizador",
+                        column: x => x.IdUtilizador,
                         principalTable: "Funcionarios",
                         principalColumn: "FuncionarioId",
                         onDelete: ReferentialAction.Restrict);
@@ -75,7 +73,7 @@ namespace Aluguer_Salas.Migrations
                         column: x => x.IdSala,
                         principalTable: "Salas",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -84,22 +82,22 @@ namespace Aluguer_Salas.Migrations
                 column: "IdSala");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Limpezas_FuncionarioId",
-                table: "Limpezas",
-                column: "FuncionarioId");
+                name: "IX_Funcionarios_UtilizadorId",
+                table: "Funcionarios",
+                column: "UtilizadorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Limpezas_IdSala",
+                name: "IX_Limpezas_IdUtilizador",
                 table: "Limpezas",
-                column: "IdSala");
+                column: "IdUtilizador");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Funcionarios_AspNetUsers_UtilizadorId",
-                table: "Funcionarios",
-                column: "UtilizadorId",
+                name: "FK_Reservas_AspNetUsers_UtilizadorIdentityId",
+                table: "Reservas",
+                column: "UtilizadorIdentityId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Reservas_Salas_IdSala",
@@ -114,8 +112,8 @@ namespace Aluguer_Salas.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Funcionarios_AspNetUsers_UtilizadorId",
-                table: "Funcionarios");
+                name: "FK_Reservas_AspNetUsers_UtilizadorIdentityId",
+                table: "Reservas");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_Reservas_Salas_IdSala",
@@ -124,22 +122,12 @@ namespace Aluguer_Salas.Migrations
             migrationBuilder.DropTable(
                 name: "Limpezas");
 
+            migrationBuilder.DropTable(
+                name: "Funcionarios");
+
             migrationBuilder.DropIndex(
                 name: "IX_Reservas_IdSala",
                 table: "Reservas");
-
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_Funcionarios",
-                table: "Funcionarios");
-
-            migrationBuilder.RenameTable(
-                name: "Funcionarios",
-                newName: "Funcionario");
-
-            migrationBuilder.RenameIndex(
-                name: "IX_Funcionarios_UtilizadorId",
-                table: "Funcionario",
-                newName: "IX_Funcionario_UtilizadorId");
 
             migrationBuilder.AddColumn<int>(
                 name: "SalaId",
@@ -148,29 +136,21 @@ namespace Aluguer_Salas.Migrations
                 nullable: false,
                 defaultValue: 0);
 
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_Funcionario",
-                table: "Funcionario",
-                column: "FuncionarioId");
-
             migrationBuilder.CreateTable(
-                name: "Disponibilidades",
+                name: "Funcionario",
                 columns: table => new
                 {
-                    IdDisponibilidade = table.Column<int>(type: "int", nullable: false)
+                    FuncionarioId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IdSala = table.Column<int>(type: "int", nullable: false),
-                    DiaSemana = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HoraFim = table.Column<TimeSpan>(type: "time", nullable: false),
-                    HoraInicio = table.Column<TimeSpan>(type: "time", nullable: false)
+                    UtilizadorId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Disponibilidades", x => x.IdDisponibilidade);
+                    table.PrimaryKey("PK_Funcionario", x => x.FuncionarioId);
                     table.ForeignKey(
-                        name: "FK_Disponibilidades_Salas_IdSala",
-                        column: x => x.IdSala,
-                        principalTable: "Salas",
+                        name: "FK_Funcionario_AspNetUsers_UtilizadorId",
+                        column: x => x.UtilizadorId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -181,7 +161,8 @@ namespace Aluguer_Salas.Migrations
                 {
                     IdSala = table.Column<int>(type: "int", nullable: false),
                     IdUtilizador = table.Column<int>(type: "int", nullable: false),
-                    DiaSemana = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    DiaSemana = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SalaId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -198,6 +179,11 @@ namespace Aluguer_Salas.Migrations
                         principalTable: "Salas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Limpeza_Salas_SalaId",
+                        column: x => x.SalaId,
+                        principalTable: "Salas",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -206,19 +192,24 @@ namespace Aluguer_Salas.Migrations
                 column: "SalaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Disponibilidades_IdSala",
-                table: "Disponibilidades",
-                column: "IdSala");
+                name: "IX_Funcionario_UtilizadorId",
+                table: "Funcionario",
+                column: "UtilizadorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Limpeza_IdUtilizador",
                 table: "Limpeza",
                 column: "IdUtilizador");
 
+            migrationBuilder.CreateIndex(
+                name: "IX_Limpeza_SalaId",
+                table: "Limpeza",
+                column: "SalaId");
+
             migrationBuilder.AddForeignKey(
-                name: "FK_Funcionario_AspNetUsers_UtilizadorId",
-                table: "Funcionario",
-                column: "UtilizadorId",
+                name: "FK_Reservas_AspNetUsers_UtilizadorIdentityId",
+                table: "Reservas",
+                column: "UtilizadorIdentityId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);

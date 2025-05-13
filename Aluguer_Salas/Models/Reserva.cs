@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Aluguer_Salas.Models;
 
-namespace Aluguer_Salas.Data
+namespace Aluguer_Salas.Models
 {
     public class Reserva
     {

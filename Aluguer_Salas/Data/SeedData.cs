@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;         // Para ILogger (opcional, se quiser
 using System;                                 // Para IServiceProvider, Console, Exception
 using System.Linq;                            // Para .Select() na formatação de erros
 using System.Threading.Tasks;                 // Para Task
+using Aluguer_Salas.Models; 
 
 namespace Aluguer_Salas.Data
 {

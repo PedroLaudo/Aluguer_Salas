@@ -6,13 +6,11 @@
 
 <h1>@ViewData["Title"]</h1>
 
-@* CORRIGIDO AQUI: Usa-se Model diretamente, e não Model.ListaSalas *@
 @if (Model != null && Model.Any())
 {
     <table class="table table-striped table-hover">
         <thead class="table-light">
             <tr>
-                @* Para DisplayNameFor, esta forma com FirstOrDefault() continua correta para inferir o tipo *@
                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().NomeSala)</th>
                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Capacidade)</th>
                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Descricao)</th>
@@ -21,7 +19,6 @@
             </tr>
         </thead>
         <tbody>
-            @* CORRIGIDO AQUI: Itera sobre 'Model', que é a coleção *@
             @foreach (var sala in Model)
             {
                 <tr>
@@ -39,7 +36,16 @@
                         }
                     </td>
                     <td>
-                        @* Links para futuras funcionalidades *@
+                        @* ADICIONADO O BOTÃO/LINK "ALUGAR" AQUI *@
+                        @if (sala.Disponivel)
+                        {
+                            <a asp-controller="Alugar" asp-action="Aluguer" asp-route-id="@sala.Id" class="btn btn-primary btn-sm">Alugar</a>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-secondary btn-sm" disabled>Indisponível</button>
+                        }
+                        @* Adiciona aqui outros links de ação se necessário (ex: Detalhes, Editar, Apagar) *@
                     </td>
                 </tr>
             }

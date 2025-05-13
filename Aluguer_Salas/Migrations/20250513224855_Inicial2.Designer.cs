@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Aluguer_Salas.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250511112411_atualizaçãoDB")]
-    partial class atualizaçãoDB
+    [Migration("20250513224855_Inicial2")]
+    partial class Inicial2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,7 +41,31 @@ namespace Aluguer_Salas.Migrations
 
                     b.HasIndex("UtilizadorId");
 
-                    b.ToTable("Funcionarios");
+                    b.ToTable("Funcionario");
+                });
+
+            modelBuilder.Entity("Aluguer_Salas.Data.Limpeza", b =>
+                {
+                    b.Property<int>("IdSala")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdUtilizador")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DiaSemana")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SalaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("IdSala", "IdUtilizador");
+
+                    b.HasIndex("IdUtilizador");
+
+                    b.HasIndex("SalaId");
+
+                    b.ToTable("Limpeza");
                 });
 
             modelBuilder.Entity("Aluguer_Salas.Data.Reserva", b =>
@@ -64,6 +88,9 @@ namespace Aluguer_Salas.Migrations
                     b.Property<int>("IdSala")
                         .HasColumnType("int");
 
+                    b.Property<int>("SalaId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -74,7 +101,7 @@ namespace Aluguer_Salas.Migrations
 
                     b.HasKey("IdReserva");
 
-                    b.HasIndex("IdSala");
+                    b.HasIndex("SalaId");
 
                     b.HasIndex("UtilizadorIdentityId");
 
@@ -182,34 +209,6 @@ namespace Aluguer_Salas.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("Aluguer_Salas.Models.Limpeza", b =>
-                {
-                    b.Property<int>("LimpezaId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LimpezaId"));
-
-                    b.Property<string>("DiaSemana")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("FuncionarioId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdSala")
-                        .HasColumnType("int");
-
-                    b.HasKey("LimpezaId");
-
-                    b.HasIndex("FuncionarioId");
-
-                    b.HasIndex("IdSala");
-
-                    b.ToTable("Limpezas");
                 });
 
             modelBuilder.Entity("Aluguer_Salas.Models.Sala", b =>
@@ -383,11 +382,34 @@ namespace Aluguer_Salas.Migrations
                     b.Navigation("Utilizador");
                 });
 
+            modelBuilder.Entity("Aluguer_Salas.Data.Limpeza", b =>
+                {
+                    b.HasOne("Aluguer_Salas.Models.Sala", "Sala")
+                        .WithMany()
+                        .HasForeignKey("IdSala")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Aluguer_Salas.Data.Funcionario", "Funcionario")
+                        .WithMany()
+                        .HasForeignKey("IdUtilizador")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Aluguer_Salas.Models.Sala", null)
+                        .WithMany("Limpezas")
+                        .HasForeignKey("SalaId");
+
+                    b.Navigation("Funcionario");
+
+                    b.Navigation("Sala");
+                });
+
             modelBuilder.Entity("Aluguer_Salas.Data.Reserva", b =>
                 {
                     b.HasOne("Aluguer_Salas.Models.Sala", "Sala")
                         .WithMany("Reservas")
-                        .HasForeignKey("IdSala")
+                        .HasForeignKey("SalaId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -411,25 +433,6 @@ namespace Aluguer_Salas.Migrations
                         .IsRequired();
 
                     b.Navigation("Utilizador");
-                });
-
-            modelBuilder.Entity("Aluguer_Salas.Models.Limpeza", b =>
-                {
-                    b.HasOne("Aluguer_Salas.Data.Funcionario", "Funcionario")
-                        .WithMany("Limpezas")
-                        .HasForeignKey("FuncionarioId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Aluguer_Salas.Models.Sala", "Sala")
-                        .WithMany("Limpezas")
-                        .HasForeignKey("IdSala")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Funcionario");
-
-                    b.Navigation("Sala");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -481,11 +484,6 @@ namespace Aluguer_Salas.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Aluguer_Salas.Data.Funcionario", b =>
-                {
-                    b.Navigation("Limpezas");
                 });
 
             modelBuilder.Entity("Aluguer_Salas.Data.Utilizador", b =>

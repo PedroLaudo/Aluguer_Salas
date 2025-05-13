@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Aluguer_Salas.Data
+namespace Aluguer_Salas.Models
 {
     public class Funcionario
     {
@@ -15,6 +15,8 @@ namespace Aluguer_Salas.Data
         // --- Propriedade de Navegação ---
         [ForeignKey("UtilizadorId")] // Diz ao EF que UtilizadorId é a FK para esta navegação
         public virtual Utilizador Utilizador { get; set; } // 'virtual' para lazy loading
+
+        public virtual ICollection<Limpeza> Limpezas { get; set; } = new List<Limpeza>();
 
         // Outras propriedades do Funcionário (ex: Cargo, DataAdmissao, etc.)
         // public string Cargo { get; set; }

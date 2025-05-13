@@ -1,84 +1,105 @@
 ﻿// Localização: Aluguer_Salas/Data/ApplicationDbContext.cs
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Aluguer_Salas.Models; // MANTIDO: Necessário para Salas
+using Aluguer_Salas.Models; // Garante que todas as tuas classes de modelo estão neste namespace
+
+using Aluguer_Salas.Data;
+
 namespace Aluguer_Salas.Data
 {
-    // Assume que Utilizadores, Reservas, Disponibilidade, Funcionario, Limpeza, Utentes estão em Aluguer_Salas.Data
+    // 'Utilizador' é a tua classe que herda de IdentityUser, definida em Aluguer_Salas.Models
     public class ApplicationDbContext : IdentityDbContext<Utilizador>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options) { }
-        public DbSet<Reserva> Reservas { get; set; }
-        public DbSet<Disponibilidade> Disponibilidades { get; set; }
-        public DbSet<Funcionario> Funcionario { get; set; }
-        public DbSet<Limpeza> Limpeza { get; set; }
-        public DbSet<Utente> Utentes { get; set; } = default!; // Ou null! se preferir
 
-        // DbSet para entidade em Aluguer_Salas.Models
-        public DbSet<Aluguer_Salas.Models.Sala> Salas { get; set; } // MANTIDO: Correto
+        // DbSets para entidades em Aluguer_Salas.Models
+        // É convenção usar o nome da classe no plural para o DbSet
+        public DbSet<Sala> Salas { get; set; }
+        public DbSet<Reserva> Reservas { get; set; }
+        public DbSet<Funcionario> Funcionarios { get; set; } // Nome da propriedade no plural
+        public DbSet<Limpeza> Limpezas { get; set; }         // Nome da propriedade no plural
+        public DbSet<Utente> Utentes { get; set; }
+
+        // Disponibilidade foi removida
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder); // Importante para Identity
+            base.OnModelCreating(modelBuilder); // ESSENCIAL para o Identity funcionar corretamente
 
-            // Configuração para Limpeza
+            // --- Configuração para Limpeza ---
             modelBuilder.Entity<Limpeza>(entity =>
             {
-                // VERIFIQUE: A classe Limpeza.cs TEM as propriedades IdSala e IdUtilizador?
-                entity.HasKey(l => new { l.IdSala, l.IdUtilizador });
+                // Define a chave primária composta para Limpeza.
+                // Garante que Limpeza.cs tem as propriedades IdSala e IdUtilizador.
+                entity.HasKey(l => new { l.IdSala, l.IdUtilizador }); // Ajusta se a chave de Limpeza for diferente
+
+                // Relação Limpeza -> Sala (Muitos para 1)
+                // Garante que Limpeza.cs tem 'public int IdSala { get; set; }' e 'public virtual Sala Sala { get; set; }'
+                // Garante que Sala.cs tem 'public virtual ICollection<Limpeza> Limpezas { get; set; }'
+                entity.HasOne(l => l.Sala)
+                      .WithMany(s => s.Limpezas) // Assumindo que Sala tem ICollection<Limpeza> Limpezas
+                      .HasForeignKey(l => l.IdSala)
+                      .OnDelete(DeleteBehavior.Restrict); // Ajusta o comportamento de deleção conforme necessário
+
+                // Relação Limpeza -> Funcionario (Muitos para 1)
+                // Garante que Limpeza.cs tem 'public int IdUtilizador { get; set; }' (ou nome da FK para Funcionario)
+                // e 'public virtual Funcionario Funcionario { get; set; }'
+                // Garante que Funcionario.cs tem 'public virtual ICollection<Limpeza> Limpezas { get; set; }'
+                // e uma PK (ex: Id) que corresponde ao tipo de IdUtilizador em Limpeza.
+                entity.HasOne(l => l.Funcionario)
+                      .WithMany(f => f.Limpezas) // Assumindo que Funcionario tem ICollection<Limpeza> Limpezas
+                      .HasForeignKey(l => l.IdUtilizador) // Assumindo que IdUtilizador em Limpeza é a FK para Funcionario.Id
+                      .OnDelete(DeleteBehavior.Restrict);
             });
 
-            // Configuração para Relação Utilizadores <-> Utentes
+            // --- Configuração para Relação Utilizador (IdentityUser) <-> Utente ---
             modelBuilder.Entity<Utilizador>(entity =>
             {
-                // VERIFIQUE: A classe Utilizadores.cs TEM a propriedade de navegação 'public virtual Utentes Utente { get; set; }'?
+                // Relação 1 para 1: Utilizador -> Utente
+                // Garante que Utilizador.cs tem 'public virtual Utente Utente { get; set; }'
                 entity.HasOne(identityUser => identityUser.Utente)
                       .WithOne(utente => utente.Utilizador)
-                      // VERIFIQUE: A classe Utentes.cs TEM a propriedade de chave estrangeira 'public string UtilizadorIdentityId { get; set; }'? (O tipo deve corresponder ao Id do IdentityUser, geralmente string)
-                      .HasForeignKey<Utente>(utente => utente.UtilizadorIdentityId);
+                      // Garante que Utente.cs tem 'public string UtilizadorIdentityId { get; set; }'
+                      // e que o tipo corresponde ao Id do IdentityUser (string).
+                      .HasForeignKey<Utente>(utente => utente.UtilizadorIdentityId)
+                      .OnDelete(DeleteBehavior.Cascade); // Apagar Utente se Utilizador for apagado
             });
 
             modelBuilder.Entity<Utente>(entity =>
             {
-                // VERIFIQUE: A classe Utentes.cs TEM a propriedade de chave estrangeira 'public string UtilizadorIdentityId { get; set; }'?
+                // Garante que UtilizadorIdentityId é único, pois é uma relação 1 para 1.
                 entity.HasIndex(ut => ut.UtilizadorIdentityId)
                       .IsUnique();
-                // VERIFIQUE: A classe Utentes.cs TEM a propriedade de navegação 'public virtual Utilizadores Utilizador { get; set; }'? (Usada implicitamente pelo WithOne anterior)
             });
 
-            // ADICIONAR: Configuração explícita das relações de Salas (Boa Prática)
-            // Ajuda o EF Core e pode expor problemas mais cedo.
-            modelBuilder.Entity<Aluguer_Salas.Models.Sala>(entity =>
+            // --- Configuração para Sala ---
+            modelBuilder.Entity<Sala>(entity => // Removido o namespace completo, pois 'using Aluguer_Salas.Models;' está no topo
             {
-                // Relação Salas -> Reservas (1 para Muitos)
-                // Assume que Reservas.cs tem 'public int SalaId { get; set; }' e 'public virtual Salas Sala { get; set; }'
+                // Relação Sala -> Reservas (1 para Muitos)
+                // Garante que Reserva.cs tem 'public int IdSala { get; set; }' e 'public virtual Sala Sala { get; set; }'
+                // Garante que Sala.cs tem 'public virtual ICollection<Reserva> Reservas { get; set; }'
                 entity.HasMany(s => s.Reservas)
                       .WithOne(r => r.Sala)
-                      .HasForeignKey("SalaId") // Especifique o nome da FK em Reservas se não seguir a convenção (ex: IdSala)
-                      .OnDelete(DeleteBehavior.Restrict); // Ou Cascade, SetNull, etc., dependendo da sua regra de negócio
-
-                
+                      .HasForeignKey(r => r.IdSala) // CORRIGIDO para usar a propriedade IdSala da classe Reserva
+                      .OnDelete(DeleteBehavior.Restrict);
             });
 
-            // Relação Salas -> Limpeza (1 para Muitos)
-            // Assume que Limpeza.cs tem 'public int IdSala { get; set; }' e 'public virtual Salas Sala { get; set; }'
-            modelBuilder.Entity<Limpeza>() // Configurar a partir de Limpeza
-                 .HasOne(l => l.Sala)
-                 .WithMany() // Se Salas não tiver uma ICollection<Limpeza>
-                             // .WithMany(s => s.Limpezas) // Se Salas TIVER uma ICollection<Limpeza>
-                 .HasForeignKey(l => l.IdSala)
-                 .OnDelete(DeleteBehavior.Restrict); // Exemplo
+            // --- Configuração para Reserva ---
+            modelBuilder.Entity<Reserva>(entity =>
+            {
+                // Relação Reserva -> Utilizador (Muitos para 1)
+                // Garante que Reserva.cs tem 'public string UtilizadorIdentityId { get; set; }'
+                // e 'public virtual Utilizador Utilizador { get; set; }'
+                // Opcional: Adiciona 'public virtual ICollection<Reserva> Reservas { get; set; }' em Utilizador.cs
+                entity.HasOne(r => r.Utilizador)
+                      .WithMany() // Se Utilizador não tem ICollection<Reserva>
+                                  // .WithMany(u => u.Reservas) // Se Utilizador TIVER ICollection<Reserva>
+                      .HasForeignKey(r => r.UtilizadorIdentityId)
+                      .OnDelete(DeleteBehavior.Restrict); // Não apagar utilizador se tiver reservas
+            });
 
-            // Relação Funcionario -> Limpeza (1 para Muitos)
-            // Assume que Limpeza.cs tem 'public int IdUtilizador { get; set; }' (como FK para Funcionario) e 'public virtual Funcionario Funcionario { get; set; }'
-            // Assume que Funcionario.cs tem 'public int Id { get; set; }' (PK) e talvez 'public virtual ICollection<Limpeza> Limpezas { get; set; }'
-            modelBuilder.Entity<Limpeza>()
-                .HasOne(l => l.Funcionario)
-                .WithMany() // Se Funcionario não tiver uma ICollection<Limpeza>
-                            // .WithMany(f => f.Limpezas) // Se Funcionario TIVER uma ICollection<Limpeza>
-                .HasForeignKey(l => l.IdUtilizador) // Assumindo que IdUtilizador em Limpeza é a FK para Funcionario.Id
-                .OnDelete(DeleteBehavior.Restrict); // Exemplo
+            // (Disponibilidade foi removida, então não há configuração para ela aqui)
         }
     }
 }

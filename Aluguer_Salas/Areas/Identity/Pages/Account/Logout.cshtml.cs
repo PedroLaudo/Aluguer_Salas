@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Aluguer_Salas.Models;
 
 // Certifique-se que o namespace corresponde à estrutura das suas pastas
 namespace Aluguer_Salas.Areas.Identity.Pages.Account

@@ -1,7 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using Aluguer_Salas.Models;
 
-namespace Aluguer_Salas.Data
+using Aluguer_Salas.Data;
+
+namespace Aluguer_Salas.Models
 {
     public class Limpeza
     {
