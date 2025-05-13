@@ -25,8 +25,7 @@ namespace Aluguer_Salas.Models
 
         // Relações com inicialização e virtual
         // Assume que Disponibilidade está em Aluguer_Salas.Data
-        public virtual ICollection<Disponibilidade> Disponibilidades { get; set; } = new List<Disponibilidade>();
-
+        
         // Assume que Reservas está em Aluguer_Salas.Data
         public virtual ICollection<Reserva> Reservas { get; set; } = new List<Reserva>();
     }
