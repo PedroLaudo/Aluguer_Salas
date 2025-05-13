@@ -16,12 +16,12 @@ namespace Aluguer_Salas.Areas.Identity.Pages.Account
     public class LogoutModel : PageModel
     {
         // Injeta o SignInManager para a classe Utilizadores
-        private readonly SignInManager<Utilizadores>
+        private readonly SignInManager<Utilizador>
     _signInManager;
         private readonly ILogger<LogoutModel>
             _logger;
 
-        public LogoutModel(SignInManager<Utilizadores>
+        public LogoutModel(SignInManager<Utilizador>
             signInManager, ILogger<LogoutModel>
                 logger)
         {

@@ -1,10 +1,9 @@
+
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-// Se a classe Limpeza estiver no namespace Aluguer_Salas.Data, adicione este using:
 using Aluguer_Salas.Data;
-// using Aluguer_Salas.Models; // Se Limpeza estiver aqui, o using acima não é necessário
-
-namespace Aluguer_Salas.Models
+using Aluguer_Salas.Models;
+namespace Aluguer_Salas.Models 
 {
     public class Sala
     {
@@ -24,12 +23,11 @@ namespace Aluguer_Salas.Models
 
         public bool Disponivel { get; set; } = true;
 
-        // REMOVA OU COMENTE ESTA LINHA:
-        // public virtual ICollection<Disponibilidade> Disponibilidades { get; set; } = new List<Disponibilidade>();
+        // Relações com inicialização e virtual
+        // Assume que Disponibilidade está em Aluguer_Salas.Data
+        public virtual ICollection<Disponibilidade> Disponibilidades { get; set; } = new List<Disponibilidade>();
 
+        // Assume que Reservas está em Aluguer_Salas.Data
         public virtual ICollection<Reserva> Reservas { get; set; } = new List<Reserva>();
-
-        // ADICIONE ESTA PROPRIEDADE
-        public virtual ICollection<Limpeza> Limpezas { get; set; } = new List<Limpeza>();
     }
 }

@@ -18,10 +18,10 @@ namespace Aluguer_Salas.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class RegisterConfirmationModel : PageModel
     {
-        private readonly UserManager<Utilizadores> _userManager;
+        private readonly UserManager<Utilizador> _userManager;
         private readonly IEmailSender _sender;
 
-        public RegisterConfirmationModel(UserManager<Utilizadores> userManager, IEmailSender sender)
+        public RegisterConfirmationModel(UserManager<Utilizador> userManager, IEmailSender sender)
         {
             _userManager = userManager;
             _sender = sender;

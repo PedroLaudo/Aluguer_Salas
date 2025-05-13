@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Aluguer_Salas.Models;
 
 
-namespace  Aluguer_Salas.Views.Alugar
+namespace Aluguer_Salas.Areas.Identity.Pages.Account
 {
     public class SalasModel : PageModel
     {

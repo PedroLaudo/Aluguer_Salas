@@ -1,0 +1,48 @@
+﻿@page
+@model Aluguer_Salas.Areas.Identity.Pages.Backoffice.CreateModel
+@{
+    ViewData["Title"] = "Criar Nova Sala";
+}
+<h1>@ViewData["Title"]</h1>
+
+<h4>Sala</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+               
+                <label asp-for="Sala.NomeSala" class="form-label"></label>
+                <input asp-for="Sala.NomeSala" class="form-control" />
+                <span asp-validation-for="Sala.NomeSala" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Sala.Capacidade" class="form-label"></label>
+                <input asp-for="Sala.Capacidade" class="form-control" />
+                <span asp-validation-for="Sala.Capacidade" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Sala.Descricao" class="form-label"></label>
+                <textarea asp-for="Sala.Descricao" class="form-control"></textarea> 
+                <span asp-validation-for="Sala.Descricao" class="text-danger"></span>
+            </div>
+             <div class="form-check mb-3">
+                 <input class="form-check-input" asp-for="Sala.Disponivel" />
+                 <label class="form-check-label" asp-for="Sala.Disponivel"></label>
+             </div> 
+
+            <div class="mb-3">
+                <input type="submit" value="Criar" class="btn btn-primary" />
+                <a asp-page="./Index" class="btn btn-secondary">Voltar à Lista</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

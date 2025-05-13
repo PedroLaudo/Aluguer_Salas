@@ -17,9 +17,9 @@ namespace Aluguer_Salas.Areas.Identity.Pages.Account
 {
     public class ConfirmEmailModel : PageModel
     {
-        private readonly UserManager<Utilizadores> _userManager;
+        private readonly UserManager<Utilizador> _userManager;
 
-        public ConfirmEmailModel(UserManager<Utilizadores> userManager)
+        public ConfirmEmailModel(UserManager<Utilizador> userManager)
         {
             _userManager = userManager;
         }

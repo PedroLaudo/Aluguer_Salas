@@ -1,89 +1,89 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿// Localização: Aluguer_Salas/Data/ApplicationDbContext.cs
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Aluguer_Salas.Models; // Namespace principal dos seus modelos
-
+using Aluguer_Salas.Models; // MANTIDO: Necessário para Salas
 namespace Aluguer_Salas.Data
 {
+    // Assume que Utilizadores, Reservas, Disponibilidade, Funcionario, Limpeza, Utentes estão em Aluguer_Salas.Data
     public class ApplicationDbContext : IdentityDbContext<Utilizador>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options) { }
+        public DbSet<Reserva> Reservas { get; set; }
+        public DbSet<Disponibilidade> Disponibilidades { get; set; }
+        public DbSet<Funcionario> Funcionario { get; set; }
+        public DbSet<Limpeza> Limpeza { get; set; }
+        public DbSet<Utente> Utentes { get; set; } = default!; // Ou null! se preferir
 
-        // DbSets para suas entidades
-        public DbSet<Sala> Salas { get; set; } = null!;
-        public DbSet<Reserva> Reservas { get; set; } = null!;
-        public DbSet<Funcionario> Funcionarios { get; set; } = null!; // Pluralizado
-        public DbSet<Limpeza> Limpezas { get; set; } = null!;       // Pluralizado
-        public DbSet<Utente> Utentes { get; set; } = null!;
+        // DbSet para entidade em Aluguer_Salas.Models
+        public DbSet<Aluguer_Salas.Models.Sala> Salas { get; set; } // MANTIDO: Correto
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder); // Importante para Identity
 
-            // Relação Utilizador (Identity) <-> Utente (Um-para-Um ou Um-para-Zero-ou-Um)
+            // Configuração para Limpeza
+            modelBuilder.Entity<Limpeza>(entity =>
+            {
+                // VERIFIQUE: A classe Limpeza.cs TEM as propriedades IdSala e IdUtilizador?
+                entity.HasKey(l => new { l.IdSala, l.IdUtilizador });
+            });
+
+            // Configuração para Relação Utilizadores <-> Utentes
             modelBuilder.Entity<Utilizador>(entity =>
             {
-                entity.HasOne(u => u.Utente)        // Utilizador tem um Utente (propriedade de navegação em Utilizador.cs)
-                      .WithOne(ut => ut.Utilizador) // Utente tem um Utilizador (propriedade de navegação em Utente.cs)
-                      .HasForeignKey<Utente>(ut => ut.UtilizadorIdentityId); // Chave estrangeira está em Utente e se chama UtilizadorId
-                                                                             // (Certifique-se que Utente.cs tem 'public string UtilizadorId { get; set; }')
+                // VERIFIQUE: A classe Utilizadores.cs TEM a propriedade de navegação 'public virtual Utentes Utente { get; set; }'?
+                entity.HasOne(identityUser => identityUser.Utente)
+                      .WithOne(utente => utente.Utilizador)
+                      // VERIFIQUE: A classe Utentes.cs TEM a propriedade de chave estrangeira 'public string UtilizadorIdentityId { get; set; }'? (O tipo deve corresponder ao Id do IdentityUser, geralmente string)
+                      .HasForeignKey<Utente>(utente => utente.UtilizadorIdentityId);
             });
 
             modelBuilder.Entity<Utente>(entity =>
             {
-                // Garante que um Utilizador só pode estar associado a um Utente (opcional, mas bom para 1-para-1)
+                // VERIFIQUE: A classe Utentes.cs TEM a propriedade de chave estrangeira 'public string UtilizadorIdentityId { get; set; }'?
                 entity.HasIndex(ut => ut.UtilizadorIdentityId)
                       .IsUnique();
+                // VERIFIQUE: A classe Utentes.cs TEM a propriedade de navegação 'public virtual Utilizadores Utilizador { get; set; }'? (Usada implicitamente pelo WithOne anterior)
             });
 
-            // Relação Utilizador (Identity) <-> Funcionario (Um Utilizador pode ser um Funcionario)
-            modelBuilder.Entity<Funcionario>(entity =>
+            // ADICIONAR: Configuração explícita das relações de Salas (Boa Prática)
+            // Ajuda o EF Core e pode expor problemas mais cedo.
+            modelBuilder.Entity<Aluguer_Salas.Models.Sala>(entity =>
             {
-                entity.HasOne(f => f.Utilizador) // Funcionario tem um Utilizador (propriedade de navegação em Funcionario.cs)
-                      .WithMany()               // IdentityUser (Utilizador) não terá uma coleção explícita de Funcionarios aqui.
-                                                // Se um Utilizador pudesse ser muitos Funcionarios (não faz sentido neste contexto), você adicionaria .WithMany(u => u.Funcionarios) e a coleção em Utilizador.cs
-                      .HasForeignKey(f => f.UtilizadorId) // Chave estrangeira está em Funcionario e se chama UtilizadorId
-                      .IsRequired(); // Um Funcionario DEVE ter um Utilizador associado
+                // Relação Salas -> Reservas (1 para Muitos)
+                // Assume que Reservas.cs tem 'public int SalaId { get; set; }' e 'public virtual Salas Sala { get; set; }'
+                entity.HasMany(s => s.Reservas)
+                      .WithOne(r => r.Sala)
+                      .HasForeignKey("SalaId") // Especifique o nome da FK em Reservas se não seguir a convenção (ex: IdSala)
+                      .OnDelete(DeleteBehavior.Restrict); // Ou Cascade, SetNull, etc., dependendo da sua regra de negócio
 
-                // Se você quiser garantir que um Utilizador só pode ser UM Funcionario:
-                // entity.HasIndex(f => f.UtilizadorId).IsUnique();
+                // Relação Salas -> Disponibilidades (1 para Muitos)
+                // Assume que Disponibilidade.cs tem 'public int IdSala { get; set; }' e 'public virtual Salas Sala { get; set; }'
+                entity.HasMany(s => s.Disponibilidades)
+                      .WithOne(d => d.Sala)
+                      .HasForeignKey(d => d.IdSala) // Nome da FK em Disponibilidade
+                      .OnDelete(DeleteBehavior.Cascade); // Exemplo: Apagar disponibilidades se a sala for apagada
             });
 
-            // Relação Sala <-> Reserva (Um-para-Muitos)
-            modelBuilder.Entity<Sala>(entity =>
-            {
-                entity.HasMany(s => s.Reservas) // Sala tem muitas Reservas (propriedade de navegação ICollection<Reserva> em Sala.cs)
-                      .WithOne(r => r.Sala)     // Reserva pertence a uma Sala (propriedade de navegação Sala em Reserva.cs)
-                      .HasForeignKey(r => r.IdSala) // Chave estrangeira está em Reserva e se chama IdSala (CORRIGIDO)
-                      .OnDelete(DeleteBehavior.Restrict); // O que acontece se uma Sala for apagada
-            });
-            // A relação Reserva <-> Utilizador (IdentityUser) é implicitamente tratada se você tem
-            // 'public string UtilizadorIdentityId { get; set; }' e 'public virtual Utilizador Utilizador { get; set; }' em Reserva.cs
+            // Relação Salas -> Limpeza (1 para Muitos)
+            // Assume que Limpeza.cs tem 'public int IdSala { get; set; }' e 'public virtual Salas Sala { get; set; }'
+            modelBuilder.Entity<Limpeza>() // Configurar a partir de Limpeza
+                 .HasOne(l => l.Sala)
+                 .WithMany() // Se Salas não tiver uma ICollection<Limpeza>
+                             // .WithMany(s => s.Limpezas) // Se Salas TIVER uma ICollection<Limpeza>
+                 .HasForeignKey(l => l.IdSala)
+                 .OnDelete(DeleteBehavior.Restrict); // Exemplo
 
-            // Relação Sala <-> Limpeza (Um-para-Muitos)
-            modelBuilder.Entity<Sala>(entity =>
-            {
-                entity.HasMany(s => s.Limpezas) // Sala tem muitas Limpezas (ICollection<Limpeza> em Sala.cs)
-                      .WithOne(l => l.Sala)     // Limpeza pertence a uma Sala (Sala em Limpeza.cs)
-                      .HasForeignKey(l => l.IdSala) // Chave estrangeira está em Limpeza e se chama IdSala
-                      .OnDelete(DeleteBehavior.Cascade); // Ex: Se apagar Sala, apaga Limpezas associadas
-            });
-
-            // Relação Funcionario <-> Limpeza (Um-para-Muitos)
-            modelBuilder.Entity<Funcionario>(entity =>
-            {
-                entity.HasMany(f => f.Limpezas) // Funcionario tem muitas Limpezas (ICollection<Limpeza> em Funcionario.cs)
-                      .WithOne(l => l.Funcionario) // Limpeza pertence a um Funcionario (Funcionario em Limpeza.cs)
-                      .HasForeignKey(l => l.FuncionarioId) // Chave estrangeira está em Limpeza e se chama FuncionarioId (CORRIGIDO)
-                      .OnDelete(DeleteBehavior.Restrict); // O que acontece se um Funcionario for apagado
-            });
-
-            // Configuração da entidade Limpeza (PK já definida por [Key] em Limpeza.cs)
-            // Se Limpeza NÃO tivesse [Key] e você quisesse chave composta, seria aqui:
-            // modelBuilder.Entity<Limpeza>(entity =>
-            // {
-            //     entity.HasKey(l => new { l.IdSala, l.FuncionarioId, l.DiaSemana });
-            // });
+            // Relação Funcionario -> Limpeza (1 para Muitos)
+            // Assume que Limpeza.cs tem 'public int IdUtilizador { get; set; }' (como FK para Funcionario) e 'public virtual Funcionario Funcionario { get; set; }'
+            // Assume que Funcionario.cs tem 'public int Id { get; set; }' (PK) e talvez 'public virtual ICollection<Limpeza> Limpezas { get; set; }'
+            modelBuilder.Entity<Limpeza>()
+                .HasOne(l => l.Funcionario)
+                .WithMany() // Se Funcionario não tiver uma ICollection<Limpeza>
+                            // .WithMany(f => f.Limpezas) // Se Funcionario TIVER uma ICollection<Limpeza>
+                .HasForeignKey(l => l.IdUtilizador) // Assumindo que IdUtilizador em Limpeza é a FK para Funcionario.Id
+                .OnDelete(DeleteBehavior.Restrict); // Exemplo
         }
     }
 }

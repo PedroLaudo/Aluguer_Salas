@@ -4,6 +4,7 @@ using Aluguer_Salas.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Aluguer_Salas.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250507145038_atualizado")]
+    partial class atualizado
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,9 +46,12 @@ namespace Aluguer_Salas.Migrations
                     b.Property<int>("IdSala")
                         .HasColumnType("int");
 
+                    b.Property<int>("SalaId")
+                        .HasColumnType("int");
+
                     b.HasKey("IdDisponibilidade");
 
-                    b.HasIndex("IdSala");
+                    b.HasIndex("SalaId");
 
                     b.ToTable("Disponibilidades");
                 });
@@ -81,14 +87,22 @@ namespace Aluguer_Salas.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("FuncionarioId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SalaId")
+                        .HasColumnType("int");
+
                     b.HasKey("IdSala", "IdUtilizador");
 
-                    b.HasIndex("IdUtilizador");
+                    b.HasIndex("FuncionarioId");
+
+                    b.HasIndex("SalaId");
 
                     b.ToTable("Limpeza");
                 });
 
-            modelBuilder.Entity("Aluguer_Salas.Data.Reserva", b =>
+            modelBuilder.Entity("Aluguer_Salas.Data.Reservas", b =>
                 {
                     b.Property<int>("IdReserva")
                         .ValueGeneratedOnAdd()
@@ -96,39 +110,63 @@ namespace Aluguer_Salas.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdReserva"));
 
-                    b.Property<DateTime>("Data")
+                    b.Property<DateTime>("DataHoraFim")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("HoraFim")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("HoraInicio")
+                    b.Property<DateTime>("DataHoraInicio")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("IdSala")
                         .HasColumnType("int");
 
-                    b.Property<int>("SalaId")
+                    b.Property<int>("IdUtilizador")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SalaId")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UtilizadorIdentityId")
-                        .IsRequired()
+                    b.Property<string>("UtilizadorId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("IdReserva");
 
                     b.HasIndex("SalaId");
 
-                    b.HasIndex("UtilizadorIdentityId");
+                    b.HasIndex("UtilizadorId");
 
                     b.ToTable("Reservas");
                 });
 
-            modelBuilder.Entity("Aluguer_Salas.Data.Utente", b =>
+            modelBuilder.Entity("Aluguer_Salas.Data.Salas", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Capacidade")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NomeSala")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Salas");
+                });
+
+            modelBuilder.Entity("Aluguer_Salas.Data.Utentes", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -157,7 +195,7 @@ namespace Aluguer_Salas.Migrations
                     b.ToTable("Utentes");
                 });
 
-            modelBuilder.Entity("Aluguer_Salas.Data.Utilizador", b =>
+            modelBuilder.Entity("Aluguer_Salas.Data.Utilizadores", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -229,33 +267,6 @@ namespace Aluguer_Salas.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("Aluguer_Salas.Models.Sala", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Capacidade")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Descricao")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Disponivel")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("NomeSala")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Salas");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -393,9 +404,9 @@ namespace Aluguer_Salas.Migrations
 
             modelBuilder.Entity("Aluguer_Salas.Data.Disponibilidade", b =>
                 {
-                    b.HasOne("Aluguer_Salas.Models.Sala", "Sala")
+                    b.HasOne("Aluguer_Salas.Data.Salas", "Sala")
                         .WithMany("Disponibilidades")
-                        .HasForeignKey("IdSala")
+                        .HasForeignKey("SalaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -404,7 +415,7 @@ namespace Aluguer_Salas.Migrations
 
             modelBuilder.Entity("Aluguer_Salas.Data.Funcionario", b =>
                 {
-                    b.HasOne("Aluguer_Salas.Data.Utilizador", "Utilizador")
+                    b.HasOne("Aluguer_Salas.Data.Utilizadores", "Utilizador")
                         .WithMany()
                         .HasForeignKey("UtilizadorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -415,16 +426,16 @@ namespace Aluguer_Salas.Migrations
 
             modelBuilder.Entity("Aluguer_Salas.Data.Limpeza", b =>
                 {
-                    b.HasOne("Aluguer_Salas.Models.Sala", "Sala")
-                        .WithMany()
-                        .HasForeignKey("IdSala")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("Aluguer_Salas.Data.Funcionario", "Funcionario")
                         .WithMany()
-                        .HasForeignKey("IdUtilizador")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("FuncionarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Aluguer_Salas.Data.Salas", "Sala")
+                        .WithMany()
+                        .HasForeignKey("SalaId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Funcionario");
@@ -432,30 +443,26 @@ namespace Aluguer_Salas.Migrations
                     b.Navigation("Sala");
                 });
 
-            modelBuilder.Entity("Aluguer_Salas.Data.Reserva", b =>
+            modelBuilder.Entity("Aluguer_Salas.Data.Reservas", b =>
                 {
-                    b.HasOne("Aluguer_Salas.Models.Sala", "Sala")
+                    b.HasOne("Aluguer_Salas.Data.Salas", "Sala")
                         .WithMany("Reservas")
-                        .HasForeignKey("SalaId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("SalaId");
 
-                    b.HasOne("Aluguer_Salas.Data.Utilizador", "Utilizador")
+                    b.HasOne("Aluguer_Salas.Data.Utilizadores", "Utilizador")
                         .WithMany()
-                        .HasForeignKey("UtilizadorIdentityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UtilizadorId");
 
                     b.Navigation("Sala");
 
                     b.Navigation("Utilizador");
                 });
 
-            modelBuilder.Entity("Aluguer_Salas.Data.Utente", b =>
+            modelBuilder.Entity("Aluguer_Salas.Data.Utentes", b =>
                 {
-                    b.HasOne("Aluguer_Salas.Data.Utilizador", "Utilizador")
+                    b.HasOne("Aluguer_Salas.Data.Utilizadores", "Utilizador")
                         .WithOne("Utente")
-                        .HasForeignKey("Aluguer_Salas.Data.Utente", "UtilizadorIdentityId")
+                        .HasForeignKey("Aluguer_Salas.Data.Utentes", "UtilizadorIdentityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -473,7 +480,7 @@ namespace Aluguer_Salas.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Aluguer_Salas.Data.Utilizador", null)
+                    b.HasOne("Aluguer_Salas.Data.Utilizadores", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -482,7 +489,7 @@ namespace Aluguer_Salas.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Aluguer_Salas.Data.Utilizador", null)
+                    b.HasOne("Aluguer_Salas.Data.Utilizadores", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -497,7 +504,7 @@ namespace Aluguer_Salas.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Aluguer_Salas.Data.Utilizador", null)
+                    b.HasOne("Aluguer_Salas.Data.Utilizadores", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -506,23 +513,23 @@ namespace Aluguer_Salas.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Aluguer_Salas.Data.Utilizador", null)
+                    b.HasOne("Aluguer_Salas.Data.Utilizadores", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Aluguer_Salas.Data.Utilizador", b =>
-                {
-                    b.Navigation("Utente");
-                });
-
-            modelBuilder.Entity("Aluguer_Salas.Models.Sala", b =>
+            modelBuilder.Entity("Aluguer_Salas.Data.Salas", b =>
                 {
                     b.Navigation("Disponibilidades");
 
                     b.Navigation("Reservas");
+                });
+
+            modelBuilder.Entity("Aluguer_Salas.Data.Utilizadores", b =>
+                {
+                    b.Navigation("Utente");
                 });
 #pragma warning restore 612, 618
         }

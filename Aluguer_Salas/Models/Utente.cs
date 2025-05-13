@@ -1,7 +1,6 @@
 // Aluguer_Salas/Data/Utentes.cs
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Aluguer_Salas.Models;
 
 namespace Aluguer_Salas.Data
 {
