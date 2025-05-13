@@ -40,6 +40,6 @@ namespace Aluguer_Salas.Data
         public Utilizadores? Utilizador { get; set; }      // pode ser null
 
         // Relacionamento com a tabela Salas
-        public Salas? Sala { get; set; }                    // pode ser null
+        public Sala? Sala { get; set; }                    // pode ser null
     }
 }

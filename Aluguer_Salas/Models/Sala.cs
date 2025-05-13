@@ -3,7 +3,7 @@ using Aluguer_Salas.Models;
 
 namespace Aluguer_Salas.Data
 {
-    public class Salas
+    public class Sala
     {
         [Key]
         public int Id { get; set; }

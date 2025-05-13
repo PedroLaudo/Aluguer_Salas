@@ -10,7 +10,7 @@ namespace Aluguer_Salas.Data
             : base(options) { }
 
         public DbSet<Reservas> Reservas { get; set; }
-        public DbSet<Salas> Salas { get; set; }
+        public DbSet<Sala> Salas { get; set; }
         public DbSet<Disponibilidade> Disponibilidades { get; set; }
         public DbSet<Funcionario> Funcionario { get; set; }
         public DbSet<Limpeza> Limpeza { get; set; }

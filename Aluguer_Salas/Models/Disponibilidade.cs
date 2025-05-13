@@ -32,6 +32,6 @@ namespace Aluguer_Salas.Data
         public TimeSpan HoraFim { get; set; }
 
         // Relacionamento com a tabela Salas
-        public Salas Sala { get; set; }
+        public Sala Sala { get; set; }
     }
 }

@@ -1,0 +1,74 @@
+﻿@model Aluguer_Salas.Models.AluguerViewModel
+@{
+    ViewData["Title"] = "Alugar Sala";
+}
+
+<h1>Alugar Sala: @Model.NomeSala</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-7">
+        <form asp-controller="Alugar" asp-action="ConfirmarAluguer" method="post">
+            @Html.AntiForgeryToken() @* Importante para segurança CSRF *@
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div> @* Mostra erros de modelo não associados a uma propriedade específica *@
+
+            @* Campo oculto para passar o SalaId *@
+            <input type="hidden" asp-for="SalaId" />
+
+            @* Mostrar detalhes da sala (não editáveis) *@
+            <fieldset disabled class="mb-3">
+                <legend class="h5">Detalhes da Sala</legend>
+                <div class="mb-3">
+                    <label asp-for="NomeSala" class="form-label"></label>
+                    <input asp-for="NomeSala" class="form-control" />
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Capacidade" class="form-label"></label>
+                        <input asp-for="Capacidade" class="form-control" />
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="DescricaoSala" class="form-label"></label>
+                    <textarea asp-for="DescricaoSala" class="form-control" rows="3"></textarea>
+                </div>
+            </fieldset>
+
+            <h4 class="mt-4">Preencha os Dados da Reserva</h4>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Data" class="form-label"></label>
+                    <input asp-for="Data" class="form-control" />
+                    <span asp-validation-for="Data" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="HoraInicio" class="form-label"></label>
+                    <input asp-for="HoraInicio" type="time" class="form-control" />
+                    <span asp-validation-for="HoraInicio" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="HoraFim" class="form-label"></label>
+                    <input asp-for="HoraFim" type="time" class="form-control" />
+                    <span asp-validation-for="HoraFim" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group mt-4">
+                <button type="submit" class="btn btn-primary">Confirmar Reserva</button>
+                <a asp-action="Salas" class="btn btn-secondary ms-2">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@* Adicionar a secção Scripts para validação do lado do cliente *@
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
