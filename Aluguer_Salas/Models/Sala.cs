@@ -1,29 +1,35 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Aluguer_Salas.Models;
+// Se a classe Limpeza estiver no namespace Aluguer_Salas.Data, adicione este using:
+using Aluguer_Salas.Data;
+// using Aluguer_Salas.Models; // Se Limpeza estiver aqui, o using acima não é necessário
 
-namespace Aluguer_Salas.Data
+namespace Aluguer_Salas.Models
 {
     public class Sala
     {
         [Key]
         public int Id { get; set; }
-
-        // Validação para garantir que o nome da sala é obrigatório e não exceda 255 caracteres
         [Required(ErrorMessage = "O {0} é de preenchimento obrigatório.")]
         [StringLength(255, ErrorMessage = "O {0} deve ter no máximo {1} caracteres.")]
-        public string NomeSala { get; set; }
+        [Display(Name = "Nome da Sala")]
+        public string NomeSala { get; set; } = string.Empty;
 
-        // Validação para garantir que a capacidade da sala é obrigatória
         [Required(ErrorMessage = "A {0} é de preenchimento obrigatório.")]
+        [Range(1, int.MaxValue, ErrorMessage = "A capacidade deve ser pelo menos 1.")]
         public int Capacidade { get; set; }
 
-        // A descrição da sala pode ser opcional
-        public string Descricao { get; set; }
+        [DataType(DataType.MultilineText)]
+        public string? Descricao { get; set; }
 
-        // Relacionamento com a tabela Disponibilidade (se houver)
-        public ICollection<Disponibilidade> Disponibilidades { get; set; }
+        public bool Disponivel { get; set; } = true;
 
-        // Relacionamento com a tabela Reserva (se houver)
-        public ICollection<Reservas> Reservas { get; set; }
+        // REMOVA OU COMENTE ESTA LINHA:
+        // public virtual ICollection<Disponibilidade> Disponibilidades { get; set; } = new List<Disponibilidade>();
+
+        public virtual ICollection<Reserva> Reservas { get; set; } = new List<Reserva>();
+
+        // ADICIONE ESTA PROPRIEDADE
+        public virtual ICollection<Limpeza> Limpezas { get; set; } = new List<Limpeza>();
     }
 }
