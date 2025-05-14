@@ -54,6 +54,9 @@ builder.Services.AddIdentity<Utilizador, IdentityRole>(options => // Use AddIden
 // 3. Regista o serviço de envio de e-mail
 builder.Services.AddTransient<ICustomEmailSender, EmailSender>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
+
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+
 // 4. Personaliza opções do Cookie de Autenticação do Identity (Opcional, mas bom para ter)
 builder.Services.ConfigureApplicationCookie(options =>
 {
