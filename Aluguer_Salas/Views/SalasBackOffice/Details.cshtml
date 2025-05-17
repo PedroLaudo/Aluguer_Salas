@@ -1,0 +1,28 @@
+﻿@model Aluguer_Salas.Models.Sala
+@{
+    ViewData["Title"] = "Detalhes da Sala";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <h4>Sala: @Model.NomeSala</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.NomeSala)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.NomeSala)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Capacidade)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Capacidade)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Descricao)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Descricao)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Disponivel)</dt>
+        <dd class="col-sm-9">@(Model.Disponivel ? "Sim" : "Não")</dd>
+    </dl>
+</div>
+<div class="mt-3">
+    <a asp-controller="SalasBackoffice" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Editar</a>
+    <a asp-controller="SalasBackoffice" asp-action="Index" class="btn btn-secondary">Voltar à Lista</a>
+</div>

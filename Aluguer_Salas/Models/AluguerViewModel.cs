@@ -1,33 +1,39 @@
-﻿using System;
+﻿// Ficheiro: Models/AluguerViewModel.cs
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Aluguer_Salas.Models // Certifique-se que o namespace está correto
+namespace Aluguer_Salas.Models
 {
     public class AluguerViewModel
     {
-        // Informações da Sala (para mostrar ao utilizador)
+        // Detalhes da Sala (para exibição)
         public int SalaId { get; set; }
-        public string NomeSala { get; set; }
+        public string? NomeSala { get; set; }
         public int Capacidade { get; set; }
-        public string DescricaoSala { get; set; }
+        public string? DescricaoSala { get; set; }
 
-        // Campos do formulário para a Reserva
+        // Inputs do Formulário de Reserva
         [Required(ErrorMessage = "A data da reserva é obrigatória.")]
         [DataType(DataType.Date)]
-        [Display(Name = "Data da Reserva")]
-        public DateTime Data { get; set; } = DateTime.Today; // Valor padrão
+        public DateTime Data { get; set; } = DateTime.Today; // Mantido como 'Data' para corresponder ao seu .cshtml
 
         [Required(ErrorMessage = "A hora de início é obrigatória.")]
-        [DataType(DataType.Time)] // Isto ajudará o browser a mostrar um seletor de hora
-        [Display(Name = "Hora de Início")]
-        public DateTime HoraInicio { get; set; }
+        [DataType(DataType.Time)]
+        public TimeSpan HoraInicio { get; set; } // Mantido como 'HoraInicio'
 
         [Required(ErrorMessage = "A hora de fim é obrigatória.")]
-        [DataType(DataType.Time)] // Isto ajudará o browser a mostrar um seletor de hora
-        [Display(Name = "Hora de Fim")]
-        public DateTime HoraFim { get; set; }
+        [DataType(DataType.Time)]
+        public TimeSpan HoraFim { get; set; }    // Mantido como 'HoraFim'
 
-        // Não precisamos incluir aqui IdReserva, Status, ou UtilizadorIdentityId
-        // porque eles serão definidos no controller ou pela base de dados.
+        // Para mostrar horários já ocupados na view
+        public List<HorarioOcupadoViewModel> HorariosOcupados { get; set; } = new List<HorarioOcupadoViewModel>();
+    }
+
+    public class HorarioOcupadoViewModel // ViewModel auxiliar
+    {
+        public TimeSpan HoraInicio { get; set; }
+        public TimeSpan HoraFim { get; set; }
+        // Pode adicionar uma string "Descricao" se quiser mostrar quem reservou, etc. (com cuidado pela privacidade)
     }
 }

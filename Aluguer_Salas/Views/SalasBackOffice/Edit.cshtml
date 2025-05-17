@@ -1,0 +1,50 @@
+﻿@model Aluguer_Salas.Models.Sala
+@{
+    ViewData["Title"] = "Editar Sala";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h4>Sala: @Model.NomeSala</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        @* Aumentado o col-md *@
+        <form asp-controller="SalasBackoffice" asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" /> @* Importante para o POST saber qual Sala atualizar *@
+
+            <div class="mb-3">
+                <label asp-for="NomeSala" class="form-label"></label>
+                <input asp-for="NomeSala" class="form-control" />
+                <span asp-validation-for="NomeSala" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Capacidade" class="form-label"></label>
+                <input asp-for="Capacidade" class="form-control" type="number" />
+                <span asp-validation-for="Capacidade" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Descricao" class="form-label"></label>
+                <textarea asp-for="Descricao" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Descricao" class="text-danger"></span>
+            </div>
+
+            <div class="form-check mb-3">
+                <input class="form-check-input" asp-for="Disponivel" />
+                <label class="form-check-label" asp-for="Disponivel"></label>
+            </div>
+
+            <div class="mb-3">
+                <input type="submit" value="Guardar Alterações" class="btn btn-primary" />
+                <a asp-controller="SalasBackoffice" asp-action="Index" class="btn btn-secondary">Voltar à Lista</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

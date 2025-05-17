@@ -1,0 +1,30 @@
+﻿@model Aluguer_Salas.Models.Sala
+@{
+    ViewData["Title"] = "Apagar Sala";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <h4>Sala: @Model.NomeSala</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.NomeSala)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.NomeSala)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Capacidade)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Capacidade)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Descricao)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Descricao)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Disponivel)</dt>
+        <dd class="col-sm-9">@(Model.Disponivel ? "Sim" : "Não")</dd>
+    </dl>
+
+    <form asp-controller="SalasBackoffice" asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" /> @* Envia o ID para a action DeleteConfirmed *@
+        <input type="submit" value="Apagar " class="btn btn-danger" />
+        <a asp-controller="SalasBackoffice" asp-action="Index" class="btn btn-secondary">Cancelar </a>
+    </form>
+</div>

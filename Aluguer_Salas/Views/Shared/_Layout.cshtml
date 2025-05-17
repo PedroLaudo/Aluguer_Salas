@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@using Aluguer_Salas.Data 
+@using Aluguer_Salas.Data
 
 @inject SignInManager<Utilizador> SignInManager
 @inject UserManager<Utilizador> UserManager
@@ -39,18 +39,17 @@
 
 
 
-                        
-                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrador"))
+
+                        @if (User.IsInRole("Administrador")) // Só mostra o link se o utilizador for Administrador
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Backoffice/Index">Salas Administrador</a>
+                                <a class="nav-link text-dark" asp-controller="SalasBackoffice" asp-action="Index">Salas Administrador</a>
                             </li>
-                            
                         }
-                        
+
 
                     </ul>
-                    <partial name="_LoginPartial" /> 
+                    <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
