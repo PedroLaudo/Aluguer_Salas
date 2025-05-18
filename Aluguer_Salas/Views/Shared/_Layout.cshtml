@@ -36,7 +36,12 @@
                             <a class="nav-link text-dark" asp-area="Identity" asp-controller="Alugar" asp-action="Salas">Salas</a>
                         </li>
 
-
+                        @if (User.IsInRole("Administrador")) // Só mostra o link se o utilizador for Administrador
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="MaterialBackOffice" asp-action="Index">Gerir Material</a>
+                            </li>
+                        }
 
 
 

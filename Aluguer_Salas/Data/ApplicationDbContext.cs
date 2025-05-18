@@ -17,9 +17,11 @@ namespace Aluguer_Salas.Data
         // É convenção usar o nome da classe no plural para o DbSet
         public DbSet<Sala> Salas { get; set; }
         public DbSet<Reserva> Reservas { get; set; }
-        public DbSet<Funcionario> Funcionarios { get; set; } // Nome da propriedade no plural
-        public DbSet<Limpeza> Limpezas { get; set; }         // Nome da propriedade no plural
+        public DbSet<Funcionario> Funcionarios { get; set; } 
+        public DbSet<Limpeza> Limpezas { get; set; }         
         public DbSet<Utente> Utentes { get; set; }
+        public DbSet<Material> Materiais { get; set; }
+        public DbSet<RequisicaoMaterial> RequisicoesMaterial { get; set; }
 
         // Disponibilidade foi removida
 

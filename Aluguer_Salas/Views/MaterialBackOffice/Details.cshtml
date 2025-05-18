@@ -1,0 +1,31 @@
+﻿@model Aluguer_Salas.Models.Material
+
+@{
+    ViewData["Title"] = "Detalhes do Material";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <h4>Material</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.QuantidadeDisponivel)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.QuantidadeDisponivel)
+        </dd>
+        @* Adicione outras propriedades do material aqui, se houver *@
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Editar</a> |
+    <a asp-action="Index" class="btn btn-secondary">Voltar à Lista</a>
+</div>
