@@ -1,18 +1,19 @@
 ﻿@model Aluguer_Salas.Models.AluguerViewModel
+
 @{
     ViewData["Title"] = "Alugar Sala";
 }
 
-<h1>Alugar Sala: @Model.NomeSala</h1>
-<hr />
+<h2 class="mb-4">@ViewData["Title"]: @Model.NomeSala</h2>
 
 <div class="row">
     <div class="col-md-7">
-        @* O formulário agora aponta para a ação Aluguer no AlugarController *@
         <form asp-controller="Alugar" asp-action="Aluguer" method="post">
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
             <input type="hidden" asp-for="SalaId" />
+            <input type="hidden" asp-for="NomeSala" />
 
             <fieldset disabled class="mb-3">
                 <legend class="h5">Detalhes da Sala</legend>
@@ -20,32 +21,27 @@
                     <label asp-for="NomeSala" class="form-label"></label>
                     <input asp-for="NomeSala" class="form-control" />
                 </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="Capacidade" class="form-label"></label>
-                        <input asp-for="Capacidade" class="form-control" />
-                    </div>
-                </div>
                 <div class="mb-3">
                     <label asp-for="DescricaoSala" class="form-label"></label>
-                    <textarea asp-for="DescricaoSala" class="form-control" rows="3"></textarea>
+                    <textarea asp-for="DescricaoSala" class="form-control" rows="2"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Capacidade" class="form-label"></label>
+                    <input asp-for="Capacidade" class="form-control" />
                 </div>
             </fieldset>
 
-            <h4 class="mt-4">Preencha os Dados da Reserva</h4>
+            <h5 class="mt-4">Escolha a Data e Hora</h5>
+            <hr />
 
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label asp-for="Data" class="form-label"></label>
-                    @* Ao mudar a data, submete o formulário para a action Aluguer com method POST.
-                       O controller irá recarregar os horários e retornar a view.
-                       Para uma UX melhor, usar AJAX para chamar GetHorariosOcupadosJson e atualizar dinamicamente. *@
-                    <input asp-for="Data" class="form-control" id="dataReservaInput" />
+                    <label asp-for="Data" class="form-label">Data da Reserva</label>
+                    <input asp-for="Data" class="form-control" id="dataReservaInput" type="date" asp-format="{0:yyyy-MM-dd}" />
                     <span asp-validation-for="Data" class="text-danger"></span>
                 </div>
             </div>
 
-            @* Mostrar horários ocupados *@
             @if (Model.HorariosOcupados != null && Model.HorariosOcupados.Any())
             {
                 <div class="mt-3 mb-3 alert alert-warning p-2">
@@ -54,30 +50,36 @@
                         @foreach (var horario in Model.HorariosOcupados)
                         {
                             <li>
-                                <i class="fas fa-ban text-danger me-1"></i> @horario.HoraInicio.ToString("hh\\:mm") - @horario.HoraFim.ToString("hh\\:mm")
+                                <i class="fas fa-ban text-danger me-1"></i> @horario.HoraInicio.ToString(@"hh\:mm") - @horario.HoraFim.ToString(@"hh\:mm")
                             </li>
                         }
                     </ul>
                     <small class="d-block mt-1" style="font-size: 0.8rem;">Por favor, escolha um horário diferente dos listados acima.</small>
                 </div>
             }
-
+            else if (Model.Data != default)
+            {
+                <div class="mt-3 mb-3 alert alert-success p-2">
+                    <h6 class="alert-heading" style="font-size: 0.9rem;">Não há horários ocupados para @Model.Data.ToShortDateString().</h6>
+                </div>
+            }
 
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label asp-for="HoraInicio" class="form-label"></label>
-                    <input asp-for="HoraInicio" type="time" class="form-control" />
+                    <input asp-for="HoraInicio" class="form-control" type="time" />
                     <span asp-validation-for="HoraInicio" class="text-danger"></span>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label asp-for="HoraFim" class="form-label"></label>
-                    <input asp-for="HoraFim" type="time" class="form-control" />
+                    <input asp-for="HoraFim" class="form-control" type="time" />
                     <span asp-validation-for="HoraFim" class="text-danger"></span>
                 </div>
             </div>
 
             <div class="form-group mt-4">
-                @* O 'name' e 'value' ajudam o controller a saber se é uma submissão final *@
+                @* Botão principal para confirmar a reserva.
+                   O 'name' e 'value' são importantes para o controller identificar a ação. *@
                 <button type="submit" name="command" value="ConfirmarReserva" class="btn btn-primary">Confirmar Reserva</button>
                 <a asp-controller="Alugar" asp-action="Salas" class="btn btn-secondary ms-2">Cancelar</a>
             </div>
@@ -93,13 +95,47 @@
         document.addEventListener('DOMContentLoaded', function () {
             const dataInput = document.getElementById('dataReservaInput');
             if (dataInput) {
-                dataInput.addEventListener('change', function () 
-                    this.form.submit(); // Submete o formulário inteiro
+                dataInput.addEventListener('change', function () {
+                    // Adiciona um input oculto para o comando de atualização de horários
+                    let commandInput = this.form.querySelector('input[name="commandUpdateHorarios"]');
+                    if (!commandInput) {
+                       commandInput = document.createElement('input');
+                       commandInput.type = 'hidden';
+                       commandInput.name = 'command'; // Usa o mesmo nome 'command'
+                       commandInput.value = 'UpdateHorarios'; // Valor específico para atualização
+                       commandInput.setAttribute('name', 'commandUpdateHorarios'); // Para fácil remoção/identificação
+                       this.form.appendChild(commandInput);
+                    } else {
+                       commandInput.value = 'UpdateHorarios'; // Garante que o valor está correto
+                    }
+                    this.form.submit();
+                });
+            }
+
+            // Garante que o input 'commandUpdateHorarios' seja removido se o usuário clicar no botão de submissão principal
+            // para que o 'command' do botão seja enviado.
+            const mainForm = document.querySelector('form[asp-controller="Alugar"][asp-action="Aluguer"]');
+            if (mainForm) {
+                mainForm.addEventListener('submit', function(event) {
+                    const updateCommandInput = mainForm.querySelector('input[name="commandUpdateHorarios"]');
+                    if (updateCommandInput) {
+                        // Verifica se o evento de submit foi originado pelo botão de "Confirmar Reserva"
+                        // ou por outro botão que envia um 'command'.
+                        // Se foi o JS (mudança de data), o 'submitter' pode ser nulo ou não ser um botão com 'command'.
+                        // Neste caso, como o JS sempre adiciona o input, precisamos de uma forma de distinguir.
+                        // Se o submitter tem name="command", então é um dos botões de ação.
+                        const submitter = event.submitter;
+                        if (submitter && submitter.name === 'command' && submitter.value === 'ConfirmarReserva') {
+                             updateCommandInput.remove();
+                        }
+                        // Se o submit é via JS (mudança de data), o input 'commandUpdateHorarios' é o que queremos.
+                        // Se for o botão 'ConfirmarReserva', o input de 'UpdateHorarios' é removido e o valor do botão é usado.
+                    }
                 });
             }
         });
     </script>
-    @* Descomente se quiser usar ícones Font Awesome na lista de horários:
+    @*
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     *@
 }

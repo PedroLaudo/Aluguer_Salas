@@ -1,0 +1,222 @@
+﻿@model Aluguer_Salas.Models.RequisicaoMaterial
+
+@{
+    string titulo = "Requisitar Material(ais)";
+    string nomeSala = ViewBag.NomeSalaPendente as string;
+    if (!string.IsNullOrEmpty(nomeSala))
+    {
+        titulo += $" para a Sala: {nomeSala}";
+    }
+    ViewData["Title"] = titulo;
+
+    // Preparar a lista de materiais para o JavaScript
+    var materiaisParaJs = new List<object>();
+    if (ViewBag.ListaMateriaisDisponiveis is SelectList selectList)
+    {
+        foreach (SelectListItem item in selectList)
+        {
+            materiaisParaJs.Add(new
+            {
+                // O serializador JSON provavelmente transformará estes em camelCase: value, text
+                Value = item.Value,
+                Text = item.Text
+            });
+        }
+    }
+    // Se o Model.Itens for null e você quiser que a primeira linha seja adicionada dinamicamente
+    // ou se você quiser garantir que haja pelo menos um item para o binding inicial:
+    // if (Model.Itens == null) { Model.Itens = new List<ItemRequisicaoViewModel>(); }
+    // if (!Model.Itens.Any()) { Model.Itens.Add(new ItemRequisicaoViewModel()); } // Adapte conforme seu ViewModel de item
+}
+
+<h2>@ViewData["Title"]</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Index" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+            @if (ViewBag.SalaIdPendente != null)
+            {
+                <input type="hidden" name="salaIdPendenteInput" value="@ViewBag.SalaIdPendente" />
+            }
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label asp-for="DataRequisicao" class="form-label"></label>
+                    <input asp-for="DataRequisicao" type="date" class="form-control" value="@Model.DataRequisicao.ToString("yyyy-MM-dd")" />
+                    <span asp-validation-for="DataRequisicao" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="HoraInicio" class="form-label"></label>
+                    <input asp-for="HoraInicio" type="time" class="form-control" value="@Model.HoraInicio.ToString(@"hh\:mm")" />
+                    <span asp-validation-for="HoraInicio" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="HoraFim" class="form-label"></label>
+                    <input asp-for="HoraFim" type="time" class="form-control" value="@Model.HoraFim.ToString(@"hh\:mm")" />
+                    <span asp-validation-for="HoraFim" class="text-danger"></span>
+                </div>
+            </div>
+
+            <h4 class="mt-4">Itens da Requisição</h4>
+            <div id="itens-container">
+                @* Linha inicial - assumindo que seu Model.Itens pode ter um item,
+                   ou que você quer renderizar a primeira linha estaticamente com os nomes corretos.
+                   Se Model.Itens é onde os itens da requisição são armazenados: *@
+                @{
+                    // Exemplo se você tiver uma lista no seu Model principal para os itens
+                    // if (Model.Itens == null) Model.Itens = new List<SeuTipoDeItem>();
+                    // if (!Model.Itens.Any()) Model.Itens.Add(new SeuTipoDeItem()); // Para garantir a primeira linha
+                }
+                @* Para o primeiro item (índice 0) *@
+                <div class="row item-row mb-3 align-items-end">
+                    <div class="col-md-5">
+                        <label class="form-label visually-hidden">Material</label>
+                        @* Ajuste o nome para o model binding: Itens[0].MaterialId *@
+                        <select name="Itens[0].MaterialId" asp-items="ViewBag.ListaMateriaisDisponiveis as SelectList" class="form-select material-select">
+                            <option value="">-- Selecione o Material --</option>
+                        </select>
+                        @* Adicione span para validação se necessário *@
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label visually-hidden">Quantidade</label>
+                        @* Ajuste o nome para o model binding: Itens[0].QuantidadeRequisitada *@
+                        <input name="Itens[0].QuantidadeRequisitada" type="number" min="1" class="form-control quantidade-input" placeholder="Qtd." value="1" />
+                        @* Adicione span para validação se necessário *@
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-danger btn-sm remove-item-btn" title="Remover Item" style="display:none;">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" id="add-item-btn" class="btn btn-success btn-sm mt-2 mb-3">
+                <i class="bi bi-plus-circle"></i> Adicionar Outro Material
+            </button>
+
+            <div class="form-group mt-4">
+                <button type="submit" class="btn btn-primary">Confirmar Requisição</button>
+                <a asp-controller="Alugar" asp-action="Salas" class="btn btn-secondary ms-2">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const itensContainer = document.getElementById('itens-container');
+            const addItemBtn = document.getElementById('add-item-btn');
+
+            const listaMateriaisDisponiveis = @Html.Raw(Json.Serialize(materiaisParaJs));
+            console.log('Lista de materiais disponíveis no carregamento:', listaMateriaisDisponiveis);
+
+            // Função de escape HTML correta
+            function escapeHtml(unsafe) {
+                if (typeof unsafe !== 'string') {
+                    unsafe = String(unsafe);
+                }
+                return unsafe
+                    .replace(/&/g, "&")
+                    .replace(/</g, "<")
+                    .replace(/>/g, ">")
+                    .replace(/"/g, """)
+                    .replace(/'/g, "'");
+            }
+
+            function updateRemoveButtonsVisibility() {
+                const itemRows = itensContainer.querySelectorAll('.item-row');
+                itemRows.forEach((row, index) => {
+                    const removeBtn = row.querySelector('.remove-item-btn');
+                    if (removeBtn) {
+                        removeBtn.style.display = itemRows.length > 1 ? 'inline-block' : 'none';
+                    }
+                });
+            }
+
+            function updateInputNames() {
+                const itemRows = itensContainer.querySelectorAll('.item-row');
+                itemRows.forEach((row, index) => {
+                    const materialSelect = row.querySelector('.material-select');
+                    const quantidadeInput = row.querySelector('.quantidade-input');
+
+                    if (materialSelect) {
+                        materialSelect.name = `Itens[${index}].MaterialId`;
+                    }
+                    if (quantidadeInput) {
+                        quantidadeInput.name = `Itens[${index}].QuantidadeRequisitada`;
+                    }
+                    // Se você tiver outros campos por item, atualize-os aqui também
+                });
+            }
+
+            function createItemRowHtml(index) { // Passa o índice para os nomes dos campos
+                let optionsHtml = '<option value="">-- Selecione o Material --</option>';
+                if (Array.isArray(listaMateriaisDisponiveis)) {
+                    listaMateriaisDisponiveis.forEach(function (item) {
+                        // CORREÇÃO AQUI: use item.value e item.text (camelCase)
+                        const value = item.value ?? ''; // Acessando .value (minúsculo)
+                        const text = item.text ?? 'Opção Inválida'; // Acessando .text (minúsculo)
+                        optionsHtml += `<option value="${escapeHtml(value)}">${escapeHtml(text)}</option>`;
+                    });
+                } else {
+                    console.warn('listaMateriaisDisponiveis não é um array ou está indefinida ao criar HTML do item:', listaMateriaisDisponiveis);
+                }
+
+                // CORREÇÃO AQUI: Nomes dos campos indexados para model binding
+                return `
+                    <div class="row item-row mb-3 align-items-end">
+                        <div class="col-md-5">
+                            <label class="form-label visually-hidden">Material</label>
+                            <select name="Itens[${index}].MaterialId" class="form-select material-select">
+                                ${optionsHtml}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label visually-hidden">Quantidade</label>
+                            <input name="Itens[${index}].QuantidadeRequisitada" type="number" min="1" class="form-control quantidade-input" placeholder="Qtd." value="1"/>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-danger btn-sm remove-item-btn" title="Remover Item">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            addItemBtn.addEventListener('click', function () {
+                console.log('Adicionando nova linha. Materiais disponíveis:', listaMateriaisDisponiveis);
+                if (!Array.isArray(listaMateriaisDisponiveis) || listaMateriaisDisponiveis.length === 0) {
+                    console.warn('Tentando adicionar item, mas a lista de materiais está vazia ou não é um array.');
+                    // Poderia adicionar uma mensagem para o usuário aqui
+                }
+
+                const currentRowCount = itensContainer.querySelectorAll('.item-row').length;
+                itensContainer.insertAdjacentHTML('beforeend', createItemRowHtml(currentRowCount));
+                updateRemoveButtonsVisibility();
+                // Não precisa chamar updateInputNames() aqui porque createItemRowHtml já usa o índice correto.
+            });
+
+            itensContainer.addEventListener('click', function (e) {
+                const removeButton = e.target.closest('.remove-item-btn');
+                if (removeButton) {
+                    removeButton.closest('.item-row').remove();
+                    updateRemoveButtonsVisibility();
+                    updateInputNames(); // Reindexar os campos após a remoção
+                }
+            });
+
+            // Garante que os nomes da primeira linha (se renderizada estaticamente) estejam corretos
+            // e a visibilidade do botão de remover.
+            updateInputNames();
+            updateRemoveButtonsVisibility();
+        });
+    </script>
+}

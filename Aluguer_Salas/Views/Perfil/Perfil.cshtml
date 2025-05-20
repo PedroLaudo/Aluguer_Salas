@@ -1,17 +1,18 @@
-﻿@model IEnumerable<Aluguer_Salas.Models.Reserva>
-@* O modelo principal é uma lista de Reservas *@
+﻿@* No topo do ficheiro Views/Perfil/Perfil.cshtml *@
+@using Aluguer_Salas.Models
+
 @{
     ViewData["Title"] = "O Meu Perfil";
-    var currentUser = ViewData["CurrentUtilizador"] as Aluguer_Salas.Models.Utilizador;
+
     var statusMessage = ViewData["StatusMessage"] as string;
     var errorMessage = ViewData["ErrorMessage"] as string;
+    var currentUser = ViewData["CurrentUtilizador"] as Utilizador;
+    var minhasReservas = ViewData["MinhasReservas"] as IEnumerable<Reserva> ?? new List<Reserva>();
+    var minhasRequisicoesMaterial = ViewData["MinhasRequisicoesMaterial"] as IEnumerable<RequisicaoMaterial> ?? new List<RequisicaoMaterial>();
 }
-
-@* ... resto do seu Views/Perfil/Index.cshtml ... *@
 
 <h1>@ViewData["Title"]</h1>
 
-@* Exibir mensagens de status/erro do ViewData *@
 @if (!string.IsNullOrEmpty(statusMessage))
 {
     <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
@@ -48,9 +49,8 @@ else
     <div class="alert alert-warning">Não foi possível carregar os dados do utilizador.</div>
 }
 
-<h2>As Minhas Reservas</h2>
-
-@if (Model != null && Model.Any()) @* Model aqui é IEnumerable<Reserva> *@
+<h2>As Minhas Reservas de Salas</h2>
+@if (minhasReservas.Any())
 {
     <div class="table-responsive">
         <table class="table table-striped table-hover">
@@ -65,49 +65,48 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var reserva in Model) @* Iterar sobre Model (a lista de reservas) *@
+                @foreach (var reserva in minhasReservas)
                 {
                     <tr>
                         <td>@(reserva.Sala?.NomeSala ?? "N/A")</td>
                         <td>@reserva.Data.ToShortDateString()</td>
-                        <td>@reserva.HoraInicio.ToShortTimeString()</td>
-                        <td>@reserva.HoraFim.ToShortTimeString()</td>
+                        <td>@reserva.HoraInicio.ToString("HH:mm")</td>
+                        <td>@reserva.HoraFim.ToString("HH:mm")</td>
                         <td>@Html.DisplayFor(modelItem => reserva.Status)</td>
                         <td>
-                            @if (reserva.HoraInicio > DateTime.Now &&
-                                 (reserva.Status?.Equals("Confirmada", StringComparison.OrdinalIgnoreCase) == true ||
-                                  reserva.Status?.Equals("Pendente", StringComparison.OrdinalIgnoreCase) == true))
+                            @{
+                                DateTime reservaStartDateTime = reserva.HoraInicio;
+                                bool podeSerCancelada = reservaStartDateTime > DateTime.Now &&
+                                (reserva.Status?.Equals("Confirmada", StringComparison.OrdinalIgnoreCase) == true ||
+                                reserva.Status?.Equals("Pendente", StringComparison.OrdinalIgnoreCase) == true);
+                            }
+                            @if (podeSerCancelada) // Alterado de podeSerModificadaOuCancelada para podeSerCancelada
                             {
+                                // O BOTÃO DE EDITAR RESERVA FOI REMOVIDO DAQUI
                                 <form asp-controller="Perfil" asp-action="CancelarReserva" method="post" class="d-inline">
+                                    @* Removido ms-1 se for o único botão *@
                                     @Html.AntiForgeryToken()
                                     <input type="hidden" name="idReserva" value="@reserva.IdReserva" />
                                     <button type="submit"
                                             class="btn btn-danger btn-sm"
-                                            title="Remover esta reserva"
-                                            onclick="return confirm('Tem a certeza que deseja remover esta reserva? Esta ação não pode ser desfeita.');">
-                                        <i class="bi bi-trash"></i> Remover
+                                            title="Cancelar esta reserva"
+                                            onclick="return confirm('Tem a certeza que deseja cancelar esta reserva?');">
+                                        <i class="bi bi-x-circle"></i> Cancelar
                                     </button>
                                 </form>
                             }
+                            else if (reserva.Status?.Equals("Cancelada", StringComparison.OrdinalIgnoreCase) == true)
+                            {
+                                <span class="badge bg-secondary">Cancelada</span>
+                            }
+                            else if (reservaStartDateTime <= DateTime.Now)
+                            {
+                                <span class="badge bg-info">Histórico</span>
+                            }
                             else
                             {
-                                @if (reserva.Status?.Equals("Cancelada", StringComparison.OrdinalIgnoreCase) == true ||
-                                     reserva.Status?.Equals("Removida", StringComparison.OrdinalIgnoreCase) == true)
-                                {
-                                    <span class="badge bg-secondary">Cancelada/Removida</span>
-                                }
-                                else if (reserva.Status?.Equals("Concluída", StringComparison.OrdinalIgnoreCase) == true)
-                                {
-                                    <span class="badge bg-success">Concluída</span>
-                                }
-                                else if (reserva.HoraInicio <= DateTime.Now)
-                                {
-                                    <span class="badge bg-info">Passada</span>
-                                }
-                                else
-                                {
-                                    <span class="text-muted small">Não removível</span>
-                                }
+                                <!-- Outros estados que não permitem modificação (ex: Rejeitada) -->
+                                <span class="badge bg-light text-dark">@reserva.Status</span>
                             }
                         </td>
                     </tr>
@@ -119,12 +118,77 @@ else
 else
 {
     <div class="alert alert-info">
-        Não tem reservas efetuadas. Gostaria de
-        <a asp-controller="Alugar" asp-action="Salas" class="alert-link">alugar uma sala</a>?
+        Não tem reservas de salas efetuadas.
     </div>
+}
 
+<hr />
+
+<h2>As Minhas Requisições de Material</h2>
+@if (minhasRequisicoesMaterial.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Material</th>
+                    <th>Quantidade</th>
+                    <th>Data Requisição</th>
+                    <th>Hora Início</th>
+                    <th>Hora Fim</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var requisicao in minhasRequisicoesMaterial)
+                {
+                    {
+                        DateTime requisicaoDateTimeInicio = requisicao.DataRequisicao.Add(requisicao.HoraInicio);
+                        bool podeSerModificada = requisicaoDateTimeInicio > DateTime.Now;
+
+                        <tr>
+                            <td>@(requisicao.Material?.Nome ?? "N/A")</td>
+                            <td>@requisicao.QuantidadeRequisitada</td>
+                            <td>@requisicao.DataRequisicao.ToShortDateString()</td>
+                            <td>@requisicao.HoraInicio.ToString(@"hh\:mm")</td>
+                            <td>@requisicao.HoraFim.ToString(@"hh\:mm")</td>
+                            <td>
+                                @if (podeSerModificada)
+                                {
+                                    <a asp-controller="Perfil" asp-action="EditarRequisicaoMaterial" asp-route-id="@requisicao.Id" class="btn btn-warning btn-sm" title="Editar Requisição">
+                                        <i class="bi bi-pencil"></i> Editar
+                                    </a>
+                                    <form asp-controller="Perfil" asp-action="CancelarRequisicaoMaterial" method="post" class="d-inline ms-1">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="idRequisicao" value="@requisicao.Id" />
+                                        <button type="submit"
+                                                class="btn btn-danger btn-sm"
+                                                title="Cancelar esta requisição"
+                                                onclick="return confirm('Tem a certeza que deseja cancelar esta requisição de material?');">
+                                            <i class="bi bi-x-circle"></i> Cancelar
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Não modificável</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        Não tem requisições de material efetuadas. Gostaria de
+        <a asp-controller="RequisitarMaterial" asp-action="Index" class="alert-link">requisitar material</a>?
+    </div>
 }
 
 <div class="mt-4">
-    <a asp-area="Identity" asp-page="/Account/Manage/Index" class="btn btn-secondary">Gerir Conta (Identity)</a>
+    <a asp-area="Identity" asp-page="/Account/Manage/Index" class="btn btn-secondary">Gerir Conta</a>
 </div>

@@ -43,10 +43,6 @@ namespace Aluguer_Salas.Models
         [ForeignKey("IdSala")]
         public Sala? Sala { get; set; }
 
-        /// <summary>
-        /// Chave estrangeira para o Utilizador
-        /// Ajuste o tipo conforme necessário (int ou string)
-        /// </summary>
         [Required]
         public string UtilizadorIdentityId { get; set; } = string.Empty;
 

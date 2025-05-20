@@ -1,4 +1,13 @@
-﻿// Ficheiro: Controllers/AlugarController.cs
+﻿using Aluguer_Salas.Controllers;
+using Aluguer_Salas.Data;
+using Aluguer_Salas.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+using System.Security.Claims;
+
+// Ficheiro: Controllers / AlugarController.cs
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Aluguer_Salas.Data;
