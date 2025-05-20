@@ -9,7 +9,6 @@
     }
     ViewData["Title"] = titulo;
 
-    // Preparar a lista de materiais para o JavaScript
     var materiaisParaJs = new List<object>();
     if (ViewBag.ListaMateriaisDisponiveis is SelectList selectList)
     {
@@ -17,16 +16,11 @@
         {
             materiaisParaJs.Add(new
             {
-                // O serializador JSON provavelmente transformará estes em camelCase: value, text
                 Value = item.Value,
                 Text = item.Text
             });
         }
     }
-    // Se o Model.Itens for null e você quiser que a primeira linha seja adicionada dinamicamente
-    // ou se você quiser garantir que haja pelo menos um item para o binding inicial:
-    // if (Model.Itens == null) { Model.Itens = new List<ItemRequisicaoViewModel>(); }
-    // if (!Model.Itens.Any()) { Model.Itens.Add(new ItemRequisicaoViewModel()); } // Adapte conforme seu ViewModel de item
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -63,29 +57,21 @@
 
             <h4 class="mt-4">Itens da Requisição</h4>
             <div id="itens-container">
-                @* Linha inicial - assumindo que seu Model.Itens pode ter um item,
-                   ou que você quer renderizar a primeira linha estaticamente com os nomes corretos.
-                   Se Model.Itens é onde os itens da requisição são armazenados: *@
-                @{
-                    // Exemplo se você tiver uma lista no seu Model principal para os itens
-                    // if (Model.Itens == null) Model.Itens = new List<SeuTipoDeItem>();
-                    // if (!Model.Itens.Any()) Model.Itens.Add(new SeuTipoDeItem()); // Para garantir a primeira linha
-                }
-                @* Para o primeiro item (índice 0) *@
+                @* Primeira linha estática - nomes ajustados para binding com arrays no controller *@
                 <div class="row item-row mb-3 align-items-end">
                     <div class="col-md-5">
                         <label class="form-label visually-hidden">Material</label>
-                        @* Ajuste o nome para o model binding: Itens[0].MaterialId *@
-                        <select name="Itens[0].MaterialId" asp-items="ViewBag.ListaMateriaisDisponiveis as SelectList" class="form-select material-select">
+                        @* NOME CORRIGIDO: materialId[0] *@
+                        <select name="materialId[0]" asp-items="ViewBag.ListaMateriaisDisponiveis as SelectList" class="form-select material-select">
                             <option value="">-- Selecione o Material --</option>
                         </select>
-                        @* Adicione span para validação se necessário *@
+                        @* <span asp-validation-for="MaterialId" class="text-danger"></span> se você tivesse um Model.MaterialId *@
                     </div>
                     <div class="col-md-4">
                         <label class="form-label visually-hidden">Quantidade</label>
-                        @* Ajuste o nome para o model binding: Itens[0].QuantidadeRequisitada *@
-                        <input name="Itens[0].QuantidadeRequisitada" type="number" min="1" class="form-control quantidade-input" placeholder="Qtd." value="1" />
-                        @* Adicione span para validação se necessário *@
+                        @* NOME CORRIGIDO: quantidadeRequisitada[0] *@
+                        <input name="quantidadeRequisitada[0]" type="number" min="1" class="form-control quantidade-input" placeholder="Qtd." value="1" />
+                        @* <span asp-validation-for="QuantidadeRequisitada" class="text-danger"></span> se você tivesse um Model.QuantidadeRequisitada *@
                     </div>
                     <div class="col-md-2">
                         <button type="button" class="btn btn-danger btn-sm remove-item-btn" title="Remover Item" style="display:none;">
@@ -117,18 +103,15 @@
             const listaMateriaisDisponiveis = @Html.Raw(Json.Serialize(materiaisParaJs));
             console.log('Lista de materiais disponíveis no carregamento:', listaMateriaisDisponiveis);
 
-            // Função de escape HTML correta
-            function escapeHtml(unsafe) {
-                if (typeof unsafe !== 'string') {
-                    unsafe = String(unsafe);
-                }
-                return unsafe
-                    .replace(/&/g, "&")
-                    .replace(/</g, "<")
-                    .replace(/>/g, ">")
-                    .replace(/"/g, """)
-                    .replace(/'/g, "'");
-            }
+            // Função de escape HTML CORRIGIDA
+                   function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
 
             function updateRemoveButtonsVisibility() {
                 const itemRows = itensContainer.querySelectorAll('.item-row');
@@ -147,40 +130,40 @@
                     const quantidadeInput = row.querySelector('.quantidade-input');
 
                     if (materialSelect) {
-                        materialSelect.name = `Itens[${index}].MaterialId`;
+                        // NOME CORRIGIDO para binding com array no controller
+                        materialSelect.name = `materialId[${index}]`;
                     }
                     if (quantidadeInput) {
-                        quantidadeInput.name = `Itens[${index}].QuantidadeRequisitada`;
+                        // NOME CORRIGIDO para binding com array no controller
+                        quantidadeInput.name = `quantidadeRequisitada[${index}]`;
                     }
-                    // Se você tiver outros campos por item, atualize-os aqui também
                 });
             }
 
-            function createItemRowHtml(index) { // Passa o índice para os nomes dos campos
+            function createItemRowHtml(index) {
                 let optionsHtml = '<option value="">-- Selecione o Material --</option>';
                 if (Array.isArray(listaMateriaisDisponiveis)) {
                     listaMateriaisDisponiveis.forEach(function (item) {
-                        // CORREÇÃO AQUI: use item.value e item.text (camelCase)
-                        const value = item.value ?? ''; // Acessando .value (minúsculo)
-                        const text = item.text ?? 'Opção Inválida'; // Acessando .text (minúsculo)
+                        const value = item.value ?? item.Value ?? ''; // Tenta camelCase, depois PascalCase
+                        const text = item.text ?? item.Text ?? 'Opção Inválida'; // Tenta camelCase, depois PascalCase
                         optionsHtml += `<option value="${escapeHtml(value)}">${escapeHtml(text)}</option>`;
                     });
                 } else {
                     console.warn('listaMateriaisDisponiveis não é um array ou está indefinida ao criar HTML do item:', listaMateriaisDisponiveis);
                 }
 
-                // CORREÇÃO AQUI: Nomes dos campos indexados para model binding
+                // Nomes dos campos CORRIGIDOS para binding com arrays no controller
                 return `
                     <div class="row item-row mb-3 align-items-end">
                         <div class="col-md-5">
                             <label class="form-label visually-hidden">Material</label>
-                            <select name="Itens[${index}].MaterialId" class="form-select material-select">
+                            <select name="materialId[${index}]" class="form-select material-select">
                                 ${optionsHtml}
                             </select>
                         </div>
                         <div class="col-md-4">
                             <label class="form-label visually-hidden">Quantidade</label>
-                            <input name="Itens[${index}].QuantidadeRequisitada" type="number" min="1" class="form-control quantidade-input" placeholder="Qtd." value="1"/>
+                            <input name="quantidadeRequisitada[${index}]" type="number" min="1" class="form-control quantidade-input" placeholder="Qtd." value="1"/>
                         </div>
                         <div class="col-md-2">
                             <button type="button" class="btn btn-danger btn-sm remove-item-btn" title="Remover Item">
@@ -192,16 +175,11 @@
             }
 
             addItemBtn.addEventListener('click', function () {
-                console.log('Adicionando nova linha. Materiais disponíveis:', listaMateriaisDisponiveis);
-                if (!Array.isArray(listaMateriaisDisponiveis) || listaMateriaisDisponiveis.length === 0) {
-                    console.warn('Tentando adicionar item, mas a lista de materiais está vazia ou não é um array.');
-                    // Poderia adicionar uma mensagem para o usuário aqui
-                }
-
                 const currentRowCount = itensContainer.querySelectorAll('.item-row').length;
                 itensContainer.insertAdjacentHTML('beforeend', createItemRowHtml(currentRowCount));
                 updateRemoveButtonsVisibility();
-                // Não precisa chamar updateInputNames() aqui porque createItemRowHtml já usa o índice correto.
+                // updateInputNames() não é estritamente necessário aqui porque createItemRowHtml já usa o índice correto,
+                // mas não prejudica se for chamado.
             });
 
             itensContainer.addEventListener('click', function (e) {
@@ -209,11 +187,11 @@
                 if (removeButton) {
                     removeButton.closest('.item-row').remove();
                     updateRemoveButtonsVisibility();
-                    updateInputNames(); // Reindexar os campos após a remoção
+                    updateInputNames(); // Essencial reindexar após a remoção
                 }
             });
 
-            // Garante que os nomes da primeira linha (se renderizada estaticamente) estejam corretos
+            // Chamada inicial para garantir que a primeira linha (se estática) tenha os nomes corretos
             // e a visibilidade do botão de remover.
             updateInputNames();
             updateRemoveButtonsVisibility();
