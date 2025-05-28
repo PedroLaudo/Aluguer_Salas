@@ -43,7 +43,7 @@
                             </li>
                         }
 
-                        @if (User.IsInRole("Professor")) // Só mostra o link se o utilizador for Administrador
+                        @if (User.IsInRole("Administrador") || User.IsInRole("Professor")) // Só mostra o link se o utilizador for Administrador ou professor
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="RequisitarMaterial" asp-action="Index">Requisitar Material</a>
