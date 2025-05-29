@@ -1,0 +1,115 @@
+﻿
+/* Estilos para centralizar o formulário na página (opcional, mas ajuda a replicar) */
+/* Se você não quiser este comportamento para todas as páginas,
+   aplique-o via @section Styles na página de Login.cshtml especificamente,
+   ou adicione uma classe ao body da página de login. */
+body.login-page-body {
+    display: flex;
+    flex-direction: column; /* Para que o H1 fique acima do row */
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f2f5; /* Um cinza claro para o fundo da página */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    padding: 20px; /* Para evitar que o card encoste nas bordas em telas pequenas */
+}
+
+/* O contêiner principal que será o "card" branco para o formulário de login local */
+/* Aplicaremos esta classe ao <div class="col-md-4"> ou a um wrapper dentro dele */
+.login-form-card {
+    background-color: #ffffff;
+    padding: 30px 35px; /* Ajuste o padding conforme necessário */
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    /* max-width: 380px;  Se aplicado ao col-md-4, a largura já é controlada pelo grid.
+                         Se usar um wrapper interno, max-width pode ser útil. */
+    text-align: center; /* Para centralizar o ícone e o botão. Outros textos podem precisar de ajuste. */
+    margin-top: 20px; /* Adiciona um espaço se o H1 estiver acima */
+}
+
+    /* Estilos para o título e hr DENTRO do card, se eles ficarem centralizados e você quiser alinhá-los à esquerda */
+    .login-form-card h2,
+    .login-form-card hr {
+        text-align: left; /* Ou mantenha centralizado se preferir */
+        margin-bottom: 1.5rem; /* Espaçamento padrão do Bootstrap para h2 */
+    }
+
+    .login-form-card hr {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+
+
+.login-icon-placeholder {
+    width: 90px; /* Tamanho do ícone */
+    height: 90px;
+    margin: 0 auto 25px auto; /* Centraliza e adiciona margem abaixo */
+    display: block;
+    fill: #333; /* Cor do ícone (preto/cinza escuro) */
+}
+
+.login-form-card .form-floating {
+    margin-bottom: 20px !important; /* Espaçamento entre os campos */
+    text-align: left; /* Para que o label e o input fiquem alinhados à esquerda */
+}
+
+.login-form-card .form-control {
+    border-radius: 6px !important;
+    border: 1px solid #dcdcdc !important; /* Borda cinza clara */
+    padding-top: 1.5rem !important; /* Mais padding no topo para o label flutuante */
+    padding-bottom: 0.5rem !important; /* Menos padding na base */
+    height: auto !important; /* Deixa o padding definir a altura */
+    font-size: 0.95rem;
+}
+
+.login-form-card .form-floating > label {
+    padding: 0.9rem 0.75rem; /* Ajustar para alinhar com o texto do input */
+    color: #777; /* Cor do label quando é placeholder */
+}
+
+.login-form-card .form-floating > .form-control:focus ~ label,
+.login-form-card .form-floating > .form-control:not(:placeholder-shown) ~ label {
+    opacity: .75;
+    transform: scale(.85) translateY(-.6rem) translateX(.15rem); /* Posição do label flutuado */
+    color: #555; /* Cor do label quando flutuado */
+}
+
+/* Estilos para o checkbox "Remember me" se precisar ajustar */
+.login-form-card .checkbox.mb-3 {
+    text-align: left; /* Alinha o checkbox à esquerda */
+    margin-bottom: 1.5rem !important;
+}
+
+    .login-form-card .checkbox.mb-3 label {
+        font-weight: normal;
+    }
+
+.login-form-card #login-submit {
+    background-color: #7352C7 !important; /* Cor roxa do botão */
+    border-color: #7352C7 !important;
+    color: white !important;
+    padding: 10px 15px !important;
+    border-radius: 6px !important;
+    font-size: 0.95rem;
+    font-weight: 500;
+    width: auto !important; /* Remove o w-100 do Bootstrap, se aplicado */
+    min-width: 100px; /* Uma largura mínima para o botão */
+    display: inline-block; /* Permite centralização pelo text-align do pai */
+    margin-top: 10px; /* Pequena margem acima do botão */
+}
+
+    .login-form-card #login-submit:hover {
+        background-color: #5e42a3 !important; /* Roxo mais escuro no hover */
+        border-color: #5e42a3 !important;
+    }
+
+/* Estilos para os links de "Forgot password", etc., se precisar */
+.login-form-card div > p {
+    text-align: left; /* Alinha os links à esquerda */
+    margin-bottom: 0.5rem; /* Menor espaçamento entre os links */
+}
+
+    .login-form-card div > p a {
+        font-size: 0.9rem;
+    }
