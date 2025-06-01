@@ -1,0 +1,83 @@
+﻿/* Estilo apenas para a página de registo */
+form#registerForm {
+    background-color: #ffffff;
+    padding: 40px 35px;
+    border-radius: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin-top: 20%;
+    margin-left: 100%;
+    width: 100%;
+}
+
+    /* Cabeçalho do formulário */
+    form#registerForm h2 {
+        text-align: left;
+        margin-bottom: 1rem;
+    }
+
+    /* Campo de input */
+    form#registerForm .form-floating {
+        margin-bottom: 20px;
+        text-align: left;
+    }
+
+    form#registerForm .form-control {
+        border-radius: 6px;
+        border: 1px solid #dcdcdc;
+        padding-top: 1.5rem;
+        padding-bottom: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    form#registerForm .form-floating > label {
+        padding: 0.9rem 0.75rem;
+        color: #777;
+    }
+
+    form#registerForm .form-floating > .form-control:focus ~ label,
+    form#registerForm .form-floating > .form-control:not(:placeholder-shown) ~ label {
+        opacity: .75;
+        transform: scale(.85) translateY(-.6rem) translateX(.15rem);
+        color: #555;
+    }
+
+/* Botão de submeter */
+#registerSubmit {
+    background-color: #7352C7;
+    border-color: #7352C7;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-top: 10px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+    #registerSubmit:hover {
+        background-color: #5e42a3;
+        border-color: #5e42a3;
+    }
+
+/* Secção de serviços externos */
+.col-md-6.col-md-offset-2 section {
+    background-color: #ffffff;
+    padding: 25px 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-top: 50px;
+}
+
+/* Botões externos */
+#external-account button.btn.btn-primary {
+    margin: 5px;
+    background-color: #7352C7;
+    border-color: #7352C7;
+    font-weight: 500;
+}
+
+    #external-account button.btn.btn-primary:hover {
+        background-color: #5e42a3;
+        border-color: #5e42a3;
+    }
