@@ -11,6 +11,10 @@
     var minhasRequisicoesMaterial = ViewData["MinhasRequisicoesMaterial"] as IEnumerable<RequisicaoMaterial> ?? new List<RequisicaoMaterial>();
 }
 
+<head>
+    <link rel="stylesheet" href="~/css/Perfil.css" asp-append-version="true" />
+</head>
+
 <h1>@ViewData["Title"]</h1>
 
 @if (!string.IsNullOrEmpty(statusMessage))
