@@ -1,0 +1,112 @@
+﻿/* Container do título */
+h1 {
+    color: #7352C7;
+    font-weight: 700;
+    margin-bottom: 28px;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+/* Botão de criar nova sala */
+.btn-success {
+    background-color: #7352C7;
+    border-color: #7352C7;
+    font-weight: 500;
+    margin-bottom: 18px;
+}
+
+    .btn-success:hover, .btn-success:focus {
+        background-color: #5e42a3;
+        border-color: #5e42a3;
+    }
+
+/* Tabela de salas */
+.table {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(115,82,199,0.08);
+    margin-bottom: 32px;
+}
+
+    .table thead th {
+        background: #ede7f6;
+        color: #7352C7;
+        font-weight: 600;
+        border-bottom: 2px solid #7352C7;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .table tbody td {
+        vertical-align: middle;
+        text-align: center;
+        font-size: 1rem;
+        color: #444;
+    }
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #f7f7fa;
+}
+
+.table-hover > tbody > tr:hover {
+    background-color: #ede7f6;
+    transition: background 0.2s;
+}
+
+/* Botões de ação */
+.btn-outline-primary, .btn-outline-info, .btn-outline-danger {
+    font-weight: 500;
+    margin-right: 6px;
+    border-radius: 6px;
+    min-width: 80px;
+}
+
+.btn-outline-primary {
+    color: #7352C7;
+    border-color: #7352C7;
+}
+
+    .btn-outline-primary:hover {
+        background: #7352C7;
+        color: #fff;
+    }
+
+.btn-outline-info {
+    color: #1976d2;
+    border-color: #1976d2;
+}
+
+    .btn-outline-info:hover {
+        background: #1976d2;
+        color: #fff;
+    }
+
+.btn-outline-danger {
+    color: #d32f2f;
+    border-color: #d32f2f;
+}
+
+    .btn-outline-danger:hover {
+        background: #d32f2f;
+        color: #fff;
+    }
+
+/* Mensagem de nenhuma sala */
+.table td.text-center {
+    color: #888;
+    font-style: italic;
+}
+
+/* Responsivo */
+@media (max-width: 900px) {
+    .table {
+        font-size: 0.95rem;
+    }
+
+    .btn-outline-primary, .btn-outline-info, .btn-outline-danger {
+        min-width: 60px;
+        font-size: 0.95rem;
+        margin-bottom: 4px;
+    }
+}

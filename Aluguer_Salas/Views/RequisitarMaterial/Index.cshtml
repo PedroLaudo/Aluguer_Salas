@@ -23,9 +23,15 @@
     }
 }
 
+<head>
+    <link rel="stylesheet" href="~/css/RequisitarMaterial.css" asp-append-version="true" />
+</head>
+
 <h2>@ViewData["Title"]</h2>
 <hr />
 
+
+<div class="requisitar-material-container">
 <div class="row">
     <div class="col-md-8">
         <form asp-action="Index" method="post">
@@ -91,6 +97,7 @@
             </div>
         </form>
     </div>
+</div>
 </div>
 
 @section Scripts {

@@ -1,0 +1,127 @@
+﻿/* Container principal para isolamento */
+.requisitar-material-container {
+    max-width: 950px;
+    margin: 0 auto 40px auto;
+    padding: 32px 0;
+}
+
+    /* Título da página */
+    .requisitar-material-container h2 {
+        color: #7352C7;
+        font-weight: 700;
+        margin-bottom: 18px;
+        text-align: center;
+        letter-spacing: 1px;
+    }
+
+    /* Linha divisória */
+    .requisitar-material-container hr {
+        border-top: 2px solid #7352C7;
+        opacity: 0.15;
+        margin-bottom: 32px;
+    }
+
+    /* Formulário principal */
+    .requisitar-material-container form {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(115,82,199,0.10);
+        padding: 32px 28px 24px 28px;
+        margin-bottom: 32px;
+    }
+
+    /* Labels e inputs */
+    .requisitar-material-container .form-label {
+        font-weight: 500;
+        color: #444;
+    }
+
+    .requisitar-material-container .form-control,
+    .requisitar-material-container .form-select {
+        border-radius: 6px;
+        border: 1px solid #dcdcdc;
+        font-size: 1rem;
+        padding: 0.6rem 0.75rem;
+        margin-bottom: 4px;
+    }
+
+        .requisitar-material-container .form-control:focus,
+        .requisitar-material-container .form-select:focus {
+            border-color: #7352C7;
+            box-shadow: 0 0 0 2px #e0d6f7;
+        }
+
+    /* Itens da requisição */
+    .requisitar-material-container #itens-container .item-row {
+        background: #f7f7fa;
+        border-radius: 8px;
+        padding: 10px 0 6px 0;
+        margin-bottom: 12px;
+        box-shadow: 0 2px 8px rgba(115,82,199,0.04);
+    }
+
+    .requisitar-material-container #itens-container .form-select,
+    .requisitar-material-container #itens-container .form-control {
+        margin-bottom: 0;
+    }
+
+    /* Botão de adicionar item */
+    .requisitar-material-container #add-item-btn {
+        background-color: #7352C7;
+        border-color: #7352C7;
+        font-weight: 500;
+    }
+
+        .requisitar-material-container #add-item-btn:hover,
+        .requisitar-material-container #add-item-btn:focus {
+            background-color: #5e42a3;
+            border-color: #5e42a3;
+        }
+
+    /* Botão de remover item */
+    .requisitar-material-container .remove-item-btn {
+        margin-left: 8px;
+        margin-bottom: 2px;
+    }
+
+    /* Botões principais */
+    .requisitar-material-container .btn-primary {
+        background-color: #7352C7;
+        border-color: #7352C7;
+        font-weight: 500;
+    }
+
+        .requisitar-material-container .btn-primary:hover,
+        .requisitar-material-container .btn-primary:focus {
+            background-color: #5e42a3;
+            border-color: #5e42a3;
+        }
+
+    .requisitar-material-container .btn-secondary {
+        font-weight: 500;
+    }
+
+    .requisitar-material-container .ms-2 {
+        margin-left: 0.75rem !important;
+    }
+
+    /* Validação */
+    .requisitar-material-container .text-danger {
+        font-size: 0.97rem;
+    }
+
+/* Responsivo */
+@media (max-width: 900px) {
+    .requisitar-material-container form {
+        padding: 16px 4px 16px 4px;
+    }
+
+    .requisitar-material-container .col-md-8 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .requisitar-material-container #itens-container .item-row {
+        padding: 8px 0 4px 0;
+    }
+}
