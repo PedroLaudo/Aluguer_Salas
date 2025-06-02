@@ -1,0 +1,158 @@
+﻿/* Container principal para garantir isolamento */
+.aluguer-container {
+    max-width: 900px;
+    margin: 0 auto 40px auto;
+    padding: 32px 0;
+}
+
+/* Título da página */
+.aluguer-container h2.mb-4 {
+    text-align: center;
+    color: #7352C7;
+    font-weight: 700;
+    margin-top: 16px;
+    margin-bottom: 32px;
+    letter-spacing: 1px;
+}
+
+/* Card/formulário principal */
+.aluguer-container form {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 16px rgba(115,82,199,0.10);
+    padding: 36px 32px 28px 32px;
+    margin-bottom: 32px;
+}
+
+/* Fieldset de detalhes da sala */
+.aluguer-container fieldset {
+    background: #f7f7fa;
+    border-radius: 10px;
+    border: none;
+    padding: 18px 18px 10px 18px;
+    margin-bottom: 24px;
+}
+
+.aluguer-container legend.h5 {
+    color: #7352C7;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+/* Labels e inputs */
+.aluguer-container .form-label {
+    font-weight: 500;
+    color: #444;
+}
+
+.aluguer-container .form-control[disabled], 
+.aluguer-container fieldset[disabled] .form-control {
+    background-color: #ececf6 !important;
+    color: #888;
+    border: 1px solid #e0e0e0;
+}
+
+.aluguer-container .form-control {
+    border-radius: 6px;
+    border: 1px solid #dcdcdc;
+    font-size: 1rem;
+    padding: 0.6rem 0.75rem;
+    margin-bottom: 4px;
+    border-color: #7352C7;
+    box-shadow: 0 0 0 2px #e0d6f7;
+}
+
+.aluguer-container textarea.form-control {
+    min-height: 60px;
+    resize: vertical;
+}
+
+/* Título da secção de data/hora */
+.aluguer-container h5.mt-4 {
+    color: #7352C7;
+    font-weight: 600;
+    margin-top: 32px;
+    margin-bottom: 10px;
+}
+
+/* Alertas */
+.aluguer-container .alert {
+    border-radius: 10px;
+    font-size: 1rem;
+    margin-bottom: 18px;
+    padding: 12px 18px;
+}
+
+.aluguer-container .alert-warning {
+    background: #fff8e1;
+    border-color: #ffe082;
+    color: #a67c00;
+}
+
+.aluguer-container .alert-success {
+    background: #e8f5e9;
+    border-color: #81c784;
+    color: #256029;
+}
+
+.aluguer-container .alert-heading {
+    font-weight: 600;
+    color: #7352C7;
+    margin-bottom: 6px;
+}
+
+/* Botões */
+.aluguer-container .btn-primary {
+    background-color: #7352C7;
+    border-color: #7352C7;
+    font-weight: 500;
+    transition: background 0.2s, border 0.2s;
+}
+
+.aluguer-container .btn-primary:hover, 
+.aluguer-container .btn-primary:focus {
+    background-color: #5e42a3;
+    border-color: #5e42a3;
+}
+
+.aluguer-container .btn-secondary {
+    font-weight: 500;
+}
+
+.aluguer-container .ms-2 {
+    margin-left: 0.75rem !important;
+}
+
+/* Validação */
+.aluguer-container .text-danger {
+    font-size: 0.97rem;
+}
+
+.aluguer-container .hora-reservada {
+    color: #dc3545; /* Vermelho Bootstrap */
+    font-weight: 500;
+}
+
+.aluguer-container .input-ocupado {
+    border: 2px solid #dc3545 !important; /* Vermelho Bootstrap */
+    background: #fff0f3 !important;
+    color: #dc3545 !important;
+    font-weight: 600;
+}
+
+
+
+
+
+/* Responsivo */
+@media (max-width: 900px) {
+    .aluguer-container form {
+        padding: 18px 8px 18px 8px;
+    }
+
+    .aluguer-container .col-md-7 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+

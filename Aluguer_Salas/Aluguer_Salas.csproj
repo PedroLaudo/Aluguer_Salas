@@ -13,6 +13,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Remove="wwwroot\css\DetalhesSala.css" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="MailKit" Version="4.12.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.13" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.1" />
