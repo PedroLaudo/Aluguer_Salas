@@ -1,8 +1,43 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Página Inicial";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<link rel="stylesheet" href="~/css/Home.css" />
+
+<main class="main-content">
+    <h1>Reserve Salas e<br />Equipamentos</h1>
+    <p class="subtitle">Faça a gestão das suas reservas de salas e equipamentos de forma simples e rápida.</p>
+    <a href="/Alugar/Salas" class="main-btn">Reservar Agora</a>
+    <div class="features">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <!-- Door SVG -->
+                <svg width="40" height="40" fill="none" stroke="#2e7d4f" stroke-width="2"><rect x="10" y="8" width="20" height="24" rx="2" fill="#e8f5e9" /><circle cx="26" cy="20" r="1.5" fill="#2e7d4f" /></svg>
+            </div>
+            <div>
+                <h2>Procurar Sala</h2>
+                <ul>
+                    <li>Ver datas disponíveis</li>
+                    <li>Pesquisar por tipo de sala</li>
+                    <li>Filtrar por capacidade</li>
+                </ul>
+                <a href="/Alugar/Salas" class="main-btn feature-btn">Procurar Sala</a>
+            </div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <!-- Microphone SVG -->
+                <svg width="40" height="40" fill="none" stroke="#1976d2" stroke-width="2"><circle cx="14" cy="18" r="6" fill="#e3f2fd" /><rect x="24" y="16" width="8" height="12" rx="2" fill="#e3f2fd" /><rect x="12" y="28" width="16" height="2" rx="1" fill="#1976d2" /></svg>
+            </div>
+            <div>
+                <h2>Consultar Equipamento</h2>
+                <ul>
+                    <li>Selecionar tipo de equipamento</li>
+                    <li>Ordenar por disponibilidade</li>
+                    <li>Ver especificações</li>
+                </ul>
+                <a href="/RequisitarMaterial" class="main-btn feature-btn">Consultar Equipamento</a>
+            </div>
+        </div>
+    </div>
+</main>
