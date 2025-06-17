@@ -5,6 +5,7 @@ using Aluguer_Salas.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Aluguer_Salas.Services.Email;
+using System.Reflection;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -85,6 +86,10 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1",
         Description = "API para gestão de salas, materiais, funcionários, reservas e requisições de material"
     });
+
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
 });
 
 builder.Services.AddRazorPages(options =>
