@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services; // Para IEmailSender
 using Aluguer_Salas.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Aluguer_Salas.Services.Email;
 
 
@@ -74,7 +75,18 @@ builder.Services.AddAuthorization(options =>
 });
 
 // 6. Serviços da Aplicação (MVC e/ou Razor Pages)
- builder.Services.AddControllersWithViews(); 
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "API de Gestão de Salas e Materiais",
+        Version = "v1",
+        Description = "API para gestão de salas, materiais, funcionários, reservas e requisições de material"
+    });
+});
+
 builder.Services.AddRazorPages(options =>
 {
     // Convenções de autorização para pastas, se desejar (alternativa a [Authorize] em cada página)
@@ -151,5 +163,12 @@ app.UseAuthorization();  // Verifica se o utilizador tem permissão
     name: "default",
    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages(); // Para Razor Pages e Identity UI
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 
 app.Run();
