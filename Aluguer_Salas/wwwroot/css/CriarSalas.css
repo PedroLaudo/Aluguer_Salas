@@ -1,0 +1,308 @@
+﻿.create-sala-page h1 {
+    color: #7352C7;
+    font-weight: 700;
+    margin-bottom: 28px;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.create-sala-page h4 {
+    color: #444;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.create-sala-page form {
+    background: #fff;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(115, 82, 199, 0.08);
+    margin: auto;
+}
+
+.create-sala-page .form-label {
+    font-weight: 500;
+    color: #333;
+}
+
+.create-sala-page .form-control {
+    border-radius: 8px;
+    padding: 10px 12px;
+}
+
+    .create-sala-page .form-control:focus {
+        border-color: #7352C7;
+        box-shadow: 0 0 0 0.2rem rgba(115, 82, 199, 0.25);
+    }
+
+.create-sala-page .text-danger {
+    font-size: 0.9rem;
+}
+
+.create-sala-page .form-check-input {
+    margin-top: 0.3rem;
+}
+
+.create-sala-page .form-check-label {
+    margin-left: 6px;
+    color: #333;
+}
+
+.create-sala-page .btn-primary {
+    background-color: #7352C7;
+    border-color: #7352C7;
+    font-weight: 500;
+    min-width: 120px;
+}
+
+    .create-sala-page .btn-primary:hover,
+    .create-sala-page .btn-primary:focus {
+        background-color: #5e42a3;
+        border-color: #5e42a3;
+    }
+
+.create-sala-page .btn-secondary {
+    margin-left: 8px;
+    min-width: 120px;
+}
+
+.create-sala-page .row {
+    display: flex;
+    justify-content: center;
+}
+
+.create-sala-page .col-md-6 {
+    width: 100%;
+    max-width: 600px;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .create-sala-page form {
+        padding: 16px;
+    }
+
+    .create-sala-page .btn-primary,
+    .create-sala-page .btn-secondary {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .create-sala-page .btn-secondary {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .create-sala-page h1 {
+        font-size: 1.5rem;
+    }
+
+    .create-sala-page .form-control {
+        font-size: 0.95rem;
+    }
+}
+
+/* ---------- Editar Sala (estilo roxo isolado e responsivo) ---------- */
+
+.editar-sala-container {
+    max-width: 700px;
+    margin: auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(115, 82, 199, 0.08);
+}
+
+
+    .editar-sala-container h4 {
+        color: #444;
+        font-weight: 600;
+        margin-bottom: 16px;
+        text-align: center;
+    }
+
+    .editar-sala-container .form-label {
+        font-weight: 500;
+        color: #333;
+    }
+
+    .editar-sala-container .form-control:focus {
+        border-color: #7352C7;
+        box-shadow: 0 0 0 0.2rem rgba(115, 82, 199, 0.25);
+    }
+
+    .editar-sala-container .btn-primary {
+        background-color: #7352C7;
+        border-color: #7352C7;
+        font-weight: 500;
+        min-width: 120px;
+    }
+
+        .editar-sala-container .btn-primary:hover {
+            background-color: #5e42a3;
+            border-color: #5e42a3;
+        }
+
+    .editar-sala-container .btn-secondary {
+        margin-left: 8px;
+    }
+
+@media (max-width: 576px) {
+    .editar-sala-container {
+        padding: 12px;
+    }
+
+        .editar-sala-container h1 {
+            font-size: 1.5rem;
+        }
+
+        .editar-sala-container .btn-primary,
+        .editar-sala-container .btn-secondary {
+            width: 100%;
+            margin-top: 10px;
+        }
+}
+
+/* ---------- Detalhes da Sala - estilo roxo isolado e responsivo ---------- */
+
+.detalhes-sala-container {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(115, 82, 199, 0.08);
+    color: #444;
+}
+
+    .detalhes-sala-container h4 {
+        color: #7352C7;
+        font-weight: 700;
+        margin-bottom: 16px;
+        text-align: center;
+        letter-spacing: 1px;
+    }
+
+    .detalhes-sala-container hr {
+        border-color: #ddd;
+        margin-bottom: 24px;
+    }
+
+    .detalhes-sala-container dt {
+        font-weight: 600;
+        color: #7352C7;
+        text-align: right;
+    }
+
+    .detalhes-sala-container dd {
+        margin-left: 0;
+        color: #333;
+    }
+
+    .detalhes-sala-container .btn-primary {
+        background-color: #7352C7;
+        border-color: #7352C7;
+        font-weight: 500;
+        min-width: 120px;
+        margin-right: 8px;
+    }
+
+        .detalhes-sala-container .btn-primary:hover {
+            background-color: #5e42a3;
+            border-color: #5e42a3;
+        }
+
+    .detalhes-sala-container .btn-secondary {
+        font-weight: 500;
+    }
+
+@media (max-width: 576px) {
+    .detalhes-sala-container {
+        padding: 12px;
+        margin: 15px 10px;
+    }
+
+        .detalhes-sala-container dt,
+        .detalhes-sala-container dd {
+            text-align: left;
+        }
+
+        .detalhes-sala-container .btn-primary,
+        .detalhes-sala-container .btn-secondary {
+            width: 100%;
+            margin: 8px 0;
+        }
+}
+
+/* ---------- Apagar Sala - estilo roxo isolado e responsivo ---------- */
+
+.apagar-sala-container {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(115, 82, 199, 0.08);
+    color: #444;
+}
+
+    .apagar-sala-container h4 {
+        color: #7352C7;
+        font-weight: 700;
+        margin-bottom: 16px;
+        text-align: center;
+        letter-spacing: 1px;
+    }
+
+    .apagar-sala-container hr {
+        border-color: #ddd;
+        margin-bottom: 24px;
+    }
+
+    .apagar-sala-container dt {
+        font-weight: 600;
+        color: #7352C7;
+        text-align: right;
+    }
+
+    .apagar-sala-container dd {
+        margin-left: 0;
+        color: #333;
+    }
+
+    .apagar-sala-container .btn-danger {
+        background-color: #d32f2f;
+        border-color: #d32f2f;
+        font-weight: 500;
+        min-width: 120px;
+        margin-right: 8px;
+    }
+
+        .apagar-sala-container .btn-danger:hover {
+            background-color: #a72828;
+            border-color: #a72828;
+        }
+
+    .apagar-sala-container .btn-secondary {
+        font-weight: 500;
+    }
+
+@media (max-width: 576px) {
+    .apagar-sala-container {
+        padding: 12px;
+        margin: 15px 10px;
+    }
+
+        .apagar-sala-container dt,
+        .apagar-sala-container dd {
+            text-align: left;
+        }
+
+        .apagar-sala-container .btn-danger,
+        .apagar-sala-container .btn-secondary {
+            width: 100%;
+            margin: 8px 0;
+        }
+}

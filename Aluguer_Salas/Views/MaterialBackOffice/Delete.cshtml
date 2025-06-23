@@ -4,31 +4,29 @@
     ViewData["Title"] = "Eliminar Material";
 }
 
-<h1>@ViewData["Title"]</h1>
+<head>
+    <link rel="stylesheet" href="~/css/MaterialBackOffice.css" asp-append-version="true" />
+</head>
 
-<h3 class="text-danger">Tem a certeza que pretende eliminar este material?</h3>
-<div>
-    <h4>Material</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Nome)
-        </dt>
-        <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Nome)
-        </dd>
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.QuantidadeDisponivel)
-        </dt>
-        <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.QuantidadeDisponivel)
-        </dd>
-        @* Adicione outras propriedades do material aqui, se houver *@
-    </dl>
+<div class="material-delete-container mx-auto">
+    <h1>@ViewData["Title"]</h1>
 
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" /> @* Importante para identificar o registo a ser eliminado *@
-        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
-        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-    </form>
+    <h3 class="text-danger">Tem a certeza que pretende eliminar este material?</h3>
+    <div>
+        <h4>Material</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Nome)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.QuantidadeDisponivel)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.QuantidadeDisponivel)</dd>
+        </dl>
+
+        <form asp-action="Delete" class="mt-3 d-flex flex-wrap gap-2">
+            <input type="hidden" asp-for="Id" />  @* Importante para identificar o registo a ser eliminado *@
+            <input type="submit" value="Eliminar" class="btn btn-danger" />
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
 </div>

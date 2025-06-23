@@ -2,13 +2,13 @@
 @{
     ViewData["Title"] = "Editar Sala";
 }
+<head>
+    <link rel="stylesheet" href="~/css/CriarSalas.css" asp-append-version="true" />
+</head>
 
-<h1>@ViewData["Title"]</h1>
-
+<div class="editar-sala-container">
 <h4>Sala: @Model.NomeSala</h4>
 <hr />
-<div class="row">
-    <div class="col-md-6">
         @* Aumentado o col-md *@
         <form asp-controller="SalasBackoffice" asp-action="Edit" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -40,7 +40,6 @@
                 <a asp-controller="SalasBackoffice" asp-action="Index" class="btn btn-secondary">Voltar à Lista</a>
             </div>
         </form>
-    </div>
 </div>
 
 @section Scripts {

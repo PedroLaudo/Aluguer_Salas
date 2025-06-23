@@ -4,36 +4,35 @@
     ViewData["Title"] = "Editar Material";
 }
 
-<h1>@ViewData["Title"]</h1>
+<head>
+    <link rel="stylesheet" href="~/css/MaterialBackOffice.css" asp-append-version="true" />
+</head>
 
-<h4>Material</h4>
-<hr />
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" /> @* Importante para identificar o registo a ser atualizado *@
+<div class="material-edit-container mx-auto">
+    <h1>@ViewData["Title"]</h1>
+    <h4>Material</h4>
+    <hr />
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
 
-            <div class="form-group mb-3">
-                <label asp-for="Nome" class="control-label"></label>
-                <input asp-for="Nome" class="form-control" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
-            </div>
+        <div class="form-group mb-3">
+            <label asp-for="Nome" class="control-label"></label>
+            <input asp-for="Nome" class="form-control" />
+            <span asp-validation-for="Nome" class="text-danger"></span>
+        </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="QuantidadeDisponivel" class="control-label"></label>
-                <input asp-for="QuantidadeDisponivel" class="form-control" type="number" min="0" />
-                <span asp-validation-for="QuantidadeDisponivel" class="text-danger"></span>
-            </div>
+        <div class="form-group mb-3">
+            <label asp-for="QuantidadeDisponivel" class="control-label"></label>
+            <input asp-for="QuantidadeDisponivel" class="form-control" type="number" min="0" />
+            <span asp-validation-for="QuantidadeDisponivel" class="text-danger"></span>
+        </div>
 
-            @* Adicione outros campos editáveis aqui, se houver *@
-
-            <div class="form-group">
-                <input type="submit" value="Guardar Alterações" class="btn btn-success" />
-                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-            </div>
-        </form>
-    </div>
+        <div class="form-group mt-4 d-flex flex-wrap gap-2">
+            <input type="submit" value="Guardar Alterações" class="btn btn-success" />
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
