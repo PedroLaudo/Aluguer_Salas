@@ -2,10 +2,11 @@
 @{
     ViewData["Title"] = "Detalhes da Sala";
 }
+<head>
+    <link rel="stylesheet" href="~/css/CriarSalas.css" asp-append-version="true" />
+</head>
 
-<h1>@ViewData["Title"]</h1>
-
-<div>
+<div class="detalhes-sala-container">
     <h4>Sala: @Model.NomeSala</h4>
     <hr />
     <dl class="row">
@@ -21,8 +22,8 @@
         <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Disponivel)</dt>
         <dd class="col-sm-9">@(Model.Disponivel ? "Sim" : "Não")</dd>
     </dl>
-</div>
 <div class="mt-3">
     <a asp-controller="SalasBackoffice" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Editar</a>
     <a asp-controller="SalasBackoffice" asp-action="Index" class="btn btn-secondary">Voltar à Lista</a>
+</div>
 </div>
