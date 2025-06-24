@@ -169,10 +169,18 @@ app.UseAuthorization();  // Verifica se o utilizador tem permissão
    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages(); // Para Razor Pages e Identity UI
 
+app.UseSwagger();
+app.UseSwaggerUI();
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseMigrationsEndPoint();
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
 }
 
 
