@@ -3,6 +3,10 @@
     "mssql1": {
       "type": "mssql.local",
       "connectionId": "ConnectionStrings:DefaultConnection"
+    },
+    "apis1": {
+      "ignored": "True",
+      "type": "apis"
     }
   }
 }
