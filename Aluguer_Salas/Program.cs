@@ -11,11 +11,21 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. Connection String e DbContext
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+   // ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+// Antes (SQL Server)
+// builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//     options.UseSqlServer(connectionString));
+
+// Depois (MySQL)
+var connectionString = Environment.GetEnvironmentVariable("MYSQLCONNSTR_localdb")
+    ?? builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Connection string not found.");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
 
 // Adiciona o filtro de exceções de desenvolvimento para o Entity Framework
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
