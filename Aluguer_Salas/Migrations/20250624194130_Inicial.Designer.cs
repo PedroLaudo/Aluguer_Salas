@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Aluguer_Salas.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250624160438_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250624194130_Inicial")]
+    partial class Inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

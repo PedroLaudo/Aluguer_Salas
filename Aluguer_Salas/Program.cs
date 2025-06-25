@@ -24,7 +24,11 @@ var connectionString = Environment.GetEnvironmentVariable("MYSQLCONNSTR_localdb"
     ?? throw new InvalidOperationException("Connection string not found.");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    ));
+
+
 
 
 // Adiciona o filtro de exceções de desenvolvimento para o Entity Framework

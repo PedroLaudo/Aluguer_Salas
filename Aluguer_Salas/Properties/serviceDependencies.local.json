@@ -7,6 +7,13 @@
     "apis1": {
       "ignored": "True",
       "type": "apis"
+    },
+    "mssql2": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('serviceConnectorResourceGroupName')]/providers/Microsoft.ServiceLinker/locations/westeurope/connectors/ConnectionStringsDatabaseConnection_6AC3E2887F",
+      "secretStore": "LocalSecretsFile",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/aluguersalas/databases/aluguersalas",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:DatabaseConnection"
     }
   }
 }

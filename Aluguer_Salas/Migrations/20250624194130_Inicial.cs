@@ -53,6 +53,20 @@ namespace Aluguer_Salas.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Materiais",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nome = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    QuantidadeDisponivel = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Materiais", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Salas",
                 columns: table => new
                 {
@@ -175,7 +189,7 @@ namespace Aluguer_Salas.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Funcionario",
+                name: "Funcionarios",
                 columns: table => new
                 {
                     FuncionarioId = table.Column<int>(type: "int", nullable: false)
@@ -184,9 +198,9 @@ namespace Aluguer_Salas.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Funcionario", x => x.FuncionarioId);
+                    table.PrimaryKey("PK_Funcionarios", x => x.FuncionarioId);
                     table.ForeignKey(
-                        name: "FK_Funcionario_AspNetUsers_UtilizadorId",
+                        name: "FK_Funcionarios_AspNetUsers_UtilizadorId",
                         column: x => x.UtilizadorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -215,6 +229,36 @@ namespace Aluguer_Salas.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RequisicoesMaterial",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UtilizadorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    MaterialId = table.Column<int>(type: "int", nullable: false),
+                    DataRequisicao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    HoraInicio = table.Column<TimeSpan>(type: "time", nullable: false),
+                    HoraFim = table.Column<TimeSpan>(type: "time", nullable: false),
+                    QuantidadeRequisitada = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RequisicoesMaterial", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RequisicoesMaterial_AspNetUsers_UtilizadorId",
+                        column: x => x.UtilizadorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RequisicoesMaterial_Materiais_MaterialId",
+                        column: x => x.MaterialId,
+                        principalTable: "Materiais",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Reservas",
                 columns: table => new
                 {
@@ -225,7 +269,6 @@ namespace Aluguer_Salas.Migrations
                     Data = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IdSala = table.Column<int>(type: "int", nullable: false),
-                    SalaId = table.Column<int>(type: "int", nullable: false),
                     UtilizadorIdentityId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -236,17 +279,17 @@ namespace Aluguer_Salas.Migrations
                         column: x => x.UtilizadorIdentityId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Reservas_Salas_SalaId",
-                        column: x => x.SalaId,
+                        name: "FK_Reservas_Salas_IdSala",
+                        column: x => x.IdSala,
                         principalTable: "Salas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Limpeza",
+                name: "Limpezas",
                 columns: table => new
                 {
                     IdSala = table.Column<int>(type: "int", nullable: false),
@@ -255,15 +298,15 @@ namespace Aluguer_Salas.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Limpeza", x => new { x.IdSala, x.IdUtilizador });
+                    table.PrimaryKey("PK_Limpezas", x => new { x.IdSala, x.IdUtilizador });
                     table.ForeignKey(
-                        name: "FK_Limpeza_Funcionario_IdUtilizador",
+                        name: "FK_Limpezas_Funcionarios_IdUtilizador",
                         column: x => x.IdUtilizador,
-                        principalTable: "Funcionario",
+                        principalTable: "Funcionarios",
                         principalColumn: "FuncionarioId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Limpeza_Salas_IdSala",
+                        name: "FK_Limpezas_Salas_IdSala",
                         column: x => x.IdSala,
                         principalTable: "Salas",
                         principalColumn: "Id",
@@ -310,19 +353,29 @@ namespace Aluguer_Salas.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Funcionario_UtilizadorId",
-                table: "Funcionario",
+                name: "IX_Funcionarios_UtilizadorId",
+                table: "Funcionarios",
                 column: "UtilizadorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Limpeza_IdUtilizador",
-                table: "Limpeza",
+                name: "IX_Limpezas_IdUtilizador",
+                table: "Limpezas",
                 column: "IdUtilizador");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reservas_SalaId",
+                name: "IX_RequisicoesMaterial_MaterialId",
+                table: "RequisicoesMaterial",
+                column: "MaterialId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RequisicoesMaterial_UtilizadorId",
+                table: "RequisicoesMaterial",
+                column: "UtilizadorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservas_IdSala",
                 table: "Reservas",
-                column: "SalaId");
+                column: "IdSala");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reservas_UtilizadorIdentityId",
@@ -355,7 +408,10 @@ namespace Aluguer_Salas.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Limpeza");
+                name: "Limpezas");
+
+            migrationBuilder.DropTable(
+                name: "RequisicoesMaterial");
 
             migrationBuilder.DropTable(
                 name: "Reservas");
@@ -367,7 +423,10 @@ namespace Aluguer_Salas.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Funcionario");
+                name: "Funcionarios");
+
+            migrationBuilder.DropTable(
+                name: "Materiais");
 
             migrationBuilder.DropTable(
                 name: "Salas");
