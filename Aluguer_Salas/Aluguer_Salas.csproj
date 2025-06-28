@@ -10,6 +10,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Areas\NewFolder\**" />
+	  <Content Remove="Areas\NewFolder\**" />
+	  <EmbeddedResource Remove="Areas\NewFolder\**" />
+	  <None Remove="Areas\NewFolder\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Compile Remove="Models\Disponibilidade.cs" />
 	  <Compile Remove="Views\Alugar\Aluguer.cs" />
 	</ItemGroup>

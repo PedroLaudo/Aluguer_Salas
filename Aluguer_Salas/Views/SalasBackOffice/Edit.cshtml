@@ -9,10 +9,10 @@
 <div class="editar-sala-container">
 <h4>Sala: @Model.NomeSala</h4>
 <hr />
-        @* Aumentado o col-md *@
+        
         <form asp-controller="SalasBackoffice" asp-action="Edit" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" /> @* Importante para o POST saber qual Sala atualizar *@
+            <input type="hidden" asp-for="Id" /> 
 
             <div class="mb-3">
                 <label asp-for="NomeSala" class="form-label"></label>

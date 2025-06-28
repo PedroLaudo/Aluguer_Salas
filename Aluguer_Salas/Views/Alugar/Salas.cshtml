@@ -1,5 +1,4 @@
-﻿@* C:\Users\pedro\source\repos\Aluguer_Salas\Aluguer_Salas\Views\Alugar\Salas.cshtml *@
-@model IEnumerable<Aluguer_Salas.Models.Sala>
+﻿@model IEnumerable<Aluguer_Salas.Models.Sala>
 
 @{
     ViewData["Title"] = "Salas Disponíveis";
@@ -15,7 +14,7 @@
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         @TempData["MensagemSucesso"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
     </div>
 }
 
@@ -23,23 +22,21 @@
 {
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         @TempData["ErrorMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
     </div>
 }
 
-@* BOTÃO CONDICIONAL PARA REQUISITAR MATERIAL *@
 @if (ViewBag.MostrarBotaoRequisitarMaterial == true)
 {
     <div class="alert alert-info d-flex justify-content-between align-items-center mb-4">
         <span>A sua reserva foi confirmada. Deseja requisitar material para esta sala?</span>
-        @* Passa o ID da sala reservada *@
+        <!-- Liga para a funcionalidade de requisição de material, passando o ID da sala reservada -->
         <a asp-controller="RequisitarMaterial"
            asp-action="RequisitarMaterial"
            asp-route-salaId="@ViewBag.SalaReservadaId"
            class="btn btn-primary">
-            Próximo <i class="fas fa-arrow-right ms-1"></i> @* Ícone opcional FontAwesome *@
+            Próximo <i class="fas fa-arrow-right ms-1"></i>
         </a>
-
     </div>
 }
 
@@ -54,13 +51,13 @@ else
         {
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
-                    @* SEÇÃO DA IMAGEM REMOVIDA *@
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">@sala.NomeSala</h5>
                         <p class="card-text flex-grow-1">@sala.Descricao</p>
                         <ul class="list-unstyled">
                             <li><strong>Capacidade:</strong> @sala.Capacidade pessoas</li>
                         </ul>
+                        <!-- Botão para iniciar o processo de aluguer da sala -->
                         <a asp-controller="Alugar" asp-action="Aluguer" asp-route-id="@sala.Id" class="btn btn-success mt-auto">
                             Alugar Esta Sala
                         </a>
@@ -70,4 +67,3 @@ else
         }
     </div>
 }
-

@@ -30,74 +30,69 @@
 <h2>@ViewData["Title"]</h2>
 <hr />
 
-
 <div class="requisitar-material-container">
-<div class="row">
-    <div class="col-md-8">
-        <form asp-action="Index" method="post">
-            @Html.AntiForgeryToken()
-            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+    <div class="row">
+        <div class="col-md-8">
+            <form asp-action="Index" method="post">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
-            @if (ViewBag.SalaIdPendente != null)
-            {
-                <input type="hidden" name="salaIdPendenteInput" value="@ViewBag.SalaIdPendente" />
-            }
+                @if (ViewBag.SalaIdPendente != null)
+                {
+                    <input type="hidden" name="salaIdPendenteInput" value="@ViewBag.SalaIdPendente" />
+                }
 
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <label asp-for="DataRequisicao" class="form-label"></label>
-                    <input asp-for="DataRequisicao" type="date" class="form-control" value="@Model.DataRequisicao.ToString("yyyy-MM-dd")" />
-                    <span asp-validation-for="DataRequisicao" class="text-danger"></span>
-                </div>
-                <div class="col-md-4">
-                    <label asp-for="HoraInicio" class="form-label"></label>
-                    <input asp-for="HoraInicio" type="time" class="form-control" value="@Model.HoraInicio.ToString(@"hh\:mm")" />
-                    <span asp-validation-for="HoraInicio" class="text-danger"></span>
-                </div>
-                <div class="col-md-4">
-                    <label asp-for="HoraFim" class="form-label"></label>
-                    <input asp-for="HoraFim" type="time" class="form-control" value="@Model.HoraFim.ToString(@"hh\:mm")" />
-                    <span asp-validation-for="HoraFim" class="text-danger"></span>
-                </div>
-            </div>
-
-            <h4 class="mt-4">Itens da Requisição</h4>
-            <div id="itens-container">
-                @* Primeira linha estática - nomes ajustados para binding com arrays no controller *@
-                <div class="row item-row mb-3 align-items-end">
-                    <div class="col-md-5">
-                        <label class="form-label visually-hidden">Material</label>
-                        @* NOME CORRIGIDO: materialId[0] *@
-                        <select name="materialId[0]" asp-items="ViewBag.ListaMateriaisDisponiveis as SelectList" class="form-select material-select">
-                            <option value="">-- Selecione o Material --</option>
-                        </select>
-                        @* <span asp-validation-for="MaterialId" class="text-danger"></span> se você tivesse um Model.MaterialId *@
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label asp-for="DataRequisicao" class="form-label"></label>
+                        <input asp-for="DataRequisicao" type="date" class="form-control" value="@Model.DataRequisicao.ToString("yyyy-MM-dd")" />
+                        <span asp-validation-for="DataRequisicao" class="text-danger"></span>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label visually-hidden">Quantidade</label>
-                        @* NOME CORRIGIDO: quantidadeRequisitada[0] *@
-                        <input name="quantidadeRequisitada[0]" type="number" min="1" class="form-control quantidade-input" placeholder="Qtd." value="1" />
-                        @* <span asp-validation-for="QuantidadeRequisitada" class="text-danger"></span> se você tivesse um Model.QuantidadeRequisitada *@
+                        <label asp-for="HoraInicio" class="form-label"></label>
+                        <input asp-for="HoraInicio" type="time" class="form-control" value="@Model.HoraInicio.ToString(@"hh\:mm")" />
+                        <span asp-validation-for="HoraInicio" class="text-danger"></span>
                     </div>
-                    <div class="col-md-2">
-                        <button type="button" class="btn btn-danger btn-sm remove-item-btn" title="Remover Item" style="display:none;">
-                            <i class="bi bi-trash"></i>
-                        </button>
+                    <div class="col-md-4">
+                        <label asp-for="HoraFim" class="form-label"></label>
+                        <input asp-for="HoraFim" type="time" class="form-control" value="@Model.HoraFim.ToString(@"hh\:mm")" />
+                        <span asp-validation-for="HoraFim" class="text-danger"></span>
                     </div>
                 </div>
-            </div>
 
-            <button type="button" id="add-item-btn" class="btn btn-success btn-sm mt-2 mb-3">
-                <i class="bi bi-plus-circle"></i> Adicionar Outro Material
-            </button>
+                <h4 class="mt-4">Itens da Requisição</h4>
+                <div id="itens-container">
+                    <!-- Primeira linha de item -->
+                    <div class="row item-row mb-3 align-items-end">
+                        <div class="col-md-5">
+                            <label class="form-label visually-hidden">Material</label>
+                            <select name="materialId[0]" asp-items="ViewBag.ListaMateriaisDisponiveis as SelectList" class="form-select material-select">
+                                <option value="">-- Selecione o Material --</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label visually-hidden">Quantidade</label>
+                            <input name="quantidadeRequisitada[0]" type="number" min="1" class="form-control quantidade-input" placeholder="Qtd." value="1" />
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-danger btn-sm remove-item-btn" title="Remover Item" style="display:none;">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="form-group mt-4">
-                <button type="submit" class="btn btn-primary">Confirmar Requisição</button>
-                <a asp-controller="Alugar" asp-action="Salas" class="btn btn-secondary ms-2">Cancelar</a>
-            </div>
-        </form>
+                <button type="button" id="add-item-btn" class="btn btn-success btn-sm mt-2 mb-3">
+                    <i class="bi bi-plus-circle"></i> Adicionar Outro Material
+                </button>
+
+                <div class="form-group mt-4">
+                    <button type="submit" class="btn btn-primary">Confirmar Requisição</button>
+                    <a asp-controller="Alugar" asp-action="Salas" class="btn btn-secondary ms-2">Cancelar</a>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 </div>
 
 @section Scripts {
@@ -108,17 +103,15 @@
             const addItemBtn = document.getElementById('add-item-btn');
 
             const listaMateriaisDisponiveis = @Html.Raw(Json.Serialize(materiaisParaJs));
-            console.log('Lista de materiais disponíveis no carregamento:', listaMateriaisDisponiveis);
 
-            // Função de escape HTML CORRIGIDA
-                   function escapeHtml(unsafe) {
-            return unsafe
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
+            function escapeHtml(unsafe) {
+                return unsafe
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
 
             function updateRemoveButtonsVisibility() {
                 const itemRows = itensContainer.querySelectorAll('.item-row');
@@ -137,11 +130,9 @@
                     const quantidadeInput = row.querySelector('.quantidade-input');
 
                     if (materialSelect) {
-                        // NOME CORRIGIDO para binding com array no controller
                         materialSelect.name = `materialId[${index}]`;
                     }
                     if (quantidadeInput) {
-                        // NOME CORRIGIDO para binding com array no controller
                         quantidadeInput.name = `quantidadeRequisitada[${index}]`;
                     }
                 });
@@ -151,15 +142,12 @@
                 let optionsHtml = '<option value="">-- Selecione o Material --</option>';
                 if (Array.isArray(listaMateriaisDisponiveis)) {
                     listaMateriaisDisponiveis.forEach(function (item) {
-                        const value = item.value ?? item.Value ?? ''; // Tenta camelCase, depois PascalCase
-                        const text = item.text ?? item.Text ?? 'Opção Inválida'; // Tenta camelCase, depois PascalCase
+                        const value = item.value ?? item.Value ?? '';
+                        const text = item.text ?? item.Text ?? 'Opção Inválida';
                         optionsHtml += `<option value="${escapeHtml(value)}">${escapeHtml(text)}</option>`;
                     });
-                } else {
-                    console.warn('listaMateriaisDisponiveis não é um array ou está indefinida ao criar HTML do item:', listaMateriaisDisponiveis);
                 }
 
-                // Nomes dos campos CORRIGIDOS para binding com arrays no controller
                 return `
                     <div class="row item-row mb-3 align-items-end">
                         <div class="col-md-5">
@@ -185,8 +173,6 @@
                 const currentRowCount = itensContainer.querySelectorAll('.item-row').length;
                 itensContainer.insertAdjacentHTML('beforeend', createItemRowHtml(currentRowCount));
                 updateRemoveButtonsVisibility();
-                // updateInputNames() não é estritamente necessário aqui porque createItemRowHtml já usa o índice correto,
-                // mas não prejudica se for chamado.
             });
 
             itensContainer.addEventListener('click', function (e) {
@@ -194,12 +180,10 @@
                 if (removeButton) {
                     removeButton.closest('.item-row').remove();
                     updateRemoveButtonsVisibility();
-                    updateInputNames(); // Essencial reindexar após a remoção
+                    updateInputNames();
                 }
             });
 
-            // Chamada inicial para garantir que a primeira linha (se estática) tenha os nomes corretos
-            // e a visibilidade do botão de remover.
             updateInputNames();
             updateRemoveButtonsVisibility();
         });

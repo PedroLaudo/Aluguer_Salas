@@ -12,13 +12,12 @@ namespace Aluguer_Salas.Data
             var userManager = serviceProvider.GetRequiredService<UserManager<Utilizador>>();
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-            // Usamos a ILoggerFactory para criar um logger para uma classe estática.
             var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
             var logger = loggerFactory.CreateLogger("Aluguer_Salas.Data.SeedData");
 
             logger.LogInformation("--- A iniciar o processo de SeedData ---");
 
-            // 1. CRIAR ROLES ESSENCIAIS
+            // Criar as roles principais, caso ainda não existam
             string[] roleNames = { "Administrador", "Professor", "Aluno" };
             foreach (var roleName in roleNames)
             {
@@ -29,12 +28,12 @@ namespace Aluguer_Salas.Data
                 }
             }
 
-            // 2. LER E CRIAR UTILIZADORES DA SECÇÃO "AdminUsers"
+            // Ler utilizadores da configuração e criar os que ainda não existem
             var usersToSeed = configuration.GetSection("AdminUsers").Get<List<SeedUserConfig>>();
 
             if (usersToSeed == null || !usersToSeed.Any())
             {
-                logger.LogInformation("Nenhum utilizador encontrado na configuração 'AdminUsers' para semear.");
+                logger.LogInformation("Nenhum utilizador encontrado na configuração 'AdminUsers'.");
                 return;
             }
 
@@ -51,16 +50,17 @@ namespace Aluguer_Salas.Data
                 );
             }
 
-            // 3. SALVAR TODAS AS ALTERAÇÕES NA BASE DE DADOS
+            // Guardar alterações na base de dados, se existirem
             if (context.ChangeTracker.HasChanges())
             {
                 await context.SaveChangesAsync();
-                logger.LogInformation("Todas as alterações do SeedData foram salvas na base de dados.");
+                logger.LogInformation("Alterações do SeedData guardadas com sucesso na base de dados.");
             }
 
             logger.LogInformation("--- Processo de SeedData concluído ---");
         }
 
+        // Cria um utilizador com uma entrada Utente e atribui-lhe uma role
         private static async Task CreateUserWithUtenteAndAssignRole(
             UserManager<Utilizador> userManager,
             ApplicationDbContext dbContext,
@@ -83,16 +83,16 @@ namespace Aluguer_Salas.Data
                 var result = await userManager.CreateAsync(identityUser, password);
                 if (!result.Succeeded)
                 {
-                    logger.LogError($"❌ Erro ao criar utilizador Identity '{email}': {FormatErrors(result.Errors)}");
+                    logger.LogError($"❌ Erro ao criar utilizador '{email}': {FormatErrors(result.Errors)}");
                     return;
                 }
-                logger.LogInformation($"✔️ Utilizador Identity '{email}' criado com sucesso.");
+                logger.LogInformation($"✔️ Utilizador '{email}' criado com sucesso.");
             }
 
             if (!await userManager.IsInRoleAsync(identityUser, roleName))
             {
                 await userManager.AddToRoleAsync(identityUser, roleName);
-                logger.LogInformation($"🔐 Role '{roleName}' atribuído com sucesso a '{email}'.");
+                logger.LogInformation($"🔐 Role '{roleName}' atribuída a '{email}'.");
             }
 
             var utente = await dbContext.Utentes.FirstOrDefaultAsync(u => u.UtilizadorIdentityId == identityUser.Id);
@@ -105,17 +105,18 @@ namespace Aluguer_Salas.Data
                     UtilizadorIdentityId = identityUser.Id
                 };
                 dbContext.Utentes.Add(utente);
-                logger.LogInformation($"✔️ Entrada Utente para '{email}' adicionada ao contexto.");
+                logger.LogInformation($"✔️ Utente associado ao utilizador '{email}' adicionado.");
             }
         }
 
+        // Formata erros de criação do Identity
         private static string FormatErrors(IEnumerable<IdentityError> errors)
         {
             return string.Join(", ", errors.Select(e => e.Description));
         }
     }
 
-    // Classe auxiliar para ler a configuração do appsettings.json
+    // Modelo auxiliar para carregar utilizadores do appsettings.json
     public class SeedUserConfig
     {
         public string Nome { get; set; }

@@ -84,11 +84,11 @@ else
                                 (reserva.Status?.Equals("Confirmada", StringComparison.OrdinalIgnoreCase) == true ||
                                 reserva.Status?.Equals("Pendente", StringComparison.OrdinalIgnoreCase) == true);
                             }
-                            @if (podeSerCancelada) // Alterado de podeSerModificadaOuCancelada para podeSerCancelada
+                            @if (podeSerCancelada) 
                             {
-                                // O BOTÃO DE EDITAR RESERVA FOI REMOVIDO DAQUI
+                                
                                 <form asp-controller="Perfil" asp-action="CancelarReserva" method="post" class="d-inline">
-                                    @* Removido ms-1 se for o único botão *@
+                                    
                                     @Html.AntiForgeryToken()
                                     <input type="hidden" name="idReserva" value="@reserva.IdReserva" />
                                     <button type="submit"
@@ -109,7 +109,6 @@ else
                             }
                             else
                             {
-                                <!-- Outros estados que não permitem modificação (ex: Rejeitada) -->
                                 <span class="badge bg-light text-dark">@reserva.Status</span>
                             }
                         </td>
