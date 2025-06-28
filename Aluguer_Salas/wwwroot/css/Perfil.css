@@ -1,9 +1,7 @@
-﻿/* Container principal */
-body, .perfil-container {
+﻿body, .perfil-container {
     background: #f7f7fa;
 }
 
-/* Título principal */
 h1 {
     color: #7352C7;
     font-weight: 700;
@@ -12,7 +10,6 @@ h1 {
     letter-spacing: 1px;
 }
 
-/* Cartão do utilizador */
 .card {
     border-radius: 14px;
     box-shadow: 0 4px 16px rgba(115,82,199,0.08);
@@ -38,7 +35,6 @@ h1 {
     color: #5e42a3;
 }
 
-/* Títulos das secções */
 h2 {
     color: #7352C7;
     font-weight: 600;
@@ -47,7 +43,7 @@ h2 {
     letter-spacing: 0.5px;
 }
 
-/* Alertas */
+
 .alert {
     border-radius: 10px;
     font-size: 1rem;
@@ -79,7 +75,7 @@ h2 {
     color: #a67c00;
 }
 
-/* Tabelas */
+
 .table {
     background: #fff;
     border-radius: 12px;
@@ -113,7 +109,6 @@ h2 {
     transition: background 0.2s;
 }
 
-/* Badges de estado */
 .badge.bg-secondary {
     background: #bdbdbd !important;
     color: #fff !important;
@@ -130,7 +125,7 @@ h2 {
     border: 1px solid #dcdcdc;
 }
 
-/* Botões */
+
 .btn-primary, .btn-warning, .btn-danger, .btn-secondary {
     font-weight: 500;
     border-radius: 6px;
@@ -190,7 +185,7 @@ h2 {
     margin-left: 0.75rem !important;
 }
 
-/* Responsivo */
+
 @media (max-width: 900px) {
     .table {
         font-size: 0.95rem;

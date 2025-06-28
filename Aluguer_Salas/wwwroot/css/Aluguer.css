@@ -1,11 +1,9 @@
-﻿/* Container principal para garantir isolamento */
-.aluguer-container {
+﻿.aluguer-container {
     max-width: 900px;
     margin: 0 auto 40px auto;
     padding: 32px 0;
 }
 
-/* Título da página */
 .aluguer-container h2.mb-4 {
     text-align: center;
     color: #7352C7;
@@ -15,7 +13,6 @@
     letter-spacing: 1px;
 }
 
-/* Card/formulário principal */
 .aluguer-container form {
     background: #fff;
     border-radius: 18px;
@@ -24,7 +21,6 @@
     margin-bottom: 32px;
 }
 
-/* Fieldset de detalhes da sala */
 .aluguer-container fieldset {
     background: #f7f7fa;
     border-radius: 10px;
@@ -67,7 +63,6 @@
     resize: vertical;
 }
 
-/* Título da secção de data/hora */
 .aluguer-container h5.mt-4 {
     color: #7352C7;
     font-weight: 600;
@@ -75,7 +70,6 @@
     margin-bottom: 10px;
 }
 
-/* Alertas */
 .aluguer-container .alert {
     border-radius: 10px;
     font-size: 1rem;
@@ -101,7 +95,6 @@
     margin-bottom: 6px;
 }
 
-/* Botões */
 .aluguer-container .btn-primary {
     background-color: #7352C7;
     border-color: #7352C7;
@@ -123,28 +116,24 @@
     margin-left: 0.75rem !important;
 }
 
-/* Validação */
+
 .aluguer-container .text-danger {
     font-size: 0.97rem;
 }
 
 .aluguer-container .hora-reservada {
-    color: #dc3545; /* Vermelho Bootstrap */
+    color: #dc3545;
     font-weight: 500;
 }
 
 .aluguer-container .input-ocupado {
-    border: 2px solid #dc3545 !important; /* Vermelho Bootstrap */
+    border: 2px solid #dc3545 !important;
     background: #fff0f3 !important;
     color: #dc3545 !important;
     font-weight: 600;
 }
 
 
-
-
-
-/* Responsivo */
 @media (max-width: 900px) {
     .aluguer-container form {
         padding: 18px 8px 18px 8px;

@@ -1,46 +1,36 @@
-﻿/* ==========================================================================
-   ESTILOS GERAIS E DE LAYOUT (COM A LINHA ESTILIZADA)
-   ========================================================================== */
-
-body {
+﻿body {
     background-color: #f8f9fa;
 }
 
-/* Estilo para o Título principal */
 h2 {
     color: #7352C7;
     font-weight: 700;
     margin-top: 40px;
-    margin-bottom: 18px; /* Espaço entre o título e a linha */
+    margin-bottom: 18px;
     text-align: center;
     letter-spacing: 1px;
 }
 
-/* ESTILO DA NOVA LINHA DECORATIVA */
 hr {
-    max-width: 250px; /* Define um comprimento máximo para a linha */
-    margin: 0 auto 32px auto; /* Centra a linha horizontalmente e adiciona espaço abaixo */
-    border: none; /* Remove o estilo padrão da linha */
-    border-top: 2px solid #7352C7; /* Cria a nova linha com a cor e espessura desejada */
-    opacity: 1; /* Garante que a cor seja sólida (Bootstrap pode reduzir a opacidade) */
+    max-width: 250px;
+    margin: 0 auto 32px auto;
+    border: none;
+    border-top: 2px solid #7352C7;
+    opacity: 1;
 }
 
 
-/* Container principal */
 .requisitar-material-container {
     max-width: 950px;
     margin: 0 auto 40px auto;
     padding: 0 15px;
 }
 
-    /* Centra a coluna .col-md-8 dentro da .row */
+    
     .requisitar-material-container .row {
         justify-content: center;
     }
 
-    /* ==========================================================================
-   ESTILOS DO FORMULÁRIO (A CAIXA BRANCA)
-   ========================================================================== */
 
     .requisitar-material-container form {
         background: #fff;
@@ -50,7 +40,6 @@ hr {
         width: 100%;
     }
 
-    /* Labels e inputs */
     .requisitar-material-container .form-label {
         font-weight: 500;
         color: #444;
@@ -70,7 +59,6 @@ hr {
             box-shadow: 0 0 0 3px #e0d6f7;
         }
 
-    /* Itens da requisição */
     .requisitar-material-container #itens-container .item-row {
         background: #f7f7fa;
         border-radius: 8px;
@@ -80,7 +68,7 @@ hr {
         margin-right: 0;
     }
 
-    /* Botões */
+
     .requisitar-material-container #add-item-btn,
     .requisitar-material-container .btn-primary {
         background-color: #7352C7;
@@ -100,9 +88,6 @@ hr {
         font-weight: 500;
     }
 
-/* ==========================================================================
-   RESPONSIVO
-   ========================================================================== */
 @media (max-width: 768px) {
     h2 {
         font-size: 1.75rem;
@@ -110,7 +95,7 @@ hr {
     }
 
     hr {
-        max-width: 180px; /* Linha um pouco mais curta no mobile */
+        max-width: 180px;
         margin-bottom: 24px;
     }
 

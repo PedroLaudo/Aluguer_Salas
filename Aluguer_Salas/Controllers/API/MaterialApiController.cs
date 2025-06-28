@@ -18,7 +18,10 @@ namespace Aluguer_Salas.Controllers.API
         {
             _context = context;
         }
-
+        /// <summary>
+        /// Lista todos os materiais do sistema.
+        /// </summary>
+        /// <returns></returns>
         // GET: api/MaterialApi
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Material>>> GetMateriais()

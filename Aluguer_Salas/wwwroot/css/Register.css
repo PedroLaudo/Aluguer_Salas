@@ -1,16 +1,12 @@
-﻿/* --- CSS PARA A PÁGINA DE REGISTO --- */
-
-/* 1. Container para centrar o formulário na página */
-.register-wrapper {
+﻿.register-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 4rem 1rem;
     width: 100%;
-    min-height: 85vh; /* Dá espaço para o cabeçalho e rodapé */
+    min-height: 85vh;
 }
 
-/* 2. Estilo do card do formulário */
 form#registerForm {
     background-color: #ffffff;
     padding: 40px 35px;
@@ -19,7 +15,6 @@ form#registerForm {
     width: 100%;
 }
 
-    /* 3. Título do formulário */
     form#registerForm h2 {
         text-align: left;
         margin: 0 0 30px 0;
@@ -28,24 +23,22 @@ form#registerForm {
         color: #333;
     }
 
-    /* Esconde a linha <hr> do template padrão */
     form#registerForm hr {
         display: none;
     }
 
-/* 4. Estilo dos campos "form-floating" */
+
 .form-floating > .form-control,
 .form-floating > .form-select {
     height: auto;
-    padding: 1rem 1.1rem; /* Padding interno do campo */
+    padding: 1rem 1.1rem;
 }
 
 .form-floating > label {
-    padding: 1rem 1.1rem; /* O padding do label deve corresponder ao do input */
+    padding: 1rem 1.1rem;
     color: #888;
 }
 
-/* Campos de input e select */
 .form-control {
     border-radius: 12px;
     border: 1px solid #e0e0e0;
@@ -58,18 +51,15 @@ form#registerForm {
         box-shadow: 0 0 0 3px rgba(115, 82, 199, 0.15);
     }
 
-/* 5. Estilo específico para o Dropdown (Select) */
 .form-floating > select.form-control {
-    /* Esconde a seta padrão do browser */
     -webkit-appearance: none;
     appearance: none;
-    background-image: none; /* Garante que não há imagem de fundo */
+    background-image: none;
 }
 
-/* Estilo do ícone da seta no label do dropdown */
 .form-floating > label > i.bi-chevron-down {
     position: absolute;
-    right: 15px; /* Posição à direita */
+    right: 15px;
     top: 50%;
     transform: translateY(-50%);
     font-size: 0.9rem;
@@ -77,17 +67,14 @@ form#registerForm {
     transition: transform 0.2s;
 }
 
-/* Gira a seta quando o dropdown está aberto (em foco) */
 select.form-control:focus + label > i.bi-chevron-down {
     transform: translateY(-50%) rotate(180deg);
 }
 
-/* Estilo para a opção de placeholder ficar cinzenta */
 select:invalid {
     color: #888;
 }
 
-/* 6. Botão de submeter */
 #registerSubmit {
     background-color: #7352C7;
     border: none;
@@ -105,11 +92,10 @@ select:invalid {
         background-color: #5e42a3;
     }
 
-/* 7. Media query para responsividade em telemóveis */
 @media (max-width: 768px) {
     .register-wrapper {
-        padding: 1.5rem 0.5rem; /* Menos padding em mobile */
-        align-items: flex-start; /* Alinha no topo em mobile */
+        padding: 1.5rem 0.5rem;
+        align-items: flex-start;
     }
 
     form#registerForm {

@@ -1,11 +1,10 @@
-﻿/* Container geral da gestão de materiais */
-.material-backoffice-container {
+﻿.material-backoffice-container {
     max-width: 1000px;
     margin: 0 auto;
     padding: 20px;
 }
 
-    /* Título */
+    
     .material-backoffice-container h1 {
         color: #7352C7;
         font-weight: 700;
@@ -13,7 +12,7 @@
         margin-bottom: 24px;
     }
 
-    /* Botão de adicionar material */
+  
     .material-backoffice-container .btn-primary {
         background-color: #7352C7;
         border-color: #7352C7;
@@ -27,7 +26,7 @@
             border-color: #5e42a3;
         }
 
-    /* Tabela */
+    
     .material-backoffice-container .table {
         background-color: #fff;
         border-radius: 12px;
@@ -50,7 +49,7 @@
             color: #444;
         }
 
-    /* Ações */
+    
     .material-backoffice-container .btn-outline-primary,
     .material-backoffice-container .btn-outline-info,
     .material-backoffice-container .btn-outline-danger {
@@ -89,7 +88,6 @@
             color: #fff;
         }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .material-backoffice-container .table {
         font-size: 0.9rem;
@@ -109,7 +107,6 @@
     }
 }
 
-/*  criar material */
 
 .material-form-container {
     background-color: #fff;
@@ -160,7 +157,6 @@
         min-width: 120px;
     }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .material-form-container {
         padding: 16px;
@@ -181,9 +177,6 @@
             gap: 0;
         }
 }
-
-
-/* Detalhes do material */
 
 .material-details-container {
     background-color: #fff;
@@ -233,7 +226,6 @@
         min-width: 120px;
     }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .material-details-container {
         padding: 16px;
@@ -254,8 +246,6 @@
             margin-bottom: 8px;
         }
 }
-
-/* Editar material */
 
 .material-edit-container {
     background-color: #fff;
@@ -296,7 +286,6 @@
         min-width: 160px;
     }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .material-edit-container {
         padding: 16px;
@@ -313,7 +302,6 @@
         }
 }
 
-/* Apagar material */
 
 .material-delete-container {
     background-color: #fff;
@@ -358,7 +346,6 @@
         font-weight: 500;
     }
 
-/* Responsivo */
 @media (max-width: 768px) {
     .material-delete-container {
         padding: 16px;

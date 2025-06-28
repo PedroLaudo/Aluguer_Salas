@@ -1,5 +1,4 @@
-﻿/* Título da página */
-h1 {
+﻿h1 {
     text-align: center;
     color: #7352C7;
     font-weight: 700;
@@ -7,7 +6,6 @@ h1 {
     letter-spacing: 1px;
 }
 
-/* Cartão de sala */
 .card {
     border-radius: 18px;
     box-shadow: 0 4px 16px rgba(115,82,199,0.10);
@@ -26,7 +24,6 @@ h1 {
     padding: 28px 22px;
 }
 
-/* Título da sala */
 .card-title {
     font-size: 1.25rem;
     font-weight: 600;
@@ -34,21 +31,18 @@ h1 {
     margin-bottom: 10px;
 }
 
-/* Descrição da sala */
 .card-text {
     color: #444;
     font-size: 1rem;
     margin-bottom: 16px;
 }
 
-/* Lista de detalhes */
 .list-unstyled {
     margin-bottom: 18px;
     color: #555;
     font-size: 0.98rem;
 }
 
-/* Botão de alugar */
 .btn-success {
     background-color: #7352C7;
     border-color: #7352C7;
@@ -61,7 +55,6 @@ h1 {
         border-color: #5e42a3;
     }
 
-/* Alertas */
 .alert {
     max-width: 700px;
     margin: 20px auto;
@@ -69,7 +62,6 @@ h1 {
     font-size: 1rem;
 }
 
-/* Responsivo para cartões */
 @media (max-width: 991px) {
     .col-md-4 {
         flex: 0 0 100%;

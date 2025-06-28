@@ -1,6 +1,4 @@
-﻿/* --- CSS PARA A PÁGINA DE LOGIN (VERSÃO CORRIGIDA) --- */
-
-.login-page-body {
+﻿.login-page-body {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -11,12 +9,11 @@
     box-sizing: border-box;
 }
 
-    /* Usamos um seletor mais específico para garantir que esta regra é aplicada */
     .login-page-body .login-form-card {
         background-color: #ffffff;
         padding: 40px 35px;
         border-radius: 30px;
-        box-shadow: none !important; /* Remove a sombra de forma definitiva */
+        box-shadow: none !important;
         border: 1px solid #e9e9f0;
         max-width: 420px;
         width: 100%;

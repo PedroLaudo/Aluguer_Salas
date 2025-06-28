@@ -104,7 +104,6 @@
     }
 }
 
-/* ---------- Editar Sala (estilo roxo isolado e responsivo) ---------- */
 
 .editar-sala-container {
     max-width: 700px;
@@ -164,8 +163,6 @@
             margin-top: 10px;
         }
 }
-
-/* ---------- Detalhes da Sala - estilo roxo isolado e responsivo ---------- */
 
 .detalhes-sala-container {
     max-width: 700px;
@@ -236,7 +233,6 @@
         }
 }
 
-/* ---------- Apagar Sala - estilo roxo isolado e responsivo ---------- */
 
 .apagar-sala-container {
     max-width: 700px;
