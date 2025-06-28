@@ -109,11 +109,16 @@ main.main-content {
     transition: background-color 0.2s;
 }
 
-#registerSubmit:hover {
+.main-btn:hover {
         background-color: #5e42a3;
         color:#fff;
     }
 
 .feature-btn {
     margin-top: auto;
+}
+
+.feature-btn:hover {
+    background-color: #5e42a3;
+    color: #fff;
 }
