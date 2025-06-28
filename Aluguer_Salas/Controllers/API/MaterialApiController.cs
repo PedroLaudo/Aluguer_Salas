@@ -29,6 +29,12 @@ namespace Aluguer_Salas.Controllers.API
             return await _context.Materiais.ToListAsync();
         }
 
+        /// <summary>
+        /// Obtém um material específico pelo ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+
         // GET: api/MaterialApi/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Material>> GetMaterial(int id)
@@ -42,7 +48,12 @@ namespace Aluguer_Salas.Controllers.API
 
             return material;
         }
-
+        /// <summary>
+        /// Atualiza um material existente.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="material"></param>
+        /// <returns></returns>
         // PUT: api/MaterialApi/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMaterial(int id, Material material)
@@ -73,6 +84,11 @@ namespace Aluguer_Salas.Controllers.API
             return NoContent();
         }
 
+        /// <summary>
+        /// Cria um novo material no sistema.
+        /// </summary>
+        /// <param name="material"></param>
+        /// <returns></returns>
         // POST: api/MaterialApi
         [HttpPost]
         public async Task<ActionResult<Material>> PostMaterial(Material material)
@@ -83,6 +99,12 @@ namespace Aluguer_Salas.Controllers.API
             return CreatedAtAction(nameof(GetMaterial), new { id = material.Id }, material);
         }
 
+
+        /// <summary>
+        /// Remove um material do sistema pelo ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // DELETE: api/MaterialApi/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMaterial(int id)
@@ -98,7 +120,11 @@ namespace Aluguer_Salas.Controllers.API
 
             return NoContent();
         }
-
+        /// <summary>
+        /// Verifica se um material existe pelo ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         private bool MaterialExists(int id)
         {
             return _context.Materiais.Any(e => e.Id == id);

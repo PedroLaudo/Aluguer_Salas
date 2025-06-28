@@ -19,6 +19,11 @@ namespace Aluguer_Salas.Controllers.API
             _context = context;
         }
 
+
+        /// <summary>
+        /// Lista todos os utentes do sistema.
+        /// </summary>
+        /// <returns></returns>
         // GET: api/UtenteApi
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Utente>>> GetUtentes()
@@ -26,6 +31,11 @@ namespace Aluguer_Salas.Controllers.API
             return await _context.Utentes.ToListAsync();
         }
 
+        /// <summary>
+        /// Obtém um utente específico pelo ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET: api/UtenteApi/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Utente>> GetUtente(int id)
@@ -40,6 +50,13 @@ namespace Aluguer_Salas.Controllers.API
             return utente;
         }
 
+
+        /// <summary>
+        /// Atualiza um utente existente.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="utente"></param>
+        /// <returns></returns>
         // PUT: api/UtenteApi/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUtente(int id, Utente utente)
@@ -70,6 +87,12 @@ namespace Aluguer_Salas.Controllers.API
             return NoContent();
         }
 
+
+        /// <summary>
+        /// Cria um novo utente no sistema.
+        /// </summary>
+        /// <param name="utente"></param>
+        /// <returns></returns>
         // POST: api/UtenteApi
         [HttpPost]
         public async Task<ActionResult<Utente>> PostUtente(Utente utente)
@@ -80,6 +103,12 @@ namespace Aluguer_Salas.Controllers.API
             return CreatedAtAction(nameof(GetUtente), new { id = utente.Id }, utente);
         }
 
+
+        /// <summary>
+        /// Remove um utente do sistema pelo ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // DELETE: api/UtenteApi/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUtente(int id)
@@ -96,6 +125,11 @@ namespace Aluguer_Salas.Controllers.API
             return NoContent();
         }
 
+        /// <summary>
+        /// Verifica se um utente existe pelo ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         private bool UtenteExists(int id)
         {
             return _context.Utentes.Any(e => e.Id == id);

@@ -19,6 +19,11 @@ namespace Aluguer_Salas.Controllers.API
             _context = context;
         }
 
+
+        /// <summary>
+        /// Lista todas as reservas do sistema.
+        /// </summary>
+        /// <returns></returns>
         // GET: api/ReservaApi
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Reserva>>> GetReservas()
@@ -26,6 +31,11 @@ namespace Aluguer_Salas.Controllers.API
             return await _context.Reservas.ToListAsync();
         }
 
+        /// <summary>
+        /// Obtém uma reserva específica pelo ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET: api/ReservaApi/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Reserva>> GetReserva(int id)
@@ -40,6 +50,12 @@ namespace Aluguer_Salas.Controllers.API
             return reserva;
         }
 
+        /// <summary>
+        /// Atualiza uma reserva existente.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="reserva"></param>
+        /// <returns></returns>
         // PUT: api/ReservaApi/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutReserva(int id, Reserva reserva)
@@ -70,6 +86,12 @@ namespace Aluguer_Salas.Controllers.API
             return NoContent();
         }
 
+
+        /// <summary>
+        /// Cria uma nova reserva.
+        /// </summary>
+        /// <param name="reserva"></param>
+        /// <returns></returns>
         // POST: api/ReservaApi
         [HttpPost]
         public async Task<ActionResult<Reserva>> PostReserva(Reserva reserva)
@@ -80,6 +102,11 @@ namespace Aluguer_Salas.Controllers.API
             return CreatedAtAction(nameof(GetReserva), new { id = reserva.IdReserva }, reserva);
         }
 
+        /// <summary>
+        /// Remove uma reserva existente pelo ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // DELETE: api/ReservaApi/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReserva(int id)
@@ -96,6 +123,12 @@ namespace Aluguer_Salas.Controllers.API
             return NoContent();
         }
 
+
+        /// <summary>
+        /// Verifica se uma reserva existe pelo ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         private bool ReservaExists(int id)
         {
             return _context.Reservas.Any(e => e.IdReserva == id);

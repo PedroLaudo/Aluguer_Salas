@@ -19,6 +19,11 @@ namespace Aluguer_Salas.Controllers.API
             _context = context;
         }
 
+
+        /// <summary>
+        /// Lista todas as salas do sistema.
+        /// </summary>
+        /// <returns></returns>
         // GET: api/SalaApi
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Sala>>> GetSalas()
@@ -26,6 +31,11 @@ namespace Aluguer_Salas.Controllers.API
             return await _context.Salas.ToListAsync();
         }
 
+        /// <summary>
+        /// Obtém uma sala específica pelo ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET: api/SalaApi/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Sala>> GetSala(int id)
@@ -40,6 +50,12 @@ namespace Aluguer_Salas.Controllers.API
             return sala;
         }
 
+        /// <summary>
+        /// Atualiza uma sala existente.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="sala"></param>
+        /// <returns></returns>
         // PUT: api/SalaApi/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutSala(int id, Sala sala)
@@ -70,6 +86,11 @@ namespace Aluguer_Salas.Controllers.API
             return NoContent();
         }
 
+        /// <summary>
+        /// Cria uma nova sala.
+        /// </summary>
+        /// <param name="sala"></param>
+        /// <returns></returns>
         // POST: api/SalaApi
         [HttpPost]
         public async Task<ActionResult<Sala>> PostSala(Sala sala)
@@ -80,6 +101,11 @@ namespace Aluguer_Salas.Controllers.API
             return CreatedAtAction(nameof(GetSala), new { id = sala.Id }, sala);
         }
 
+        /// <summary>
+        /// Remove uma sala existente pelo ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // DELETE: api/SalaApi/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSala(int id)
@@ -96,6 +122,11 @@ namespace Aluguer_Salas.Controllers.API
             return NoContent();
         }
 
+        /// <summary>
+        /// Verifica se uma sala existe pelo ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         private bool SalaExists(int id)
         {
             return _context.Salas.Any(e => e.Id == id);
