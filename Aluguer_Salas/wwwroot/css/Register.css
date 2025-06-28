@@ -1,83 +1,119 @@
-﻿/* Estilo apenas para a página de registo */
+﻿/* --- CSS PARA A PÁGINA DE REGISTO --- */
+
+/* 1. Container para centrar o formulário na página */
+.register-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4rem 1rem;
+    width: 100%;
+    min-height: 85vh; /* Dá espaço para o cabeçalho e rodapé */
+}
+
+/* 2. Estilo do card do formulário */
 form#registerForm {
     background-color: #ffffff;
     padding: 40px 35px;
-    border-radius: 30px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
-    margin-top: 20%;
-    margin-left: 100%;
+    border-radius: 24px;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
     width: 100%;
 }
 
-    /* Cabeçalho do formulário */
+    /* 3. Título do formulário */
     form#registerForm h2 {
         text-align: left;
-        margin-bottom: 1rem;
+        margin: 0 0 30px 0;
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #333;
     }
 
-    /* Campo de input */
-    form#registerForm .form-floating {
-        margin-bottom: 20px;
-        text-align: left;
+    /* Esconde a linha <hr> do template padrão */
+    form#registerForm hr {
+        display: none;
     }
 
-    form#registerForm .form-control {
-        border-radius: 6px;
-        border: 1px solid #dcdcdc;
-        padding-top: 1.5rem;
-        padding-bottom: 0.5rem;
-        font-size: 0.95rem;
+/* 4. Estilo dos campos "form-floating" */
+.form-floating > .form-control,
+.form-floating > .form-select {
+    height: auto;
+    padding: 1rem 1.1rem; /* Padding interno do campo */
+}
+
+.form-floating > label {
+    padding: 1rem 1.1rem; /* O padding do label deve corresponder ao do input */
+    color: #888;
+}
+
+/* Campos de input e select */
+.form-control {
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+    .form-control:focus {
+        border-color: #7352C7;
+        box-shadow: 0 0 0 3px rgba(115, 82, 199, 0.15);
     }
 
-    form#registerForm .form-floating > label {
-        padding: 0.9rem 0.75rem;
-        color: #777;
-    }
+/* 5. Estilo específico para o Dropdown (Select) */
+.form-floating > select.form-control {
+    /* Esconde a seta padrão do browser */
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: none; /* Garante que não há imagem de fundo */
+}
 
-    form#registerForm .form-floating > .form-control:focus ~ label,
-    form#registerForm .form-floating > .form-control:not(:placeholder-shown) ~ label {
-        opacity: .75;
-        transform: scale(.85) translateY(-.6rem) translateX(.15rem);
-        color: #555;
-    }
+/* Estilo do ícone da seta no label do dropdown */
+.form-floating > label > i.bi-chevron-down {
+    position: absolute;
+    right: 15px; /* Posição à direita */
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.9rem;
+    color: #888;
+    transition: transform 0.2s;
+}
 
-/* Botão de submeter */
+/* Gira a seta quando o dropdown está aberto (em foco) */
+select.form-control:focus + label > i.bi-chevron-down {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+/* Estilo para a opção de placeholder ficar cinzenta */
+select:invalid {
+    color: #888;
+}
+
+/* 6. Botão de submeter */
 #registerSubmit {
     background-color: #7352C7;
-    border-color: #7352C7;
+    border: none;
     color: white;
-    padding: 10px 15px;
-    border-radius: 6px;
-    font-size: 0.95rem;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 1rem;
     font-weight: 500;
     margin-top: 10px;
+    width: 100%;
     transition: background-color 0.2s ease-in-out;
 }
 
     #registerSubmit:hover {
         background-color: #5e42a3;
-        border-color: #5e42a3;
     }
 
-/* Secção de serviços externos */
-.col-md-6.col-md-offset-2 section {
-    background-color: #ffffff;
-    padding: 25px 30px;
-    border-radius: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    margin-top: 50px;
-}
-
-/* Botões externos */
-#external-account button.btn.btn-primary {
-    margin: 5px;
-    background-color: #7352C7;
-    border-color: #7352C7;
-    font-weight: 500;
-}
-
-    #external-account button.btn.btn-primary:hover {
-        background-color: #5e42a3;
-        border-color: #5e42a3;
+/* 7. Media query para responsividade em telemóveis */
+@media (max-width: 768px) {
+    .register-wrapper {
+        padding: 1.5rem 0.5rem; /* Menos padding em mobile */
+        align-items: flex-start; /* Alinha no topo em mobile */
     }
+
+    form#registerForm {
+        padding: 30px 20px;
+    }
+}
+    

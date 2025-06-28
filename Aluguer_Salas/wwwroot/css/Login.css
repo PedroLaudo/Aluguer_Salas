@@ -1,159 +1,137 @@
-﻿/* Adicione esta tag ao seu elemento <body> no HTML:
-   <body class="login-page-body">
-*/
-body.login-page-body {
+﻿/* --- CSS PARA A PÁGINA DE LOGIN (VERSÃO CORRIGIDA) --- */
+
+.login-page-body {
     display: flex;
-    flex-direction: column;
-    justify-content: center; /* Centraliza o conteúdo verticalmente */
-    align-items: center; /* Centraliza o conteúdo horizontalmente */
-    min-height: 100vh; /* Altura mínima de toda a janela de visualização */
-    background-color: #f0f2f5;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    margin: 0; /* Remove margens padrão do body */
-    padding: 20px; /* Adiciona um pouco de preenchimento para não colar nas bordas */
-    box-sizing: border-box; /* Para que o padding não aumente o tamanho total */
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #fff;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
-.login-form-card {
-    background-color: #ffffff;
-    padding: 30px 35px;
-    border-radius: 30px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    /* Usamos um seletor mais específico para garantir que esta regra é aplicada */
+    .login-page-body .login-form-card {
+        background-color: #ffffff;
+        padding: 40px 35px;
+        border-radius: 30px;
+        box-shadow: none !important; /* Remove a sombra de forma definitiva */
+        border: 1px solid #e9e9f0;
+        max-width: 420px;
+        width: 100%;
+    }
+
+form#account h2 {
     text-align: center;
-    margin-top: 100px;
-    margin-left: 400px;/*<-- REMOVA OU COMENTE ESTA LINHA para centralização perfeita pelo flexbox do body */
-    max-width: 450px; /* Adicione uma largura máxima para o card não ficar muito largo em telas grandes */
-    width: 100%; /* Faz o card responsivo, mas limitado pelo max-width */
+    margin: 0 0 30px 0;
 }
-
-    .login-form-card h2,
-    .login-form-card hr {
-        text-align: left;
-        margin-bottom: 1.5rem;
-    }
-
-    .login-form-card hr {
-        margin-top: 1rem;
-        margin-bottom: 1rem;
-    }
 
 .login-icon-placeholder {
-    width: 90px;
-    height: 90px;
-    margin: 0 auto 25px auto; /* Centraliza o ícone dentro do card */
-    display: block;
-    fill: #333;
+    width: 60px;
+    height: 60px;
+    fill: #444;
+}
+
+form#account hr {
+    display: none;
 }
 
 .login-form-card .form-floating {
     margin-bottom: 20px;
-    text-align: left;
 }
 
 .login-form-card .form-control {
-    border-radius: 6px;
-    border: 1px solid #dcdcdc;
-    padding-top: 1.5rem;
-    padding-bottom: 0.5rem;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    padding-top: 1.6rem;
+    padding-bottom: 0.6rem;
     height: auto;
-    font-size: 0.95rem;
+    font-size: 1rem;
+    transition: border-color 0.2s;
 }
+
+    .login-form-card .form-control:focus {
+        border-color: #7352C7;
+        box-shadow: 0 0 0 3px rgba(115, 82, 199, 0.15);
+    }
 
 .login-form-card .form-floating > label {
-    padding: 0.9rem 0.75rem;
-    color: #777;
-}
-
-.login-form-card .form-floating > .form-control:focus ~ label,
-.login-form-card .form-floating > .form-control:not(:placeholder-shown) ~ label {
-    opacity: .75;
-    transform: scale(.85) translateY(-.6rem) translateX(.15rem);
-    color: #555;
+    padding: 1rem 0.85rem;
+    color: #888;
 }
 
 .login-form-card .checkbox.mb-3 {
     text-align: left;
-    margin-bottom: 1.5rem;
-}
-
-    .login-form-card .checkbox.mb-3 label {
-        font-weight: normal;
-    }
-
-.login-form-card #login-submit {
-    background-color: #7352C7;
-    border-color: #7352C7;
-    color: white;
-    padding: 10px 15px;
-    border-radius: 6px;
+    margin-bottom: 24px;
     font-size: 0.95rem;
+    color: #555;
+}
+
+.login-form-card .form-check-input {
+    border-radius: 4px;
+    border-color: #ccc;
+}
+
+    .login-form-card .form-check-input:checked {
+        background-color: #7352C7;
+        border-color: #7352C7;
+    }
+
+#login-submit.btn {
+    background-color: #7352C7;
+    border: none;
+    color: white;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 1rem;
     font-weight: 500;
-    width: auto;
-    min-width: 100px;
-    display: inline-block;
-    margin-top: 10px;
+    width: 100%;
+    transition: background-color 0.2s ease-in-out;
 }
 
-    .login-form-card #login-submit:hover {
+    #login-submit.btn:hover {
         background-color: #5e42a3;
-        border-color: #5e42a3;
     }
 
-.login-form-card div > p {
-    text-align: left;
-    margin-bottom: 0.5rem;
+.form-footer-links {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 
-    .login-form-card div > p a {
-        font-size: 0.9rem;
+    .form-footer-links p {
+        margin: 0;
     }
 
-
-/* Container dos links/botões */
-.login-form-card .form-footer-links {
-    margin-top: 1.5rem;
-    display: flex; /* Habilita Flexbox */
-    justify-content: center; /* Centraliza os blocos <p> no container.
-                                 Outras opções: space-between, space-around, flex-start, flex-end */
-    align-items: center; /* Alinha os blocos <p> verticalmente no centro */
-    gap: 10px; /* Espaço entre os blocos <p> */
-    flex-wrap: wrap; /* Permite que os blocos <p> quebrem para a linha de baixo se não houver espaço */
-}
-
-    /* Parágrafos dentro do container flex */
-    .login-form-card .form-footer-links p {
-        margin: 0; /* Remove margens padrão do parágrafo para controle total pelo flexbox e gap */
-        /* O <p> agora age como o container direto do "botão" <a> */
+    .form-footer-links a {
+        display: inline-block;
+        padding: 8px 16px;
+        border: 1px solid #c5b9e8;
+        border-radius: 12px;
+        color: #7352C7;
+        background-color: transparent;
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: all 0.2s ease-in-out;
     }
 
-/* Estilo base para os links que se parecerão com botões */
-.login-form-card .form-footer-links p a {
-            display: inline-block; /* Necessário para padding, border, etc., e para que o <p> se ajuste a ele */
-            padding: 8px 16px;
-            border: 1px solid #7352C7;
-            border-radius: 6px;
-            color: #7352C7;
-            background-color: transparent;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
-            text-align: center;
-            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.1s ease;
-            cursor: pointer;
-            line-height: 1.5;
-            white-space: nowrap; /* Impede que o texto do botão quebre em várias linhas facilmente */
+        .form-footer-links a:hover {
+            background-color: #f7f5fc;
+            border-color: #7352C7;
+        }
+
+@media (max-width: 576px) {
+    .login-page-body .login-form-card {
+        padding: 30px 20px;
+        border: none;
+    }
 }
 
-
-.login-form-card .form-footer-links p a:hover,
-.login-form-card .form-footer-links p a:focus {
-                background-color: #7352C7;
-                color: white;
-                text-decoration: none;
-                outline: none;
+h1 {
+    display: none;
 }
-
-
-.login-form-card .form-footer-links p a:active {
-                transform: translateY(1px);
-}
+    
