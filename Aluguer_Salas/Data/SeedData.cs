@@ -12,7 +12,6 @@ namespace Aluguer_Salas.Data
             var userManager = serviceProvider.GetRequiredService<UserManager<Utilizador>>();
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-            // <<-- CORREÇÃO ESTÁ AQUI -->>
             // Usamos a ILoggerFactory para criar um logger para uma classe estática.
             var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
             var logger = loggerFactory.CreateLogger("Aluguer_Salas.Data.SeedData");

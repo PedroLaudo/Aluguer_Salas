@@ -36,6 +36,7 @@ namespace Aluguer_Salas.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly ICustomEmailSender _emailSender;
         private readonly ApplicationDbContext _context;
+        private readonly RoleManager<IdentityRole> _roleManager; //adicionado para gestão de roles
 
         public RegisterModel(
             UserManager<Utilizador> userManager,
@@ -43,6 +44,7 @@ namespace Aluguer_Salas.Areas.Identity.Pages.Account
             SignInManager<Utilizador> signInManager,
             ILogger<RegisterModel> logger,
             ICustomEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager, //adicionado para gestão de roles
             ApplicationDbContext context)
         {
             _userManager = userManager;
@@ -52,6 +54,7 @@ namespace Aluguer_Salas.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _context = context;
+            _roleManager = roleManager;//adicionado para gestão de roles
         }
 
         [BindProperty]
@@ -127,6 +130,24 @@ namespace Aluguer_Salas.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User (Identity) created a new account with password.");
+
+                    // 1. OBTER A ROLE DO FORMULÁRIO (o seu Input.Tipo já tem isto)
+                    var roleName = Input.Tipo;
+
+                    // 2. VERIFICAR SE A ROLE EXISTE (boa prática)
+                    if (await _roleManager.RoleExistsAsync(roleName))
+                    {
+                        // 3. ATRIBUIR A ROLE AO UTILIZADOR NO SISTEMA DE IDENTITY
+                        await _userManager.AddToRoleAsync(user, roleName);
+                        _logger.LogInformation($"Role '{roleName}' atribuída com sucesso ao utilizador '{user.Email}'.");
+                    }
+                    else
+                    {
+                        _logger.LogWarning($"Tentativa de atribuir uma role inexistente ('{roleName}') ao utilizador '{user.Email}'.");
+                        // Pode adicionar um erro ao ModelState aqui, se quiser que o registo falhe se a role for inválida.
+                        // ModelState.AddModelError(string.Empty, "O tipo de utilizador selecionado é inválido.");
+                        // return Page();
+                    }
 
                     var utente = new Utente
                     {
