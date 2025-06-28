@@ -68,7 +68,7 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "API de Gestão de Salas e Materiais",
         Version = "v1",
-        Description = "API para gestão de salas, materiais, funcionários, reservas e requisições de material"
+        Description = "API para gestão de salas, materiais, reservas e requisições de material"
     });
 
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -104,12 +104,14 @@ if (app.Environment.IsDevelopment())
 }
 
 // --- 4. CONFIGURAÇÃO DO PIPELINE HTTP ---
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
     app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI();
 }
 else
 {
@@ -127,6 +129,26 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+
+// Adiciona este bloco de código para proteger o Swagger
+app.Use(async (context, next) =>
+{
+    // Verifica se o caminho do pedido começa com /swagger
+    if (context.Request.Path.StartsWithSegments("/swagger"))
+    {
+        // Verifica se o utilizador está autenticado e se tem a função "Administrador"
+        // Se não tiver, retorna um erro 403 (Acesso Proibido)
+        if (!context.User.Identity.IsAuthenticated || !context.User.IsInRole("Administrador"))
+        {
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            await context.Response.WriteAsync("Acesso negado. Apenas Administradores podem aceder ao Swagger.");
+            return; // Termina o pedido aqui
+        }
+    }
+
+    // Se o utilizador for administrador ou o caminho não for /swagger, continua para o próximo middleware
+    await next.Invoke();
+});
 
 // --- 5. EXECUÇÃO DA APLICAÇÃO ---
 app.Run();
