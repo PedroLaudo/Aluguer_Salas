@@ -19,6 +19,11 @@ namespace Aluguer_Salas.Controllers.API
             _context = context;
         }
 
+        /// <summary>
+        /// Lista todas as requisições de material do sistema.
+        /// </summary>
+        /// <returns></returns>
+
         // GET: api/RequisicaoMaterialApi
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RequisicaoMaterial>>> GetRequisicoesMaterial()
@@ -26,6 +31,12 @@ namespace Aluguer_Salas.Controllers.API
             return await _context.RequisicoesMaterial.ToListAsync();
         }
 
+
+        /// <summary>
+        /// Obtém uma requisição de material específica pelo ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET: api/RequisicaoMaterialApi/5
         [HttpGet("{id}")]
         public async Task<ActionResult<RequisicaoMaterial>> GetRequisicaoMaterial(int id)
@@ -40,6 +51,12 @@ namespace Aluguer_Salas.Controllers.API
             return requisicao;
         }
 
+        /// <summary>
+        /// Atualiza uma requisição de material existente.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="requisicao"></param>
+        /// <returns></returns>
         // PUT: api/RequisicaoMaterialApi/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRequisicaoMaterial(int id, RequisicaoMaterial requisicao)
@@ -70,6 +87,12 @@ namespace Aluguer_Salas.Controllers.API
             return NoContent();
         }
 
+
+        /// <summary>
+        /// Cria uma nova requisição de material.
+        /// </summary>
+        /// <param name="requisicao"></param>
+        /// <returns></returns>
         // POST: api/RequisicaoMaterialApi
         [HttpPost]
         public async Task<ActionResult<RequisicaoMaterial>> PostRequisicaoMaterial(RequisicaoMaterial requisicao)
@@ -80,6 +103,12 @@ namespace Aluguer_Salas.Controllers.API
             return CreatedAtAction(nameof(GetRequisicaoMaterial), new { id = requisicao.Id }, requisicao);
         }
 
+
+        /// <summary>
+        /// Remove uma requisição de material específica pelo ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // DELETE: api/RequisicaoMaterialApi/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRequisicaoMaterial(int id)
@@ -95,7 +124,11 @@ namespace Aluguer_Salas.Controllers.API
 
             return NoContent();
         }
-
+        /// <summary>
+        /// Verifica se uma requisição de material existe pelo ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         private bool RequisicaoMaterialExists(int id)
         {
             return _context.RequisicoesMaterial.Any(e => e.Id == id);
