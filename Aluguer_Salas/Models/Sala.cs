@@ -30,6 +30,6 @@ namespace Aluguer_Salas.Models
         public virtual ICollection<Reserva> Reservas { get; set; } = new List<Reserva>();
 
         // ADICIONE ESTA PROPRIEDADE
-        public virtual ICollection<Limpeza> Limpezas { get; set; } = new List<Limpeza>();
+        
     }
 }
