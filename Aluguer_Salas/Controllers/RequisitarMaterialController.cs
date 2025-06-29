@@ -1,5 +1,4 @@
-﻿// Aluguer_Salas/Controllers/RequisitarMaterialController.cs
-using Aluguer_Salas.Data;
+﻿using Aluguer_Salas.Data;
 using Aluguer_Salas.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +13,8 @@ public class RequisitarMaterialController : Controller
     private readonly ApplicationDbContext _context;
     private readonly UserManager<Utilizador> _userManager;
 
+    // O construtor recebe o ApplicationDbContext e o UserManager para acessar os dados do utilizador autenticado.
+
     public RequisitarMaterialController(ApplicationDbContext context,
                                         UserManager<Utilizador> userManager)
     {
@@ -21,6 +22,7 @@ public class RequisitarMaterialController : Controller
         _userManager = userManager;
     }
 
+    // Método auxiliar para popular o ViewBag com a lista de materiais disponíveis.
     private async Task PopulateViewBagAsync()
     {
         Console.WriteLine("Controller: Iniciando PopulateViewBagAsync.");
@@ -31,6 +33,7 @@ public class RequisitarMaterialController : Controller
         Console.WriteLine("Controller: ViewBag.ListaMateriaisDisponiveis populado.");
     }
 
+    // Ação GET para exibir o formulário de requisição de material.
     [HttpGet]
     public async Task<IActionResult> Index()
     {
@@ -40,11 +43,9 @@ public class RequisitarMaterialController : Controller
         var viewModelParaPrimeiroItem = new RequisicaoMaterial
         {
             DataRequisicao = DateTime.Today,
-            // HoraInicio e HoraFim podem ser inicializadas aqui se desejar
-            // HoraInicio = TimeSpan.Zero, 
-            // HoraFim = TimeSpan.Zero 
         };
 
+        // Se houver uma sala pendente, recupera os dados da TempData e os adiciona ao ViewBag.
         if (TempData.TryGetValue("SalaIdPendente", out object salaIdObj) && TempData.TryGetValue("NomeSalaPendente", out object nomeSalaObj))
         {
             if (salaIdObj is int salaId && nomeSalaObj is string nomeSala)
@@ -59,6 +60,7 @@ public class RequisitarMaterialController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    // Ação POST para processar a requisição de material.
     public async Task<IActionResult> Index(
         DateTime dataRequisicao,     // Recebido de asp-for="DataRequisicao"
         TimeSpan horaInicio,         // Recebido de asp-for="HoraInicio"
@@ -226,10 +228,6 @@ public class RequisitarMaterialController : Controller
             DataRequisicao = dataRequisicao,
             HoraInicio = horaInicio,
             HoraFim = horaFim
-            // Não podemos facilmente repopular os itens individuais aqui sem um ViewModel mais complexo
-            // A view irá renderizar a primeira linha vazia (ou com os defaults)
-            // e o JavaScript irá adicionar novas linhas vazias.
-            // Os valores dos itens que causaram erro não serão preservados na UI desta forma simples.
         };
 
         if (salaIdPendenteInput.HasValue)

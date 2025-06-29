@@ -7,15 +7,6 @@ using Microsoft.EntityFrameworkCore;
 
 using System.Security.Claims;
 
-// Ficheiro: Controllers / AlugarController.cs
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Aluguer_Salas.Data;
-using Aluguer_Salas.Models;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-using Microsoft.Extensions.Logging; // Adicionado
-
 namespace Aluguer_Salas.Controllers
 {
     [Authorize]
@@ -24,12 +15,21 @@ namespace Aluguer_Salas.Controllers
         private readonly ApplicationDbContext _context;
         private readonly ILogger<AlugarController> _logger;
 
+        /// <summary>
+        /// Construtor do controlador AlugarController.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="logger"></param>
         public AlugarController(ApplicationDbContext context, ILogger<AlugarController> logger)
         {
             _context = context;
             _logger = logger;
         }
 
+        /// <summary>
+        /// Exibe a lista de salas disponíveis para reserva.
+        /// </summary>
+        /// <returns></returns>
         // GET: /Alugar/Salas
         public async Task<IActionResult> Salas()
         {
@@ -42,6 +42,12 @@ namespace Aluguer_Salas.Controllers
             return View(salas);
         }
 
+
+        /// <summary>
+        /// Exibe o formulário para alugar uma sala específica.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET: /Alugar/Aluguer/{id}
         // Esta ação prepara o formulário para alugar uma sala específica.
         public async Task<IActionResult> Aluguer(int id)
@@ -54,6 +60,7 @@ namespace Aluguer_Salas.Controllers
 
             var salaParaAlugar = await _context.Salas.FindAsync(id);
 
+            // Verifica se a sala existe e se está disponível
             if (salaParaAlugar == null)
             {
                 _logger.LogWarning($"Aluguer GET: Sala com ID {id} não encontrada.");
@@ -61,12 +68,14 @@ namespace Aluguer_Salas.Controllers
                 return RedirectToAction(nameof(Salas));
             }
 
+            // Verifica se a sala está disponível para reserva
             if (!salaParaAlugar.Disponivel)
             {
                 TempData["ErrorMessage"] = $"A sala '{salaParaAlugar.NomeSala}' não está disponível para reserva no momento.";
                 return RedirectToAction(nameof(Salas));
             }
 
+            // Cria o ViewModel para a view de aluguer
             var viewModel = new AluguerViewModel
             {
                 SalaId = salaParaAlugar.Id,
@@ -80,44 +89,53 @@ namespace Aluguer_Salas.Controllers
             return View(viewModel); // Assume que a sua view se chama "Aluguer.cshtml"
         }
 
-        // POST: /Alugar/Aluguer  (ou /Alugar/ConfirmarAluguer se mantiver essa action no form)
-        // Esta ação trata da submissão do formulário.
-        // Pode ser chamada para atualizar horários (se a data mudar) ou para confirmar a reserva.
+        /// <summary>
+        /// Processa o formulário de aluguer de sala.
+        /// </summary>
+        /// <param name="viewModel"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Aluguer(AluguerViewModel viewModel, string? command) // 'command' para distinguir ações
+        public async Task<IActionResult> Aluguer(AluguerViewModel viewModel, string? command)
         {
+            // Verifica se o ID da sala é válido
             var sala = await _context.Salas.FindAsync(viewModel.SalaId);
+
+
+            // Se a sala não for encontrada, adiciona um erro ao ModelState e retorna a view com os dados preenchidos
             if (sala == null)
             {
                 ModelState.AddModelError("", "Sala não encontrada. A operação não pode ser concluída.");
-                // Repopular o modelo para a view mesmo com erro, se possível
                 viewModel.HorariosOcupados = await GetHorariosOcupadosParaView(viewModel.SalaId, viewModel.Data);
                 return View(viewModel);
             }
 
-            // Repopular detalhes da sala no viewModel, pois eles vêm desabilitados do formulário
+            // Preenche os dados da sala no ViewModel
             viewModel.NomeSala = sala.NomeSala;
             viewModel.Capacidade = sala.Capacidade;
             viewModel.DescricaoSala = sala.Descricao;
             viewModel.HorariosOcupados = await GetHorariosOcupadosParaView(viewModel.SalaId, viewModel.Data);
 
-            // Se o comando é para confirmar a reserva (ou se 'command' for nulo e for a submissão padrão)
+            // Verifica se o comando é vazio ou se é "ConfirmarReserva"
             if (string.IsNullOrEmpty(command) || command.Equals("ConfirmarReserva", StringComparison.OrdinalIgnoreCase))
             {
-                // Validações
+                // Validações do ModelState
                 if (viewModel.Data.Date < DateTime.Today)
                 {
                     ModelState.AddModelError(nameof(viewModel.Data), "A data da reserva não pode ser no passado.");
                 }
+                // Verifica se a hora de início e fim estão preenchidas
                 if (viewModel.HoraFim <= viewModel.HoraInicio)
                 {
                     ModelState.AddModelError(nameof(viewModel.HoraFim), "A hora de fim deve ser posterior à hora de início.");
                 }
 
+                // Verifica se a data e hora de início e fim estão preenchidas
                 DateTime inicioReserva = viewModel.Data.Date.Add(viewModel.HoraInicio);
                 DateTime fimReserva = viewModel.Data.Date.Add(viewModel.HoraFim);
 
+                // Verifica se a data/hora de início da reserva é no passado
                 if (inicioReserva < DateTime.Now)
                 {
                     ModelState.AddModelError(nameof(viewModel.HoraInicio), "A data/hora de início da reserva não pode ser no passado.");
@@ -128,7 +146,9 @@ namespace Aluguer_Salas.Controllers
                     ModelState.AddModelError("", $"A sala '{sala.NomeSala}' não está mais disponível.");
                 }
 
-                if (ModelState.IsValid && _context.Reservas != null) // Verifica ModelState ANTES da query de conflito
+
+                // Verifica se já existe uma reserva para a sala no período solicitado
+                if (ModelState.IsValid && _context.Reservas != null)
                 {
                     bool conflito = await _context.Reservas
                         .AnyAsync(r => r.IdSala == viewModel.SalaId &&
@@ -142,6 +162,7 @@ namespace Aluguer_Salas.Controllers
                     }
                 }
 
+                // Se o ModelState é válido, prossegue para confirmar a reserva
                 if (ModelState.IsValid)
                 {
                     var utilizadorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -160,6 +181,8 @@ namespace Aluguer_Salas.Controllers
                         Status = "Confirmada"
                     };
 
+
+                    // Verifica se o repositório de reservas está disponível
                     if (_context.Reservas == null)
                     {
                         _logger.LogError("ConfirmarAluguer POST: _context.Reservas é nulo.");
@@ -181,7 +204,7 @@ namespace Aluguer_Salas.Controllers
                     }
                 }
             }
-            // Se não foi para confirmar, ou se ModelState é inválido, retorna a view com o modelo (e horários atualizados)
+            // Se o comando for "Cancelar", apenas redireciona para a lista de salas
             return View(viewModel);
         }
 

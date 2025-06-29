@@ -1,19 +1,20 @@
 ﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity; // Certifique-se que tem este using
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 public class AccountController : Controller
 {
-    // Mude de ApplicationUser para IdentityUser aqui
+    // GET: /Account/Login
     private readonly SignInManager<IdentityUser> _signInManager;
 
-    // E aqui também
     public AccountController(SignInManager<IdentityUser> signInManager)
     {
         _signInManager = signInManager;
     }
 
+
+    // GET: /Account/Login
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()

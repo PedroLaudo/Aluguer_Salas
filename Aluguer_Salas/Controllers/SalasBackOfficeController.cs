@@ -15,6 +15,7 @@ namespace Aluguer_Salas.Controllers
     {
         private readonly ApplicationDbContext _context;
 
+        
         public SalasBackofficeController(ApplicationDbContext context)
         {
             _context = context;
@@ -42,6 +43,7 @@ namespace Aluguer_Salas.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            // Verifica se a sala existe
             var sala = await _context.Salas.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
             if (sala == null) return NotFound();
             return View(sala);
@@ -69,6 +71,7 @@ namespace Aluguer_Salas.Controllers
                     return View(sala);
                 }
 
+                // Verifica se já existe uma sala com o mesmo nome
                 _context.Add(sala);
                 await _context.SaveChangesAsync();
                 TempData["MensagemSucesso"] = "Sala criada com sucesso!";

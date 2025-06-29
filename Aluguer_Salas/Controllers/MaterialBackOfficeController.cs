@@ -18,6 +18,7 @@ namespace Aluguer_Salas.Controllers
         }
 
         // GET: Material
+        // Este método retorna uma lista de materiais disponíveis no sistema.
         public async Task<IActionResult> Index()
         {
             // O nome do DbSet aqui deve corresponder ao que você definiu no ApplicationDbContext
@@ -25,6 +26,7 @@ namespace Aluguer_Salas.Controllers
         }
 
         // GET: Material/Details/5
+        // Este método retorna os detalhes de um material específico.
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,12 +45,14 @@ namespace Aluguer_Salas.Controllers
         }
 
         // GET: Material/Create
+        // Este método retorna a view para criar um novo material.
         public IActionResult Create()
         {
             return View();
         }
 
         // POST: Material/Create
+        // Este método processa a criação de um novo material.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Nome,QuantidadeDisponivel")] Material material)
@@ -64,6 +68,7 @@ namespace Aluguer_Salas.Controllers
         }
 
         // GET: Material/Edit/5
+        // // Este método retorna a view para editar um material existente.
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -80,6 +85,7 @@ namespace Aluguer_Salas.Controllers
         }
 
         // POST: Material/Edit/5
+        // Este método processa a atualização de um material existente.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,QuantidadeDisponivel")] Material material)
@@ -114,6 +120,7 @@ namespace Aluguer_Salas.Controllers
         }
 
         // GET: Material/Delete/5
+        // Este método retorna a view para confirmar a exclusão de um material.
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -132,6 +139,7 @@ namespace Aluguer_Salas.Controllers
         }
 
         // POST: Material/Delete/5
+        // Este método processa a exclusão de um material.
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

@@ -32,6 +32,7 @@ namespace Aluguer_Salas.Controllers
         }
 
         // GET: Perfil/Index
+        // Este método exibe o perfil do utilizador, incluindo as suas reservas e requisições de material.
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -71,6 +72,7 @@ namespace Aluguer_Salas.Controllers
         }
 
         // POST: Perfil/CancelarReserva
+        // Este método cancela uma reserva existente, se o utilizador tiver permissão.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CancelarReserva(int idReserva)
@@ -85,12 +87,14 @@ namespace Aluguer_Salas.Controllers
             var reserva = await _context.Reservas
                                   .FirstOrDefaultAsync(r => r.IdReserva == idReserva && r.UtilizadorIdentityId == user.Id);
 
+            // Verifica se a reserva existe e se o utilizador tem permissão para cancelá-la
             if (reserva == null)
             {
                 TempData["ErrorMessageController"] = "Reserva não encontrada ou não tem permissão para cancelar.";
                 return RedirectToAction(nameof(Index));
             }
 
+            // Verifica se a reserva já ocorreu ou está em andamento
             DateTime reservaStartDateTime = reserva.HoraInicio;
             if (reservaStartDateTime <= DateTime.Now)
             {
@@ -98,6 +102,7 @@ namespace Aluguer_Salas.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            // Verifica se a reserva está em um estado que permite o cancelamento
             if (!(reserva.Status?.Equals("Confirmada", StringComparison.OrdinalIgnoreCase) == true ||
                   reserva.Status?.Equals("Pendente", StringComparison.OrdinalIgnoreCase) == true))
             {
@@ -123,6 +128,7 @@ namespace Aluguer_Salas.Controllers
         }
 
         // POST: Perfil/CancelarRequisicaoMaterial
+        // Este método cancela uma requisição de material existente, se o utilizador tiver permissão.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CancelarRequisicaoMaterial(int idRequisicao)
@@ -169,6 +175,7 @@ namespace Aluguer_Salas.Controllers
         // GET: Perfil/EditarRequisicaoMaterial/5
         public async Task<IActionResult> EditarRequisicaoMaterial(int? id)
         {
+            // Verifica se o ID da requisição foi fornecido
             if (id == null)
             {
                 TempData["ErrorMessageController"] = "ID da requisição não fornecido.";
@@ -180,6 +187,7 @@ namespace Aluguer_Salas.Controllers
                                              .Include(rm => rm.Material)
                                              .FirstOrDefaultAsync(m => m.Id == id && m.UtilizadorId == userId);
 
+            // Verifica se a requisição existe e se o utilizador tem permissão para editá-la
             if (requisicaoMaterial == null)
             {
                 TempData["ErrorMessageController"] = "Requisição de material não encontrada ou não tem permissão para editar.";
@@ -201,6 +209,7 @@ namespace Aluguer_Salas.Controllers
         }
 
         // POST: Perfil/EditarRequisicaoMaterial/5
+        // Este método processa a edição de uma requisição de material existente.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditarRequisicaoMaterial(int id,
@@ -319,11 +328,11 @@ namespace Aluguer_Salas.Controllers
             return View(requisicaoMaterialEditada);
         }
 
+        // Verifica se uma requisição de material existe com base no ID fornecido.
         private bool RequisicaoMaterialExists(int id)
         {
             return _context.RequisicoesMaterial.Any(e => e.Id == id);
         }
 
-        // O método ReservaExists foi removido pois era usado apenas pelos métodos de EditarReserva.
     }
 }
