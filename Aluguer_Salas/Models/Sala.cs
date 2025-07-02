@@ -24,12 +24,10 @@ namespace Aluguer_Salas.Models
 
         public bool Disponivel { get; set; } = true;
 
-        // REMOVA OU COMENTE ESTA LINHA:
-        // public virtual ICollection<Disponibilidade> Disponibilidades { get; set; } = new List<Disponibilidade>();
-
+       
         public virtual ICollection<Reserva> Reservas { get; set; } = new List<Reserva>();
 
-        // ADICIONE ESTA PROPRIEDADE
+        
         
     }
 }

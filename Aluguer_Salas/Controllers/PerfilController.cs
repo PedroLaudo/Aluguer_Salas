@@ -1,7 +1,7 @@
-﻿// File: Controllers/PerfilController.cs
+﻿
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-using Aluguer_Salas.Models; // Para Utilizador, Reserva, RequisicaoMaterial, Sala, Material
+using Aluguer_Salas.Models; 
 using Aluguer_Salas.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc.Rendering; // Para SelectList
+using Microsoft.AspNetCore.Mvc.Rendering; 
 using System;
 
 namespace Aluguer_Salas.Controllers

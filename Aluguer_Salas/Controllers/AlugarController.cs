@@ -15,25 +15,18 @@ namespace Aluguer_Salas.Controllers
         private readonly ApplicationDbContext _context;
         private readonly ILogger<AlugarController> _logger;
 
-        /// <summary>
-        /// Construtor do controlador AlugarController.
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="logger"></param>
+      
         public AlugarController(ApplicationDbContext context, ILogger<AlugarController> logger)
         {
             _context = context;
             _logger = logger;
         }
 
-        /// <summary>
-        /// Exibe a lista de salas disponíveis para reserva.
-        /// </summary>
-        /// <returns></returns>
-        // GET: /Alugar/Salas
+       
+        // GET na tabela salas e envia para a view as disponiveis
         public async Task<IActionResult> Salas()
         {
-            if (_context.Salas == null)
+            if (_context.Salas == null) //verifica se a tabela está disponivel
             {
                 TempData["ErrorMessage"] = "Repositório de salas indisponível.";
                 return View(new List<Sala>());
@@ -43,13 +36,9 @@ namespace Aluguer_Salas.Controllers
         }
 
 
-        /// <summary>
-        /// Exibe o formulário para alugar uma sala específica.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+     
         // GET: /Alugar/Aluguer/{id}
-        // Esta ação prepara o formulário para alugar uma sala específica.
+        // Confirmar se a sala está disponivel
         public async Task<IActionResult> Aluguer(int id)
         {
             if (id == 0)
@@ -58,7 +47,7 @@ namespace Aluguer_Salas.Controllers
                 return NotFound();
             }
 
-            var salaParaAlugar = await _context.Salas.FindAsync(id);
+            var salaParaAlugar = await _context.Salas.FindAsync(id);//procura a sala na base de dados
 
             // Verifica se a sala existe e se está disponível
             if (salaParaAlugar == null)
@@ -86,20 +75,15 @@ namespace Aluguer_Salas.Controllers
                 HorariosOcupados = await GetHorariosOcupadosParaView(salaParaAlugar.Id, DateTime.Today)
             };
 
-            return View(viewModel); // Assume que a sua view se chama "Aluguer.cshtml"
+            return View(viewModel); 
         }
 
-        /// <summary>
-        /// Processa o formulário de aluguer de sala.
-        /// </summary>
-        /// <param name="viewModel"></param>
-        /// <param name="command"></param>
-        /// <returns></returns>
+     
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Aluguer(AluguerViewModel viewModel, string? command)
         {
-            // Verifica se o ID da sala é válido
+            // Verifica se o ID da sala é válido procurando a sala na base de dados
             var sala = await _context.Salas.FindAsync(viewModel.SalaId);
 
 
@@ -121,7 +105,7 @@ namespace Aluguer_Salas.Controllers
             if (string.IsNullOrEmpty(command) || command.Equals("ConfirmarReserva", StringComparison.OrdinalIgnoreCase))
             {
                 // Validações do ModelState
-                if (viewModel.Data.Date < DateTime.Today)
+                if (viewModel.Data.Date < DateTime.Today) //verifica se a data é anterior a hoje
                 {
                     ModelState.AddModelError(nameof(viewModel.Data), "A data da reserva não pode ser no passado.");
                 }
@@ -138,7 +122,7 @@ namespace Aluguer_Salas.Controllers
                 // Verifica se a data/hora de início da reserva é no passado
                 if (inicioReserva < DateTime.Now)
                 {
-                    ModelState.AddModelError(nameof(viewModel.HoraInicio), "A data/hora de início da reserva não pode ser no passado.");
+                    ModelState.AddModelError(nameof(viewModel.HoraInicio), "A hora de início da reserva não pode ser no passado.");
                 }
 
                 if (!sala.Disponivel)
@@ -166,11 +150,11 @@ namespace Aluguer_Salas.Controllers
                 if (ModelState.IsValid)
                 {
                     var utilizadorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    if (string.IsNullOrEmpty(utilizadorId))
+                    if (string.IsNullOrEmpty(utilizadorId)) //se o utilizador não tiver login feito
                     {
-                        return Challenge();
+                        return Challenge(); //redireciona para o login
                     }
-
+                    //cria um novo objeto reserva com os dados do ViewModel a utilizar
                     var reserva = new Reserva
                     {
                         IdSala = viewModel.SalaId,
@@ -224,7 +208,7 @@ namespace Aluguer_Salas.Controllers
                 .ToListAsync();
         }
 
-        // Se precisar de uma action específica para obter horários via AJAX (RECOMENDADO para melhor UX)
+       
         [HttpGet]
         public async Task<IActionResult> GetHorariosOcupadosJson(int salaId, DateTime data)
         {

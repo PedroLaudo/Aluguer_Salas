@@ -2,10 +2,9 @@
 using Aluguer_Salas.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 [Authorize]
 public class RequisitarMaterialController : Controller
@@ -14,9 +13,7 @@ public class RequisitarMaterialController : Controller
     private readonly UserManager<Utilizador> _userManager;
 
     // O construtor recebe o ApplicationDbContext e o UserManager para acessar os dados do utilizador autenticado.
-
-    public RequisitarMaterialController(ApplicationDbContext context,
-                                        UserManager<Utilizador> userManager)
+    public RequisitarMaterialController(ApplicationDbContext context, UserManager<Utilizador> userManager)
     {
         _context = context;
         _userManager = userManager;
@@ -25,19 +22,16 @@ public class RequisitarMaterialController : Controller
     // Método auxiliar para popular o ViewBag com a lista de materiais disponíveis.
     private async Task PopulateViewBagAsync()
     {
-        Console.WriteLine("Controller: Iniciando PopulateViewBagAsync.");
         var materiais = await _context.Materiais
                                       .OrderBy(m => m.Nome)
                                       .ToListAsync();
         ViewBag.ListaMateriaisDisponiveis = new SelectList(materiais, "Id", "Nome");
-        Console.WriteLine("Controller: ViewBag.ListaMateriaisDisponiveis populado.");
     }
 
     // Ação GET para exibir o formulário de requisição de material.
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        Console.WriteLine("GET: RequisitarMaterial/Index iniciado.");
         await PopulateViewBagAsync();
 
         var viewModelParaPrimeiroItem = new RequisicaoMaterial
@@ -54,7 +48,7 @@ public class RequisitarMaterialController : Controller
                 ViewBag.NomeSalaPendente = nomeSala;
             }
         }
-        // ViewData["Title"] é definido na view.
+
         return View(viewModelParaPrimeiroItem);
     }
 
@@ -62,19 +56,13 @@ public class RequisitarMaterialController : Controller
     [ValidateAntiForgeryToken]
     // Ação POST para processar a requisição de material.
     public async Task<IActionResult> Index(
-        DateTime dataRequisicao,     // Recebido de asp-for="DataRequisicao"
-        TimeSpan horaInicio,         // Recebido de asp-for="HoraInicio"
-        TimeSpan horaFim,            // Recebido de asp-for="HoraFim"
-        int[] materialId,            // Recebido de name="materialId[index]"
-        int[] quantidadeRequisitada, // Recebido de name="quantidadeRequisitada[index]"
+        DateTime dataRequisicao,
+        TimeSpan horaInicio,
+        TimeSpan horaFim,
+        int[] materialId,
+        int[] quantidadeRequisitada,
         int? salaIdPendenteInput)
     {
-        Console.WriteLine("POST: RequisitarMaterial/Index recebido.");
-        Console.WriteLine($"Data: {dataRequisicao}, Inicio: {horaInicio}, Fim: {horaFim}");
-        if (materialId != null) Console.WriteLine($"Materiais Count: {materialId.Length}");
-        if (quantidadeRequisitada != null) Console.WriteLine($"Quantidades Count: {quantidadeRequisitada.Length}");
-
-
         var currentUser = await _userManager.GetUserAsync(User);
         if (currentUser == null)
         {
@@ -100,10 +88,8 @@ public class RequisitarMaterialController : Controller
         {
             for (int i = 0; i < materialId.Length; i++)
             {
-                if (materialId[i] <= 0 && quantidadeRequisitada[i] > 0) // Apenas erro se quantidade foi preenchida mas material não
+                if (materialId[i] <= 0 && quantidadeRequisitada[i] > 0)
                 {
-                    // Chave do erro corresponde ao campo do formulário para melhor feedback ao lado do campo (se houver asp-validation-for)
-                    // ou para clareza no sumário.
                     ModelState.AddModelError($"materialId[{i}]", $"Item {i + 1}: Por favor, selecione um material.");
                 }
                 else if (materialId[i] > 0 && quantidadeRequisitada[i] <= 0)
@@ -112,25 +98,23 @@ public class RequisitarMaterialController : Controller
                 }
                 else if (materialId[i] > 0 && quantidadeRequisitada[i] > 0)
                 {
-                    itensValidosPresentes = true; // Pelo menos um item completo foi enviado
+                    itensValidosPresentes = true;
                 }
             }
-            if (!itensValidosPresentes && materialId.Length > 0) // Se existem linhas mas nenhuma é válida
+            if (!itensValidosPresentes && materialId.Length > 0)
             {
                 ModelState.AddModelError(string.Empty, "Preencha os dados dos materiais a requisitar (material e quantidade).");
             }
         }
 
-
-        var requisicoesParaSalvar = new List<RequisicaoMaterial>();
+        var requisicaoValida = new List<RequisicaoMaterial>();
         // Só prosseguir com a lógica de disponibilidade se o ModelState básico for válido e houver itens válidos
         if (ModelState.IsValid && itensValidosPresentes)
         {
             bool todosItensDisponiveis = true;
             for (int i = 0; i < materialId.Length; i++)
             {
-                // Ignorar linhas onde o material não foi selecionado ou quantidade é inválida,
-                // pois já foram tratadas ou são linhas "vazias" que o utilizador não preencheu.
+                // Ignorar linhas onde o material não foi selecionado ou quantidade é inválida
                 if (materialId[i] <= 0 || quantidadeRequisitada[i] <= 0) continue;
 
                 int currentMaterialId = materialId[i];
@@ -156,13 +140,13 @@ public class RequisitarMaterialController : Controller
 
                 if (currentQuantidade > disponivelNoPeriodo)
                 {
-                    ModelState.AddModelError($"quantidadeRequisitada[{i}]", // Ou string.Empty
+                    ModelState.AddModelError($"quantidadeRequisitada[{i}]",
                         $"Item {i + 1} ({materialInfo.Nome}): Apenas {Math.Max(0, disponivelNoPeriodo)} disponíveis. Pedido: {currentQuantidade}.");
                     todosItensDisponiveis = false;
                 }
                 else
                 {
-                    requisicoesParaSalvar.Add(new RequisicaoMaterial
+                    requisicaoValida.Add(new RequisicaoMaterial
                     {
                         UtilizadorId = currentUser.Id,
                         MaterialId = currentMaterialId,
@@ -170,56 +154,40 @@ public class RequisitarMaterialController : Controller
                         DataRequisicao = dataRequisicao.Date,
                         HoraInicio = horaInicio,
                         HoraFim = horaFim,
-                        // SalaId = salaIdPendenteInput // Descomente e ajuste se sua entidade RequisicaoMaterial tiver SalaId
                     });
                 }
             }
             if (!todosItensDisponiveis)
             {
-                requisicoesParaSalvar.Clear(); // Não salvar se algum item não estiver disponível
+                requisicaoValida.Clear(); // Não salvar se algum item não estiver disponível
             }
         }
 
-        if (ModelState.IsValid && requisicoesParaSalvar.Any())
+        if (ModelState.IsValid && requisicaoValida.Any())
         {
             try
             {
-                _context.RequisicoesMaterial.AddRange(requisicoesParaSalvar);
+                _context.RequisicoesMaterial.AddRange(requisicaoValida);
                 await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = $"{requisicoesParaSalvar.Count} requisição(ões) de material efetuada(s) com sucesso!";
+                TempData["SuccessMessage"] = $"{requisicaoValida.Count} requisição(ões) de material efetuada(s) com sucesso!";
                 return RedirectToAction("Salas", "Alugar");
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
-                Console.WriteLine($"Controller: Erro DbUpdateException ao guardar - {ex.ToString()}");
+                // Para um ambiente de produção, é melhor usar um sistema de logging mais robusto (ex: Serilog, NLog)
+                // Console.WriteLine($"Controller: Erro DbUpdateException ao guardar - {ex.ToString()}");
                 ModelState.AddModelError(string.Empty, "Ocorreu um erro ao tentar guardar as requisições.");
             }
         }
 
         // Se chegou aqui, ou ModelState é inválido ou não há requisições válidas para salvar
-        if (ModelState.ErrorCount > 0)
+        if (!ModelState.IsValid && itensValidosPresentes && !requisicaoValida.Any())
         {
-            Console.WriteLine("Controller: ModelState inválido. Requisições não foram guardadas.");
-            foreach (var modelStateKey in ModelState.Keys)
-            {
-                var modelStateVal = ModelState[modelStateKey];
-                foreach (var error in modelStateVal.Errors)
-                {
-                    Console.WriteLine($"Controller - Erro de Validação: Chave='{modelStateKey}', Erro='{error.ErrorMessage}'");
-                }
-            }
-        }
-        else if (itensValidosPresentes && !requisicoesParaSalvar.Any())
-        {
-            // Todos os itens eram válidos, mas nenhum estava disponível/passou nas verificações de disponibilidade
-            // A mensagem de erro específica já deve ter sido adicionada ao ModelState
-            // Poderia adicionar uma mensagem genérica aqui se nenhuma específica foi adicionada.
             if (!ModelState.Values.SelectMany(v => v.Errors).Any(e => e.ErrorMessage.Contains("disponíveis")))
             {
                 ModelState.AddModelError(string.Empty, "Nenhum dos materiais solicitados estava disponível nas quantidades/horários pedidos.");
             }
         }
-
 
         await PopulateViewBagAsync();
         // Recriar o modelo para a view com os dados submetidos para repopular o formulário

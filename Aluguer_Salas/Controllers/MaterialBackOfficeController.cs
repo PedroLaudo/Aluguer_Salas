@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization; // << Adicionar este using
+﻿using Microsoft.AspNetCore.Authorization; 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Aluguer_Salas.Data;
 using Aluguer_Salas.Models;
-using System.Threading.Tasks; // Adicionar se não estiver lá
+using System.Threading.Tasks; 
 
 namespace Aluguer_Salas.Controllers
 {
@@ -21,7 +21,7 @@ namespace Aluguer_Salas.Controllers
         // Este método retorna uma lista de materiais disponíveis no sistema.
         public async Task<IActionResult> Index()
         {
-            // O nome do DbSet aqui deve corresponder ao que você definiu no ApplicationDbContext
+            
             return View(await _context.Materiais.ToListAsync());
         }
 
@@ -61,13 +61,13 @@ namespace Aluguer_Salas.Controllers
             {
                 _context.Add(material);
                 await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Material adicionado com sucesso!"; // Mensagem de feedback
+                TempData["SuccessMessage"] = "Material adicionado com sucesso!"; 
                 return RedirectToAction(nameof(Index));
             }
             return View(material);
         }
 
-        // GET: Material/Edit/5
+        // GET: Material/Edit
         // // Este método retorna a view para editar um material existente.
         public async Task<IActionResult> Edit(int? id)
         {
@@ -85,7 +85,7 @@ namespace Aluguer_Salas.Controllers
         }
 
         // POST: Material/Edit/5
-        // Este método processa a atualização de um material existente.
+        // Este método recebe os dados editado, valida e insere na base de dados.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,QuantidadeDisponivel")] Material material)
@@ -150,7 +150,7 @@ namespace Aluguer_Salas.Controllers
                 _context.Materiais.Remove(material);
             }
             await _context.SaveChangesAsync();
-            TempData["SuccessMessage"] = "Material eliminado com sucesso!"; // Mensagem de feedback
+            TempData["SuccessMessage"] = "Material eliminado com sucesso!"; 
             return RedirectToAction(nameof(Index));
         }
 

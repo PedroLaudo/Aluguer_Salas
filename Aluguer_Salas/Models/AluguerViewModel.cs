@@ -16,7 +16,7 @@ namespace Aluguer_Salas.Models
         // Inputs do Formulário de Reserva
         [Required(ErrorMessage = "A data da reserva é obrigatória.")]
         [DataType(DataType.Date)]
-        public DateTime Data { get; set; } = DateTime.Today; // Mantido como 'Data' para corresponder ao seu .cshtml
+        public DateTime Data { get; set; } = DateTime.Today; 
 
         [Required(ErrorMessage = "A hora de início é obrigatória.")]
         [DataType(DataType.Time)]

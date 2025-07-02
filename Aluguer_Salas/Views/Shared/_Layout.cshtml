@@ -1,15 +1,15 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@using Aluguer_Salas.Data
+@using Aluguer_Salas.Models 
 
 @inject SignInManager<Utilizador> SignInManager
 @inject UserManager<Utilizador> UserManager
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Aluguer_Salas</title>
+    <title>@ViewData["Title"] - Aluguer de Salas</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -19,9 +19,9 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-md navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Aluguer_Salas</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Aluguer de Salas</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
+                        aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
@@ -29,32 +29,33 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                      
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Identity" asp-controller="Alugar" asp-action="Salas">Salas</a>
-                        </li>
 
-                        @if (User.IsInRole("Administrador")) // Só mostra o link se o utilizador for Administrador
+                        @* 1. Link para ver as Salas - Visível para TODOS os utilizadores autenticados *@
+                        @if (SignInManager.IsSignedIn(User))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="MaterialBackOffice" asp-action="Index">Gerir Material</a>
+                                <a class="nav-link text-dark" asp-controller="Alugar" asp-action="Salas">Alugar Salas</a>
                             </li>
                         }
 
-                        @if (User.IsInRole("Professor") || User.IsInRole("Administrador")) // Só mostra o link se o utilizador for Administrador ou professor
+                        @* 2. Link para Requisitar Material - Visível para Professores e Administradores *@
+                        @if (User.IsInRole("Professor") || User.IsInRole("Administrador"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="RequisitarMaterial" asp-action="Index">Requisitar Material</a>
                             </li>
                         }
 
-                        @if (User.IsInRole("Administrador")) // Só mostra o link se o utilizador for Administrador
+                        @* 3. Links de Administração - Visíveis APENAS para Administradores *@
+                        @if (User.IsInRole("Administrador"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="SalasBackoffice" asp-action="Index">Salas Administrador</a>
+                                <a class="nav-link text-dark" asp-controller="MaterialBackOffice" asp-action="Index">Gerir Material</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="SalasBackoffice" asp-action="Index">Gerir Salas</a>
                             </li>
                         }
-
 
                     </ul>
                     <partial name="_LoginPartial" />
@@ -70,7 +71,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            © 2025 - Aluguer_Salas - <a asp-area="" asp-controller="Home"></a>
+            © @DateTime.Now.Year - Aluguer de Salas
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
